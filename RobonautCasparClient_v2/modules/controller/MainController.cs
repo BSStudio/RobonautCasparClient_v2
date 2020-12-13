@@ -42,6 +42,7 @@ namespace RobonautCasparClient_v2.modules.controller
         private readonly Stopwatch speedTimerCounter = new Stopwatch();
         private readonly DispatcherTimer speedTimerUpdateTimer;
 
+        private bool FullscreenGraphicsShown { get; set; }
         private bool TimingShown { get; set; }
         private TimerType ShownTimingType { get; set; }
         private bool TechTimingRolling { get; set; }
@@ -83,6 +84,8 @@ namespace RobonautCasparClient_v2.modules.controller
             LastTechTimerTime = 20000;
             
             ShownTimingType = TimerType.TECHNICAL;
+
+            FullscreenGraphicsShown = false;
 
             speedTimerUpdateTimer = new DispatcherTimer();
             speedTimerUpdateTimer.Tick += updateSpeedTimerOnUi;
@@ -322,6 +325,32 @@ namespace RobonautCasparClient_v2.modules.controller
         {
             var time = speedTimerCounter.ElapsedMilliseconds;
             _window.updateSpeedTimerDisplay(time);
+        }
+
+        public void showFullScreenGraphics(FullScreenTableType type)
+        {
+            if (graphicsInteractor.IsConnected)
+            {
+                graphicsInteractor.showFullscreenGraphics(type, teamDataService.Teams);
+                FullscreenGraphicsShown = true;
+            }
+        }
+
+        public void nextFullScreenPage()
+        {
+            if (FullscreenGraphicsShown)
+            {
+                FullscreenGraphicsShown = graphicsInteractor.stepFullScreenGraphics(teamDataService.Teams);
+            }
+        }
+
+        public void hideFullScreenGraphics()
+        {
+            if (FullscreenGraphicsShown && graphicsInteractor.IsConnected)
+            {
+                graphicsInteractor.hideFullscreenGraphics();
+                FullscreenGraphicsShown = false;
+            }
         }
     }
 }

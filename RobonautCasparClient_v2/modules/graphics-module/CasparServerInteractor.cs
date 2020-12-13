@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Timers;
+using System.Windows.Documents;
 using RobonautCasparClient_v2.DO;
 using RobonautCasparClient_v2.Modules.interfaces;
 using Svt.Caspar;
@@ -28,13 +31,13 @@ namespace RobonautCasparClient_v2.modules
 
         #endregion
 
-        public static int SCOREBOARD_ITEMS_PER_PAGE = 6;
-        public static int CHANNEL = 0; //1
-        public static int NAME_LAYER = 10;
-        public static int TEAMINFO_LAYER = 11;
-        public static int TIMER_LAYER = 12;
-        public static int SCOREBOARD_LAYER = 13;
-        public static int BREAK_BETWEEN_PAGES = 7000;
+        public const int SCOREBOARD_ITEMS_PER_PAGE = 6;
+        public const int CHANNEL = 0; //1
+        public const int NAME_LAYER = 10;
+        public const int TEAMINFO_LAYER = 11;
+        public const int TIMER_LAYER = 12;
+        public const int SCOREBOARD_LAYER = 13;
+        public const int BREAK_BETWEEN_PAGES = 7000;
 
         public delegate void casparConnectedDelegate();
 
@@ -47,6 +50,9 @@ namespace RobonautCasparClient_v2.modules
         private bool TimerShown { get; set; }
         private bool TechDisplayShown { get; set; }
         private bool SpeedDisplayShown { get; set; }
+        private bool FullScreenGraphicsShown { get; set; }
+        private FullScreenTableType FullScreenGraphicsTypeShown { get; set; }
+        private int CurrentFullScreenPage { get; set; }
 
         private readonly CasparDevice casparDevice = new CasparDevice();
 
@@ -60,6 +66,8 @@ namespace RobonautCasparClient_v2.modules
             TimerShown = false;
             TechDisplayShown = false;
             SpeedDisplayShown = false;
+            FullScreenGraphicsShown = false;
+            CurrentFullScreenPage = 0;
 
             casparDevice.ConnectionStatusChanged += CasparDevice_ConnectionStatusChanged;
         }
@@ -123,9 +131,6 @@ namespace RobonautCasparClient_v2.modules
         public void stopTeamDataGraphics()
         {
             stopLayer(TEAMINFO_LAYER);
-
-            TechDisplayShown = false;
-            SpeedDisplayShown = false;
         }
 
         public void stopAllGraphics()
@@ -134,10 +139,6 @@ namespace RobonautCasparClient_v2.modules
             stopLayer(TEAMINFO_LAYER);
             stopLayer(TIMER_LAYER);
             stopLayer(SCOREBOARD_LAYER);
-
-            TimerShown = false;
-            TechDisplayShown = false;
-            SpeedDisplayShown = false;
         }
 
         public void showTeamTechnicalContestDisplay(TeamData teamData)
@@ -213,7 +214,7 @@ namespace RobonautCasparClient_v2.modules
                     cgData.SetData("dir", Converters.DirectionToString(dir));
                     cgData.SetData("time", startMs.ToString());
 
-                    casparDevice.Channels[CHANNEL].CG.Add(TIMER_LAYER, 0, "ROBONAUT_TIMER_2021", true, cgData);
+                    casparDevice.Channels[CHANNEL].CG.Add(TIMER_LAYER, 0, "ROBONAUT_TIMER", true, cgData);
 
                     TimerShown = true;
                 }
@@ -231,18 +232,6 @@ namespace RobonautCasparClient_v2.modules
         public void hideTimer()
         {
             stopLayer(TIMER_LAYER);
-            
-            TimerShown = false;
-        }
-
-        public void showFullscreenTable(FullScreenTableType type, List<TeamData> teamDatas)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void hideFullscreenTable()
-        {
-            stopLayer(SCOREBOARD_LAYER);
         }
 
         public void showTeamAllStats(TeamData teamData, TeamType rankType)
@@ -275,11 +264,328 @@ namespace RobonautCasparClient_v2.modules
             }
         }
 
+        public void showFullscreenGraphics(FullScreenTableType type, List<TeamData> teamDatas)
+        {
+            if (IsConnected)
+            {
+                CurrentFullScreenPage = 0;
+                CasparCGDataCollection cgData = new CasparCGDataCollection();
+
+                FullScreenGraphicsTypeShown = type;
+
+                switch (type)
+                {
+                    case FullScreenTableType.QUALIFICATION_POINTS:
+                        cgData.SetData("title", "Hozott pontok");
+                        updateQualificationCgData(cgData, teamDatas);
+
+                        casparDevice.Channels[CHANNEL].CG.Add(SCOREBOARD_LAYER, 0, "RANGSOR_PONT", true, cgData);
+                        break;
+                    case FullScreenTableType.AUDIENCE_POINTS:
+                        updateAudienceCgData(cgData, teamDatas);
+
+                        casparDevice.Channels[CHANNEL].CG.Add(SCOREBOARD_LAYER, 0, "RANGSOR_KOZONSEG", true, cgData);
+                        break;
+                    case FullScreenTableType.TECHNICAL_POINTS:
+                        cgData.SetData("title", "Technikai pontok");
+                        updateTechnicalPointsCgData(cgData, teamDatas);
+                        
+                        casparDevice.Channels[CHANNEL].CG.Add(SCOREBOARD_LAYER, 0, "RANGSOR_PONT", true, cgData);
+                        break;
+                    case FullScreenTableType.SPEED_TIMES:
+                        updateSpeedTimesCgData(cgData, teamDatas);
+                        
+                        casparDevice.Channels[CHANNEL].CG.Add(SCOREBOARD_LAYER, 0, "RANGSOR_GYORSASAGI", true, cgData);
+                        break;
+                    case FullScreenTableType.FINAL_JUNIOR:
+                        cgData.SetData("title", "Összesített junior rangsor");
+                        updateJuniorFinalResultCgData(cgData, teamDatas);
+
+                        casparDevice.Channels[CHANNEL].CG.Add(SCOREBOARD_LAYER, 0, "RANGSOR_PONT", true, cgData);
+                        break;
+                    case FullScreenTableType.FINAL:
+                        cgData.SetData("title", "Összesített rangsor");
+                        updateFinalResultCgData(cgData, teamDatas);
+
+                        casparDevice.Channels[CHANNEL].CG.Add(SCOREBOARD_LAYER, 0, "RANGSOR_PONT", true, cgData);
+                        break;
+                }
+
+                FullScreenGraphicsShown = true;
+            }
+        }
+
+        /*
+         * visszater azzal, hogy meg van-e jelenitve a grafika a tablazat utan
+         * true = meg van jelenitve
+         * false = nem volt mar uj adat, eltunt
+         */
+        public bool stepFullScreenGraphics(List<TeamData> teamDatas)
+        {
+            if (IsConnected)
+            {
+                if (FullScreenGraphicsShown)
+                {
+                    var numOfTeams = FullScreenGraphicsTypeShown == FullScreenTableType.FINAL_JUNIOR
+                        ? teamDatas.Where(team => team.TeamType == TeamType.JUNIOR).ToList().Count
+                        : teamDatas.Count;
+                    
+                    var numberOfPages = (int) Math.Ceiling((double) numOfTeams / SCOREBOARD_ITEMS_PER_PAGE);
+
+                    CurrentFullScreenPage++;
+
+                    //0-tól indul az oldalak szamolasa
+                    if (CurrentFullScreenPage >= numberOfPages)
+                    {
+                        stopLayer(SCOREBOARD_LAYER);
+                    }
+                    else
+                    {
+                        CasparCGDataCollection cgData = new CasparCGDataCollection();
+
+                        switch (FullScreenGraphicsTypeShown)
+                        {
+                            case FullScreenTableType.QUALIFICATION_POINTS:
+                                updateQualificationCgData(cgData, teamDatas);
+                                break;
+                            case FullScreenTableType.AUDIENCE_POINTS:
+                                updateAudienceCgData(cgData, teamDatas);
+                                break;
+                            case FullScreenTableType.TECHNICAL_POINTS:
+                                updateTechnicalPointsCgData(cgData, teamDatas);
+                                break;
+                            case FullScreenTableType.SPEED_TIMES:
+                                updateSpeedTimesCgData(cgData, teamDatas);
+                                break;
+                            case FullScreenTableType.FINAL_JUNIOR:
+                                updateJuniorFinalResultCgData(cgData, teamDatas);
+                                break;
+                            case FullScreenTableType.FINAL:
+                                updateFinalResultCgData(cgData, teamDatas);
+                                break;
+                        }
+
+                        casparDevice.Channels[CHANNEL].CG.Update(SCOREBOARD_LAYER, 0, cgData);
+                    }
+                }
+            }
+
+            return FullScreenGraphicsShown;
+        }
+
+        private void updateQualificationCgData(CasparCGDataCollection cgData, List<TeamData> teamDatas)
+        {
+            teamDatas.Sort((a, b) => b.QualificationScore - a.QualificationScore);
+
+            int firstElement = CurrentFullScreenPage * SCOREBOARD_ITEMS_PER_PAGE;
+            int lastElement = firstElement + SCOREBOARD_ITEMS_PER_PAGE <= teamDatas.Count
+                ? firstElement + SCOREBOARD_ITEMS_PER_PAGE
+                : teamDatas.Count;
+
+            int cgIndex = 1;
+            for (int i = firstElement; i < firstElement + SCOREBOARD_ITEMS_PER_PAGE; i++)
+            {
+                if (i < lastElement)
+                {
+                    var currentTeam = teamDatas[i];
+
+                    cgData.SetData("result_rank_" + cgIndex, (i + 1).ToString());
+                    cgData.SetData("result_teamname_" + cgIndex, currentTeam.TeamName);
+                    cgData.SetData("result_point_" + cgIndex, currentTeam.QualificationScore.ToString());
+                }
+                else
+                {
+                    cgData.SetData("result_rank_" + cgIndex, "");
+                    cgData.SetData("result_teamname_" + cgIndex, "");
+                    cgData.SetData("result_point_" + cgIndex, "");
+                }
+
+                cgIndex++;
+            }
+        }
+
+        private void updateTechnicalPointsCgData(CasparCGDataCollection cgData, List<TeamData> teamDatas)
+        {
+            teamDatas.Sort((a, b) => b.TechnicalScore - a.TechnicalScore);
+
+            int firstElement = CurrentFullScreenPage * SCOREBOARD_ITEMS_PER_PAGE;
+            int lastElement = firstElement + SCOREBOARD_ITEMS_PER_PAGE <= teamDatas.Count
+                ? firstElement + SCOREBOARD_ITEMS_PER_PAGE
+                : teamDatas.Count;
+
+            int cgIndex = 1;
+            for (int i = firstElement; i < firstElement + SCOREBOARD_ITEMS_PER_PAGE; i++)
+            {
+                if (i < lastElement)
+                {
+                    var currentTeam = teamDatas[i];
+
+                    cgData.SetData("result_rank_" + cgIndex, (i + 1).ToString());
+                    cgData.SetData("result_teamname_" + cgIndex, currentTeam.TeamName);
+                    cgData.SetData("result_point_" + cgIndex, currentTeam.TechnicalScore.ToString());
+                }
+                else
+                {
+                    cgData.SetData("result_rank_" + cgIndex, "");
+                    cgData.SetData("result_teamname_" + cgIndex, "");
+                    cgData.SetData("result_point_" + cgIndex, "");
+                }
+
+                cgIndex++;
+            }
+        }
+
+        private void updateSpeedTimesCgData(CasparCGDataCollection cgData, List<TeamData> teamDatas)
+        {
+            teamDatas.Sort((a, b) => a.FastestTime - b.FastestTime);
+
+            int firstElement = CurrentFullScreenPage * SCOREBOARD_ITEMS_PER_PAGE;
+            int lastElement = firstElement + SCOREBOARD_ITEMS_PER_PAGE <= teamDatas.Count
+                ? firstElement + SCOREBOARD_ITEMS_PER_PAGE
+                : teamDatas.Count;
+
+            int cgIndex = 1;
+            for (int i = firstElement; i < firstElement + SCOREBOARD_ITEMS_PER_PAGE; i++)
+            {
+                if (i < lastElement)
+                {
+                    var currentTeam = teamDatas[i];
+
+                    cgData.SetData("result_rank_" + cgIndex, (i + 1).ToString());
+                    cgData.SetData("result_teamname_" + cgIndex, currentTeam.TeamName);
+                    cgData.SetData("result_time_" + cgIndex, Converters.TimeToString(currentTeam.FastestTime));
+                }
+                else
+                {
+                    cgData.SetData("result_rank_" + cgIndex, "");
+                    cgData.SetData("result_teamname_" + cgIndex, "");
+                    cgData.SetData("result_time_" + cgIndex, "");
+                }
+
+                cgIndex++;
+            }
+        }
+
+        private void updateAudienceCgData(CasparCGDataCollection cgData, List<TeamData> teamDatas)
+        {
+            teamDatas.Sort((a, b) => b.Votes - a.Votes);
+
+            int firstElement = CurrentFullScreenPage * SCOREBOARD_ITEMS_PER_PAGE;
+            int lastElement = firstElement + SCOREBOARD_ITEMS_PER_PAGE <= teamDatas.Count
+                ? firstElement + SCOREBOARD_ITEMS_PER_PAGE
+                : teamDatas.Count;
+
+            int cgIndex = 1;
+            for (int i = firstElement; i < firstElement + SCOREBOARD_ITEMS_PER_PAGE; i++)
+            {
+                if (i < lastElement)
+                {
+                    var currentTeam = teamDatas[i];
+
+                    cgData.SetData("result_rank_" + cgIndex, (i + 1).ToString());
+                    cgData.SetData("result_teamname_" + cgIndex, currentTeam.TeamName);
+                    cgData.SetData("result_votes_" + cgIndex, currentTeam.Votes.ToString());
+                    cgData.SetData("result_point_" + cgIndex, currentTeam.AudienceScore.ToString());
+                }
+                else
+                {
+                    cgData.SetData("result_rank_" + cgIndex, "");
+                    cgData.SetData("result_teamname_" + cgIndex, "");
+                    cgData.SetData("result_votes_" + cgIndex, "");
+                    cgData.SetData("result_point_" + cgIndex, "");
+                }
+
+                cgIndex++;
+            }
+        }
+
+        private void updateJuniorFinalResultCgData(CasparCGDataCollection cgData, List<TeamData> teamDatas)
+        {
+            teamDatas = teamDatas.Where(team => team.TeamType == TeamType.JUNIOR).ToList();
+            teamDatas.Sort((a, b) => a.RankJunior - b.RankJunior);
+
+            int firstElement = CurrentFullScreenPage * SCOREBOARD_ITEMS_PER_PAGE;
+            int lastElement = firstElement + SCOREBOARD_ITEMS_PER_PAGE <= teamDatas.Count
+                ? firstElement + SCOREBOARD_ITEMS_PER_PAGE
+                : teamDatas.Count;
+
+            int cgIndex = 1;
+            for (int i = firstElement; i < firstElement + SCOREBOARD_ITEMS_PER_PAGE; i++)
+            {
+                if (i < lastElement)
+                {
+                    var currentTeam = teamDatas[i];
+
+                    cgData.SetData("result_rank_" + cgIndex, (i + 1).ToString());
+                    cgData.SetData("result_teamname_" + cgIndex, currentTeam.TeamName);
+                    cgData.SetData("result_point_" + cgIndex, currentTeam.TotalScore.ToString());
+                }
+                else
+                {
+                    cgData.SetData("result_rank_" + cgIndex, "");
+                    cgData.SetData("result_teamname_" + cgIndex, "");
+                    cgData.SetData("result_point_" + cgIndex, "");
+                }
+
+                cgIndex++;
+            }
+        }
+
+        private void updateFinalResultCgData(CasparCGDataCollection cgData, List<TeamData> teamDatas)
+        {
+            teamDatas.Sort((a, b) => b.Rank - a.Rank);
+
+            int firstElement = CurrentFullScreenPage * SCOREBOARD_ITEMS_PER_PAGE;
+            int lastElement = firstElement + SCOREBOARD_ITEMS_PER_PAGE <= teamDatas.Count
+                ? firstElement + SCOREBOARD_ITEMS_PER_PAGE
+                : teamDatas.Count;
+
+            int cgIndex = 1;
+            for (int i = firstElement; i < firstElement + SCOREBOARD_ITEMS_PER_PAGE; i++)
+            {
+                if (i < lastElement)
+                {
+                    var currentTeam = teamDatas[i];
+
+                    cgData.SetData("result_rank_" + cgIndex, (i + 1).ToString());
+                    cgData.SetData("result_teamname_" + cgIndex, currentTeam.TeamName);
+                    cgData.SetData("result_point_" + cgIndex, currentTeam.TotalScore.ToString());
+                }
+                else
+                {
+                    cgData.SetData("result_rank_" + cgIndex, "");
+                    cgData.SetData("result_teamname_" + cgIndex, "");
+                    cgData.SetData("result_point_" + cgIndex, "");
+                }
+
+                cgIndex++;
+            }
+        }
+
+        public void hideFullscreenGraphics()
+        {
+            stopLayer(SCOREBOARD_LAYER);
+        }
+
         private void stopLayer(int layer)
         {
             if (IsConnected)
             {
                 casparDevice.Channels[CHANNEL].CG.Stop(layer, 0);
+
+                switch (layer)
+                {
+                    case TIMER_LAYER:
+                        TimerShown = false;
+                        break;
+                    case TEAMINFO_LAYER:
+                        SpeedDisplayShown = false;
+                        TechDisplayShown = false;
+                        break;
+                    case SCOREBOARD_LAYER:
+                        FullScreenGraphicsShown = false;
+                        break;
+                }
             }
         }
     }

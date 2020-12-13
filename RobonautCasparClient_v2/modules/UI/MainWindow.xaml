@@ -15,7 +15,7 @@
             <RowDefinition Height="30"/>
             <RowDefinition />
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" Text="RobonAUT feliratozó kliens" FontSize="32" FontWeight="Bold" HorizontalAlignment="Center"></TextBlock>
+        <TextBlock Grid.Row="0" Text="RobonAUT feliratozó kliens v2" FontSize="32" FontWeight="Bold" HorizontalAlignment="Center"></TextBlock>
         <Grid Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="120" />
@@ -82,15 +82,19 @@
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <StackPanel Orientation="Vertical" Grid.Column="0">
-                <TextBlock Text="Össz eredmények" Margin="0,0,5,10" FontSize="20" FontWeight="Bold" HorizontalAlignment="Left"></TextBlock>
+                <TextBlock Text="Össz. eredmények" Margin="0,0,5,10" FontSize="20" FontWeight="Bold" HorizontalAlignment="Left"></TextBlock>
                 <Button Height="30" Margin="10,0,10,5" Content="Hozott pontok ranglistája" Click="showQualificationPointsTableButton_Click"></Button>
-                <!--<Button Height="30" Content="Ügyességi verseny ranglistája" Margin="10,0,10,5" Click="ShowTotalSkillPointsButton_Click"></Button>
-                <Button Height="30" Content="Gyorsasági verseny időeredmények" Margin="10,0,10,5" Click="ShowTotalSpeedTimeButton_Click" IsEnabled="False"></Button>
-                <Button Height="30" Content="Gyorsasági verseny ranglistája" Margin="10,0,10,5" Click="ShowTotalSpeedPoints_Click"></Button>-->
-                <Button Height="30" Content="Közösségi pontok ranglistája" Margin="10,0,10,5" Click="showTotalAudiencePointsTableButton_Click"></Button>
+                <Button Height="30" Content="Ügyességi verseny pontok" Margin="10,0,10,5" Click="showTechnicalPointsTableButton_Click"></Button>
+                <Button Height="30" Content="Gyorsasági verseny időeredmények" Margin="10,0,10,5" Click="showSpeedTimesTableButton_Click"></Button>
+                <!--<Button Height="30" Content="Gyorsasági verseny pontok" Margin="10,0,10,5" Click="showSpeedPointsTableButton_Click"></Button>-->
+                <Button Height="30" Content="Közönségi pontok ranglistája" Margin="10,0,10,5" Click="showTotalAudiencePointsTableButton_Click"></Button>
                 <Button Height="30" Content="Összesített eredmény - Junior" Margin="10,0,10,5" Click="showJuniorFinalResultTableButton_Click"></Button>
                 <Button Height="30" Content="Összesített eredmény - Összes" Margin="10,0,10,5" Click="showTotalFinalResultTableButton_Click"></Button>
-                <TextBlock Text="Időmérő" Margin="0,0,5,10" FontSize="20" FontWeight="Bold" HorizontalAlignment="Left"></TextBlock>
+                <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Button Height="30" Width="100" Content="Következő oldal" Margin="10,0,10,5" Click="nextFullScreenGraphicsPageButton_Click"></Button>
+                    <Button Height="30" Width="80" Content="Levétel" Margin="10,0,10,5" Click="hideFullScreenGraphicsPageButton_Click"></Button>
+                </WrapPanel>
+                <TextBlock Text="Gyorsasági időmérő" Margin="0,0,5,10" FontSize="20" FontWeight="Bold" HorizontalAlignment="Left"></TextBlock>
                 <TextBlock Name="uiStopper" Text="00:00.000" FontSize="20" Margin="0,0,5,10" HorizontalAlignment="Center"></TextBlock>
                 <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                     <Button Height="30" Width="80" Name="showStopperButton" Content="Óra feltétele" Margin="10,0,10,0" Click="showStopperButton_Click"></Button>

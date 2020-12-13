@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Documents;
 
 namespace RobonautCasparClient_v2.DO
@@ -69,6 +70,16 @@ namespace RobonautCasparClient_v2.DO
                 }
 
                 return times;
+            }
+        }
+
+        public int FastestTime
+        {
+            get
+            {
+                if (SpeedTimes.Count == 0)
+                    return int.MaxValue;
+                return SpeedTimes.Min();
             }
         }
     }

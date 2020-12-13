@@ -2,10 +2,11 @@
 {
     public enum FullScreenTableType
     {
-        BROUGHT_POINTS,
-        AUDIENCE,
-        SPEED,
-        TECHNICAL,
+        QUALIFICATION_POINTS,
+        AUDIENCE_POINTS,
+        TECHNICAL_POINTS,
+        SPEED_TIMES,
+        SPEED_POINTS,
         FINAL,
         FINAL_JUNIOR
     }

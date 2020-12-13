@@ -77,9 +77,9 @@ namespace RobonautCasparClient_v2.Modules.interfaces
          *
          * Ha egy oldalra nem férnek ki a csapatok egy oldalra, akkor magától többre bontja és lépteti
          */
-        void showFullscreenTable(FullScreenTableType type, List<TeamData> teamDatas);
+        void showFullscreenGraphics(FullScreenTableType type, List<TeamData> teamDatas);
 
-        void hideFullscreenTable();
+        void hideFullscreenGraphics();
 
         /*
          * Megjelenít egy csapathoz tartozó minden információt felvonultató inzertet

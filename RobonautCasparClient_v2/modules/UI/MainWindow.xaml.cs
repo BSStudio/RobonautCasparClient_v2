@@ -306,18 +306,42 @@ namespace RobonautCasparClient_v2
 
         private void showQualificationPointsTableButton_Click(object sender, RoutedEventArgs e)
         {
+            mainController.showFullScreenGraphics(FullScreenTableType.QUALIFICATION_POINTS);
         }
 
         private void showTotalAudiencePointsTableButton_Click(object sender, RoutedEventArgs e)
         {
+            mainController.showFullScreenGraphics(FullScreenTableType.AUDIENCE_POINTS);
+        }
+        
+        private void showTechnicalPointsTableButton_Click(object sender, RoutedEventArgs e)
+        {
+            mainController.showFullScreenGraphics(FullScreenTableType.TECHNICAL_POINTS);
+        }
+        
+        private void showSpeedTimesTableButton_Click(object sender, RoutedEventArgs e)
+        {
+            mainController.showFullScreenGraphics(FullScreenTableType.SPEED_TIMES);
         }
 
         private void showJuniorFinalResultTableButton_Click(object sender, RoutedEventArgs e)
         {
+            mainController.showFullScreenGraphics(FullScreenTableType.FINAL_JUNIOR);
         }
 
         private void showTotalFinalResultTableButton_Click(object sender, RoutedEventArgs e)
         {
+            mainController.showFullScreenGraphics(FullScreenTableType.FINAL);
+        }
+
+        private void nextFullScreenGraphicsPageButton_Click(object sender, RoutedEventArgs e)
+        {
+            mainController.nextFullScreenPage();
+        }
+
+        private void hideFullScreenGraphicsPageButton_Click(object sender, RoutedEventArgs e)
+        {
+            mainController.hideFullScreenGraphics();
         }
 
         public void updateTechTimerDisplay(long time)
