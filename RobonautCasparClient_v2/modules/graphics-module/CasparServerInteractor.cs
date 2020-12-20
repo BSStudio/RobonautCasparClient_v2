@@ -37,15 +37,6 @@ namespace RobonautCasparClient_v2.modules
         public const int TEAMINFO_LAYER = 11;
         public const int TIMER_LAYER = 12;
         public const int SCOREBOARD_LAYER = 13;
-        public const int BREAK_BETWEEN_PAGES = 7000;
-
-        public delegate void casparConnectedDelegate();
-
-        public event casparConnectedDelegate casparConnected;
-
-        public delegate void casparDisconnectedDelegate();
-
-        public event casparDisconnectedDelegate casparDisconnected;
 
         private bool TimerShown { get; set; }
         private bool TechDisplayShown { get; set; }
@@ -72,7 +63,7 @@ namespace RobonautCasparClient_v2.modules
             casparDevice.ConnectionStatusChanged += CasparDevice_ConnectionStatusChanged;
         }
 
-        public void connect(string connectionUrl)
+        public override void connect(string connectionUrl)
         {
             if (!casparDevice.IsConnected)
             {
@@ -82,7 +73,7 @@ namespace RobonautCasparClient_v2.modules
             }
         }
 
-        public void disconnect()
+        public override void disconnect()
         {
             casparDevice.Disconnect();
         }
@@ -91,15 +82,20 @@ namespace RobonautCasparClient_v2.modules
         {
             if (IsConnected)
             {
-                casparConnected();
+                fireCasparConnected();
             }
             else
             {
-                casparDisconnected();
+                fireCasparDisconnected();
             }
         }
 
-        public void showNameInsert(string name, string title)
+        public override bool getConnectionToServer()
+        {
+            return IsConnected;
+        }
+
+        public override void showNameInsert(string name, string title)
         {
             if (IsConnected)
             {
@@ -111,12 +107,12 @@ namespace RobonautCasparClient_v2.modules
             }
         }
 
-        public void hideNameInsert()
+        public override void hideNameInsert()
         {
             stopLayer(NAME_LAYER);
         }
 
-        public void showTeamNameWithMembers(TeamData teamData)
+        public override void showTeamNameWithMembers(TeamData teamData)
         {
             if (IsConnected)
             {
@@ -128,12 +124,12 @@ namespace RobonautCasparClient_v2.modules
             }
         }
 
-        public void stopTeamDataGraphics()
+        public override void stopTeamDataGraphics()
         {
             stopLayer(TEAMINFO_LAYER);
         }
 
-        public void stopAllGraphics()
+        public override void stopAllGraphics()
         {
             stopLayer(NAME_LAYER);
             stopLayer(TEAMINFO_LAYER);
@@ -141,7 +137,7 @@ namespace RobonautCasparClient_v2.modules
             stopLayer(SCOREBOARD_LAYER);
         }
 
-        public void showTeamTechnicalContestDisplay(TeamData teamData)
+        public override void showTeamTechnicalContestDisplay(TeamData teamData)
         {
             if (IsConnected)
             {
@@ -155,7 +151,7 @@ namespace RobonautCasparClient_v2.modules
             }
         }
 
-        public void updateTeamTechnicalContestDisplay(TeamData teamData)
+        public override void updateTeamTechnicalContestDisplay(TeamData teamData)
         {
             if (IsConnected && TechDisplayShown)
             {
@@ -166,7 +162,7 @@ namespace RobonautCasparClient_v2.modules
             }
         }
 
-        public void showTeamSpeedContestDisplay(TeamData teamData)
+        public override void showTeamSpeedContestDisplay(TeamData teamData)
         {
             if (IsConnected)
             {
@@ -186,7 +182,7 @@ namespace RobonautCasparClient_v2.modules
             }
         }
 
-        public void updateTeamSpeedContestDisplay(TeamData teamData)
+        public override void updateTeamSpeedContestDisplay(TeamData teamData)
         {
             if (IsConnected && SpeedDisplayShown)
             {
@@ -204,7 +200,7 @@ namespace RobonautCasparClient_v2.modules
             }
         }
 
-        public void showTimer(int startMs, TimerDirection dir)
+        public override void showTimer(int startMs, TimerDirection dir)
         {
             if (IsConnected)
             {
@@ -229,12 +225,12 @@ namespace RobonautCasparClient_v2.modules
             }
         }
 
-        public void hideTimer()
+        public override void hideTimer()
         {
             stopLayer(TIMER_LAYER);
         }
 
-        public void showTeamAllStats(TeamData teamData, TeamType rankType)
+        public override void showTeamAllStats(TeamData teamData, TeamType rankType)
         {
             if (IsConnected)
             {
@@ -264,7 +260,7 @@ namespace RobonautCasparClient_v2.modules
             }
         }
 
-        public void showFullscreenGraphics(FullScreenTableType type, List<TeamData> teamDatas)
+        public override void showFullscreenGraphics(FullScreenTableType type, List<TeamData> teamDatas)
         {
             if (IsConnected)
             {
@@ -315,12 +311,7 @@ namespace RobonautCasparClient_v2.modules
             }
         }
 
-        /*
-         * visszater azzal, hogy meg van-e jelenitve a grafika a tablazat utan
-         * true = meg van jelenitve
-         * false = nem volt mar uj adat, eltunt
-         */
-        public bool stepFullScreenGraphics(List<TeamData> teamDatas)
+        public override bool stepFullScreenGraphics(List<TeamData> teamDatas)
         {
             if (IsConnected)
             {
@@ -562,7 +553,7 @@ namespace RobonautCasparClient_v2.modules
             }
         }
 
-        public void hideFullscreenGraphics()
+        public override void hideFullscreenGraphics()
         {
             stopLayer(SCOREBOARD_LAYER);
         }

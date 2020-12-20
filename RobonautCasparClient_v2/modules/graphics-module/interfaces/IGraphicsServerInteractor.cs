@@ -3,43 +3,60 @@ using RobonautCasparClient_v2.DO;
 
 namespace RobonautCasparClient_v2.Modules.interfaces
 {
-    public interface IGraphicsServerInteractor
+    public abstract class IGraphicsServerInteractor
     {
+        public delegate void casparConnectedDelegate();
+        public event casparConnectedDelegate casparConnected;
+
+        public delegate void casparDisconnectedDelegate();
+        public event casparDisconnectedDelegate casparDisconnected;
+
+        protected void fireCasparConnected()
+        {
+         casparConnected();
+        }
+
+        protected void fireCasparDisconnected()
+        {
+         casparDisconnected();
+        }
 
         /*
          * Csatlakozik a grafikus kijátszó szerverhez a megadott elérhetőség alapján
         */
-        void connect(string connectionUrl);
+        public abstract void connect(string connectionUrl);
 
         /*
          * Lecsatlakozik a szerverről
          */
-        void disconnect();
+        public abstract void disconnect();
+
+        public abstract bool getConnectionToServer();
 
         /*
          * Megjelenít egy névinzertet
          */
-        void showNameInsert(string name, string title);
+        public abstract void showNameInsert(string name, string title);
 
         /*
          * Elrejti a névinzertet
          */
-        void hideNameInsert();
+        public abstract void hideNameInsert();
 
         /*
          * Megjeleníti egy csapat és a tagjainak nevét
          */
-        void showTeamNameWithMembers(TeamData teamData);
+        public abstract void showTeamNameWithMembers(TeamData teamData);
 
         /*
          * Elrejt minden csapatokkal kapcsolatos inzertet
          */
-        void stopTeamDataGraphics();
+        public abstract void stopTeamDataGraphics();
 
         /*
          * Elrejt minden grafikát
          */
-        void stopAllGraphics();
+        public abstract void stopAllGraphics();
 
         /*
          * Ügyességi versenyrész alatt látható inzert
@@ -47,9 +64,9 @@ namespace RobonautCasparClient_v2.Modules.interfaces
          *     - csapat neve
          *     - szerzett pontok
          */
-        void showTeamTechnicalContestDisplay(TeamData teamData);
+        public abstract void showTeamTechnicalContestDisplay(TeamData teamData);
 
-        void updateTeamTechnicalContestDisplay(TeamData teamData);
+        public abstract void updateTeamTechnicalContestDisplay(TeamData teamData);
 
         /*
          * Gyorsasági versenyrész alatt látható inzert
@@ -57,33 +74,43 @@ namespace RobonautCasparClient_v2.Modules.interfaces
          *     - ügyességi részen szerzett pont
          *     - köridők
          */
-        void showTeamSpeedContestDisplay(TeamData teamData);
+        public abstract void showTeamSpeedContestDisplay(TeamData teamData);
 
-        void updateTeamSpeedContestDisplay(TeamData teamData);
+        public abstract void updateTeamSpeedContestDisplay(TeamData teamData);
 
          /*
          * A meghatározott irányba számláló inzert megjelenítése
          * Ha már meg van jelenítve az inzert, akkor csak frissíti a tartalmat
          */
-        void showTimer(int startMs, TimerDirection dir);
+         public abstract void showTimer(int startMs, TimerDirection dir);
 
         /*
          * Elrejti a számlálót
          */
-        void hideTimer();
+        public abstract void hideTimer();
+
+        /*
+         * Megjelenít egy csapathoz tartozó minden információt felvonultató inzertet
+         */
+        public abstract void showTeamAllStats(TeamData teamData, TeamType rankType);
 
         /*
          * Teljes képernyős tabellák megjelenítése megadott típussal, megadott csapat adatokkal
          *
          * Ha egy oldalra nem férnek ki a csapatok egy oldalra, akkor magától többre bontja és lépteti
          */
-        void showFullscreenGraphics(FullScreenTableType type, List<TeamData> teamDatas);
-
-        void hideFullscreenGraphics();
-
+        public abstract void showFullscreenGraphics(FullScreenTableType type, List<TeamData> teamDatas);
+         
         /*
-         * Megjelenít egy csapathoz tartozó minden információt felvonultató inzertet
+         * visszater azzal, hogy meg van-e jelenitve a grafika a tablazat utan
+         * true = meg van jelenitve
+         * false = nem volt mar uj adat, eltunt
          */
-        void showTeamAllStats(TeamData teamData, TeamType rankType);
+        public abstract bool stepFullScreenGraphics(List<TeamData> teamDatas);
+        
+        /*
+         * elrejti a teljes képernyős grafikát
+         */
+        public abstract void hideFullscreenGraphics();
     }
 }

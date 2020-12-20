@@ -31,7 +31,7 @@ namespace RobonautCasparClient_v2.modules.controller
 
         private MainWindow _window;
 
-        private CasparServerInteractor graphicsInteractor = CasparServerInteractor.Instance;
+        private IGraphicsServerInteractor graphicsInteractor = CasparServerInteractor.Instance;
         private WebSocketDataInteractor dataInteractor = WebSocketDataInteractor.Instance;
         private TeamDataService teamDataService = TeamDataService.Instance;
 
@@ -52,7 +52,7 @@ namespace RobonautCasparClient_v2.modules.controller
 
         public bool ConnectedToGraphicsServer
         {
-            get { return graphicsInteractor.IsConnected; }
+            get { return graphicsInteractor.getConnectionToServer(); }
         }
 
         public MainWindow Window
@@ -211,7 +211,7 @@ namespace RobonautCasparClient_v2.modules.controller
 
         public void showTechTimer()
         {
-            if (graphicsInteractor.IsConnected)
+            if (ConnectedToGraphicsServer)
             {
                 var time = technicalStartTime - techTimerCounter.ElapsedMilliseconds;
                 if (TechTimingRolling)
@@ -269,7 +269,7 @@ namespace RobonautCasparClient_v2.modules.controller
 
         public void showSpeedTimer()
         {
-            if (graphicsInteractor.IsConnected)
+            if (ConnectedToGraphicsServer)
             {
                 var time = speedTimerCounter.ElapsedMilliseconds;
                 if (SpeedTimingRolling)
@@ -313,7 +313,7 @@ namespace RobonautCasparClient_v2.modules.controller
 
         public void hideTiming()
         {
-            if (graphicsInteractor.IsConnected)
+            if (ConnectedToGraphicsServer)
             {
                 graphicsInteractor.hideTimer();
 
@@ -329,7 +329,7 @@ namespace RobonautCasparClient_v2.modules.controller
 
         public void showFullScreenGraphics(FullScreenTableType type)
         {
-            if (graphicsInteractor.IsConnected)
+            if (ConnectedToGraphicsServer)
             {
                 graphicsInteractor.showFullscreenGraphics(type, teamDataService.Teams);
                 FullscreenGraphicsShown = true;
@@ -346,7 +346,7 @@ namespace RobonautCasparClient_v2.modules.controller
 
         public void hideFullScreenGraphics()
         {
-            if (FullscreenGraphicsShown && graphicsInteractor.IsConnected)
+            if (FullscreenGraphicsShown && ConnectedToGraphicsServer)
             {
                 graphicsInteractor.hideFullscreenGraphics();
                 FullscreenGraphicsShown = false;

@@ -2,3 +2,5 @@
 /.vs
 /packages
 /RobonautCasparClient_v2/bin
+RobonautCasparClient_v2/obj/
+
