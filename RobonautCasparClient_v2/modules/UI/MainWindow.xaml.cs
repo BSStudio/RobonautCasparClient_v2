@@ -323,6 +323,11 @@ namespace RobonautCasparClient_v2
         {
             mainController.showFullScreenGraphics(FullScreenTableType.SPEED_TIMES);
         }
+        
+        private void showSpeedPointsTableButton_Click(object sender, RoutedEventArgs e)
+        {
+            mainController.showFullScreenGraphics(FullScreenTableType.SPEED_POINTS);
+        }
 
         private void showJuniorFinalResultTableButton_Click(object sender, RoutedEventArgs e)
         {

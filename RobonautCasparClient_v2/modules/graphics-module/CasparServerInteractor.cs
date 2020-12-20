@@ -283,7 +283,7 @@ namespace RobonautCasparClient_v2.modules
                         casparDevice.Channels[CHANNEL].CG.Add(SCOREBOARD_LAYER, 0, "RANGSOR_KOZONSEG", true, cgData);
                         break;
                     case FullScreenTableType.TECHNICAL_POINTS:
-                        cgData.SetData("title", "Technikai pontok");
+                        cgData.SetData("title", "Ügyességi verseny rangsor");
                         updateTechnicalPointsCgData(cgData, teamDatas);
                         
                         casparDevice.Channels[CHANNEL].CG.Add(SCOREBOARD_LAYER, 0, "RANGSOR_PONT", true, cgData);
@@ -292,6 +292,12 @@ namespace RobonautCasparClient_v2.modules
                         updateSpeedTimesCgData(cgData, teamDatas);
                         
                         casparDevice.Channels[CHANNEL].CG.Add(SCOREBOARD_LAYER, 0, "RANGSOR_GYORSASAGI", true, cgData);
+                        break;
+                    case FullScreenTableType.SPEED_POINTS:
+                        cgData.SetData("title", "Gyorsasági verseny rangsor");
+                        updateSpeedPointsCgData(cgData, teamDatas);
+                        
+                        casparDevice.Channels[CHANNEL].CG.Add(SCOREBOARD_LAYER, 0, "RANGSOR_PONT", true, cgData);
                         break;
                     case FullScreenTableType.FINAL_JUNIOR:
                         cgData.SetData("title", "Összesített junior rangsor");
@@ -347,6 +353,9 @@ namespace RobonautCasparClient_v2.modules
                                 break;
                             case FullScreenTableType.SPEED_TIMES:
                                 updateSpeedTimesCgData(cgData, teamDatas);
+                                break;
+                            case FullScreenTableType.SPEED_POINTS:
+                                updateSpeedPointsCgData(cgData, teamDatas);
                                 break;
                             case FullScreenTableType.FINAL_JUNIOR:
                                 updateJuniorFinalResultCgData(cgData, teamDatas);
@@ -451,6 +460,37 @@ namespace RobonautCasparClient_v2.modules
                     cgData.SetData("result_rank_" + cgIndex, "");
                     cgData.SetData("result_teamname_" + cgIndex, "");
                     cgData.SetData("result_time_" + cgIndex, "");
+                }
+
+                cgIndex++;
+            }
+        }
+
+        private void updateSpeedPointsCgData(CasparCGDataCollection cgData, List<TeamData> teamDatas)
+        {
+            teamDatas.Sort((a, b) => b.SumSpeedPoints - a.SumSpeedPoints);
+
+            int firstElement = CurrentFullScreenPage * SCOREBOARD_ITEMS_PER_PAGE;
+            int lastElement = firstElement + SCOREBOARD_ITEMS_PER_PAGE <= teamDatas.Count
+                ? firstElement + SCOREBOARD_ITEMS_PER_PAGE
+                : teamDatas.Count;
+
+            int cgIndex = 1;
+            for (int i = firstElement; i < firstElement + SCOREBOARD_ITEMS_PER_PAGE; i++)
+            {
+                if (i < lastElement)
+                {
+                    var currentTeam = teamDatas[i];
+
+                    cgData.SetData("result_rank_" + cgIndex, (i + 1).ToString());
+                    cgData.SetData("result_teamname_" + cgIndex, currentTeam.TeamName);
+                    cgData.SetData("result_point_" + cgIndex, currentTeam.SumSpeedPoints.ToString());
+                }
+                else
+                {
+                    cgData.SetData("result_rank_" + cgIndex, "");
+                    cgData.SetData("result_teamname_" + cgIndex, "");
+                    cgData.SetData("result_point_" + cgIndex, "");
                 }
 
                 cgIndex++;
