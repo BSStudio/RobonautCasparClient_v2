@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Windows.Threading;
 using RobonautCasparClient_v2.DO;
 using RobonautCasparClient_v2.DO.communication;
+using RobonautCasparClient_v2.modules.interfaces;
 using RobonautCasparClient_v2.Modules.interfaces;
 
 namespace RobonautCasparClient_v2.modules.controller
@@ -32,7 +33,7 @@ namespace RobonautCasparClient_v2.modules.controller
         private MainWindow _window;
 
         private IGraphicsServerInteractor graphicsInteractor = CasparServerInteractor.Instance;
-        private WebSocketDataInteractor dataInteractor = WebSocketDataInteractor.Instance;
+        private IDataServerInteractor dataInteractor = WebSocketDataInteractor.Instance;
         private TeamDataService teamDataService = TeamDataService.Instance;
 
         private readonly Stopwatch techTimerCounter = new Stopwatch();
@@ -127,7 +128,7 @@ namespace RobonautCasparClient_v2.modules.controller
 
         public void sendYearToDataInteractor(int year)
         {
-            dataInteractor.Year = year;
+            dataInteractor.setYear(year);
         }
 
         private void updateUiDataFromResult(TeamResultDto teamResult)

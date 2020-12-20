@@ -4,11 +4,12 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RobonautCasparClient_v2.DO;
 using RobonautCasparClient_v2.DO.communication;
+using RobonautCasparClient_v2.modules.interfaces;
 using WebSocketSharp;
 
 namespace RobonautCasparClient_v2.modules
 {
-    public class WebSocketDataInteractor
+    public class WebSocketDataInteractor: IDataServerInteractor
     {
         #region Singleton implementation
 
@@ -34,65 +35,12 @@ namespace RobonautCasparClient_v2.modules
 
         public int Year { get; set; }
 
-        public delegate void connectedDelegate();
+        public override void setYear(int year)
+        {
+            Year = year;
+        }
 
-        public event connectedDelegate connectedEvent;
-
-        public delegate void connectionFailedDelegate();
-
-        public event connectionFailedDelegate connectionFailedEvent;
-
-        public delegate void disconnectedDelegate();
-
-        public event disconnectedDelegate disconnectedEvent;
-
-        public delegate void dataProviderClientConnectedDelegate();
-
-        public event dataProviderClientConnectedDelegate dataProviderClientConnectedEvent;
-
-        public delegate void dataProviderClientDisconnectedDelegate();
-
-        public event dataProviderClientDisconnectedDelegate dataProviderClientDisconnectedEvent;
-
-
-        public delegate void teamDatasRecievedDelegate(List<TeamData> newTeamDatas);
-
-        public event teamDatasRecievedDelegate teamDatasRecievedEvent;
-
-        public delegate void teamDataRecievedDelegate(TeamData newTeamData);
-
-        public event teamDataRecievedDelegate teamDataRecievedEvent;
-
-        public delegate void techTimerStartDelegate(int startMs);
-
-        public event techTimerStartDelegate techTimerStartEvent;
-
-        public delegate void techTimerStopDelegate(int stopTime);
-
-        public event techTimerStopDelegate techTimerStopEvent;
-
-        public delegate void stopperStartDelegate();
-
-        public event stopperStartDelegate stopperStartEvent;
-
-        public delegate void stopperStopDelegate(int stopTime);
-
-        public event stopperStopDelegate stopperStopEvent;
-
-        public delegate void technicalScoreRecievedDelegate(TechnicalScoreDto techScore);
-
-        public event technicalScoreRecievedDelegate technicalScoreRecievedEvent;
-
-        public delegate void speedScoreRecievedDelegate(SpeedScoreDto speedScore);
-
-        public event speedScoreRecievedDelegate speedScoreRecievedEvent;
-
-        public delegate void teamResultRecievedDelegate(TeamResultDto teamResult);
-
-        public event teamResultRecievedDelegate teamResultRecievedEvent;
-
-
-        public void connect(string serverUrl)
+        public override void connect(string serverUrl)
         {
             try
             {
@@ -104,11 +52,11 @@ namespace RobonautCasparClient_v2.modules
             }
             catch (Exception e)
             {
-                connectionFailedEvent();
+                fireConnectionFailedEvent();
             }
         }
 
-        public void disconnect()
+        public override void disconnect()
         {
             ws.Close();
         }
@@ -121,60 +69,60 @@ namespace RobonautCasparClient_v2.modules
             switch (obj.GetValue("type").ToString())
             {
                 case "connected":
-                    connectedEvent();
+                    fireConnectedEvent();
                     break;
                 case "teams":
                     List<TeamData> teamDatas =
                         JsonConvert.DeserializeObject<List<TeamData>>(obj.GetValue("teams").ToString());
                     teamDataService.Teams = teamDatas;
-                    teamDatasRecievedEvent(teamDatas);
+                    fireTeamDatasRecievedEvent(teamDatas);
                     break;
                 case "teamData":
                     TeamData teamData = JsonConvert.DeserializeObject<TeamData>(obj.GetValue("team").ToString());
                     teamDataService.updateTeam(teamData);
-                    teamDataRecievedEvent(teamData);
+                    fireTeamDataRecievedEvent(teamData);
                     break;
                 case "dataClientConnected":
-                    dataProviderClientConnectedEvent();
+                    fireDataProviderClientConnectedEvent();
                     break;
                 case "technicalTimerStart":
-                    techTimerStartEvent(Int32.Parse(obj.GetValue("startTime").ToString()));
+                    fireTechTimerStartEvent(Int32.Parse(obj.GetValue("startTime").ToString()));
                     break;
                 case "technicalTimerStop":
-                    techTimerStopEvent(Int32.Parse(obj.GetValue("stopTime").ToString()));
+                    fireTechTimerStopEvent(Int32.Parse(obj.GetValue("stopTime").ToString()));
                     break;
                 case "speedTimerStart":
-                    stopperStartEvent();
+                    fireStopperStartEvent();
                     break;
                 case "speedTimerStop":
-                    stopperStopEvent(Int32.Parse(obj.GetValue("stopTime").ToString()));
+                    fireStopperStopEvent(Int32.Parse(obj.GetValue("stopTime").ToString()));
                     break;
                 case "technicalScoreUpdate":
                     TechnicalScoreDto techScore =
                         JsonConvert.DeserializeObject<TechnicalScoreDto>(e.Data);
-                    technicalScoreRecievedEvent(techScore);
+                    fireTechnicalScoreRecievedEvent(techScore);
                     break;
                 case "speedScoreUpdate":
                     SpeedScoreDto speedScore =
                         JsonConvert.DeserializeObject<SpeedScoreDto>(e.Data);
-                    speedScoreRecievedEvent(speedScore);
+                    fireSpeedScoreRecievedEvent(speedScore);
                     break;
                 case "teamResult":
                     TeamResultDto teamResult =
                         JsonConvert.DeserializeObject<TeamResultDto>(e.Data);
-                    teamResultRecievedEvent(teamResult);
+                    fireTeamResultRecievedEvent(teamResult);
                     break;
             }
         }
 
-        public void requestTeamDataUpdate()
+        public override void requestTeamDataUpdate()
         {
             ws.Send("{\"type\": \"getTeams\",\"year\": " + Year + "}");
         }
 
         private void Ws_OnClose(object sender, CloseEventArgs e)
         {
-            disconnectedEvent();
+            fireDisconnectedEvent();
         }
     }
 }

@@ -122,7 +122,8 @@
     <Compile Include="DO\communication\SpeedScoreDto.cs" />
     <Compile Include="DO\communication\TeamResultDto.cs" />
     <Compile Include="DO\communication\TechnicalScoreDto.cs" />
-    <Compile Include="modules\communications-module\WebSocketDataInteractor.cs" />
+    <Compile Include="modules\data-communications-module\interfaces\IDataServerInteractor.cs" />
+    <Compile Include="modules\data-communications-module\WebSocketDataInteractor.cs" />
     <Compile Include="modules\graphics-module\CasparServerInteractor.cs" />
     <Compile Include="modules\graphics-module\interfaces\IGraphicsServerInteractor.cs" />
     <Compile Include="Util\FullScreenTableType.cs" />
