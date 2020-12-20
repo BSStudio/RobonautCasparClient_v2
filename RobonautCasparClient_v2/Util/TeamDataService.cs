@@ -71,13 +71,15 @@ namespace RobonautCasparClient_v2.DO
             return teamToUpdate;
         }
 
-        public TeamData updateWithSpeedScore(SpeedScoreDto speedScore)
+        public TeamData updateWithSafetyCarBonus(SafetyCarEventDto safetyCarEvent)
         {
-            var teamToUpdate = Teams.Find(team => team.Year == speedScore.Year && team.TeamId == speedScore.TeamId);
+            var teamToUpdate = Teams.Find(team => team.Year == safetyCarEvent.Year && team.TeamId == safetyCarEvent.TeamId);
 
             if (teamToUpdate != null)
             {
-                teamToUpdate.SpeedScore = speedScore.TotalSpeedScore;
+                teamToUpdate.Follow = safetyCarEvent.Follow;
+                teamToUpdate.Overtake = safetyCarEvent.Overtake;
+                teamToUpdate.SpeedBonusScore = safetyCarEvent.TotalSpeedBonus;
             }
 
             return teamToUpdate;
@@ -92,6 +94,8 @@ namespace RobonautCasparClient_v2.DO
                 teamToUpdate.TechnicalScore = teamResult.TechnicalScore;
                 teamToUpdate.SpeedScore = teamResult.SpeedScore;
                 teamToUpdate.SpeedTimes = teamResult.speedTimes;
+                teamToUpdate.Follow = teamResult.Follow;
+                teamToUpdate.Overtake = teamResult.Overtake;
                 teamToUpdate.Votes = teamResult.Votes;
                 teamToUpdate.AudienceScore = teamResult.AudienceScore;
                 teamToUpdate.QualificationScore = teamResult.QualificationScore;

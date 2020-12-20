@@ -62,10 +62,10 @@ namespace RobonautCasparClient_v2.modules.interfaces
         protected void fireTechnicalScoreRecievedEvent(TechnicalScoreDto techScore) =>
             technicalScoreRecievedEvent(techScore);
 
-        public delegate void speedScoreRecievedDelegate(SpeedScoreDto speedScore);
-        public event speedScoreRecievedDelegate speedScoreRecievedEvent;
-        protected void fireSpeedScoreRecievedEvent(SpeedScoreDto speedScore) =>
-            speedScoreRecievedEvent(speedScore);
+        public delegate void safetyCarEventRecievedDelegate(SafetyCarEventDto safetyCarEvent);
+        public event safetyCarEventRecievedDelegate safetyCarEventRecievedEvent;
+        protected void fireSafetyCarUpdateRecievedEvent(SafetyCarEventDto safetyCarEvent) =>
+            safetyCarEventRecievedEvent(safetyCarEvent);
 
         public delegate void teamResultRecievedDelegate(TeamResultDto teamResult);
         public event teamResultRecievedDelegate teamResultRecievedEvent;

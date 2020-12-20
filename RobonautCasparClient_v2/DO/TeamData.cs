@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Documents;
 
 namespace RobonautCasparClient_v2.DO
 {
@@ -11,10 +10,13 @@ namespace RobonautCasparClient_v2.DO
         public TeamType TeamType { get; set; }
         public string TeamName { get; set; }
         public List<string> TeamMembers { get; set; }
+        public string LogoPath { get; set; }
         public int TechnicalScore { get; set; }
         public int SpeedScore { get; set; }
         public int SpeedBonusScore { get; set; }
         public List<int> SpeedTimes { get; set; }
+        public bool Follow { get; set; }
+        public int Overtake { get; set; }
         public int Votes { get; set; }
         public int AudienceScore { get; set; }
         public int QualificationScore { get; set; }
@@ -47,32 +49,6 @@ namespace RobonautCasparClient_v2.DO
             }
         }
 
-        public string SpeedTimesString
-        {
-            get
-            {
-                string times = "";
-                if (SpeedTimes.Count != 0)
-                {
-                    times = Converters.TimeToString(SpeedTimes[0]);
-                    bool first = true;
-                    foreach (var time in SpeedTimes)
-                    {
-                        if (!first)
-                        {
-                            times += ", " + Converters.TimeToString(time);
-                        }
-                        else
-                        {
-                            first = false;
-                        }
-                    }
-                }
-
-                return times;
-            }
-        }
-
         public int FastestTime
         {
             get
@@ -80,6 +56,14 @@ namespace RobonautCasparClient_v2.DO
                 if (SpeedTimes.Count == 0)
                     return int.MaxValue;
                 return SpeedTimes.Min();
+            }
+        }
+
+        public int SumSpeedPoints
+        {
+            get
+            {
+                return SpeedScore + SpeedBonusScore;
             }
         }
     }

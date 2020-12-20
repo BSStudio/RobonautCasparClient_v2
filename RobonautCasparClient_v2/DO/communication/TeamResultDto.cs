@@ -10,6 +10,8 @@ namespace RobonautCasparClient_v2.DO.communication
         public int SpeedScore { get; set; }
         public int speedBonusScore { get; set; }
         public List<int> speedTimes { get; set; }
+        public bool Follow { get; set; }
+        public int Overtake { get; set; }
         public int Votes { get; set; }
         public int AudienceScore { get; set; }
         public int QualificationScore { get; set; }

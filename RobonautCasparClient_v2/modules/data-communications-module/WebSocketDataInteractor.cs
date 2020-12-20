@@ -102,11 +102,6 @@ namespace RobonautCasparClient_v2.modules
                         JsonConvert.DeserializeObject<TechnicalScoreDto>(e.Data);
                     fireTechnicalScoreRecievedEvent(techScore);
                     break;
-                case "speedScoreUpdate":
-                    SpeedScoreDto speedScore =
-                        JsonConvert.DeserializeObject<SpeedScoreDto>(e.Data);
-                    fireSpeedScoreRecievedEvent(speedScore);
-                    break;
                 case "teamResult":
                     TeamResultDto teamResult =
                         JsonConvert.DeserializeObject<TeamResultDto>(e.Data);
