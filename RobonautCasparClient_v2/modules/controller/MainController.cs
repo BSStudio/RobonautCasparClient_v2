@@ -33,7 +33,8 @@ namespace RobonautCasparClient_v2.modules.controller
         private MainWindow _window;
 
         private IGraphicsServerInteractor graphicsInteractor = CasparServerInteractor.Instance;
-        private IDataServerInteractor dataInteractor = WebSocketDataInteractor.Instance;
+        //private IDataServerInteractor dataInteractor = WebSocketDataInteractor.Instance;
+        private IDataServerInteractor dataInteractor = RabbitMqDataInteractor.Instance;
         private TeamDataService teamDataService = TeamDataService.Instance;
 
         private readonly Stopwatch techTimerCounter = new Stopwatch();
