@@ -265,7 +265,33 @@
             </Grid>
         </TabItem>
         <TabItem Header="Adatvezérlés">
-            <Label>Coming soon...</Label>
+            <Grid Margin="8, 4, 8, 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="500"></ColumnDefinition>
+                    <ColumnDefinition Width="500"></ColumnDefinition>
+                    <ColumnDefinition Width="500"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Left">
+                    <TextBlock FontSize="20" FontWeight="Bold" HorizontalAlignment="Center">Csapat hozzáadása</TextBlock>
+                    <Label FontSize="14">Csapatnév</Label>
+                    <TextBox Name="TeamNameTextBox" Width="300" FontSize="14" Margin="8, 0, 0, 8"></TextBox>
+                    <Label FontSize="14">Csapat azonosító</Label>
+                    <TextBox Name="TeamIdTextBox" Width="300" FontSize="14" Margin="8, 0, 0, 8"></TextBox>
+                    <Label FontSize="14">Év</Label>
+                    <TextBox Name="TeamYearTextBox" Width="300" FontSize="14" Margin="8, 0, 0, 8"></TextBox>
+                    <Label FontSize="14">Típus</Label>
+                    <ComboBox Name="TeamTypeComboBox" FontSize="14" Margin="8, 0, 0, 8">
+                        <ComboBoxItem>Junior</ComboBoxItem>
+                        <ComboBoxItem>Senior</ComboBoxItem>
+                    </ComboBox>
+                    <Label FontSize="14">Csapattagok (vesszővel elválasztva)</Label>
+                    <TextBox Name="TeamMembersTextBox" Width="300" FontSize="14" Margin="8, 0, 0, 8"></TextBox>
+                    <Button Width="90" FontSize="16" HorizontalAlignment="Left" Padding="4" Margin="8, 8, 0, 0">Hozzáadás</Button>
+                </StackPanel>
+                
+                <TextBlock Grid.Column="1" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center">Ügyességi verseny</TextBlock>
+                <TextBlock Grid.Column="2" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center">Gyorsasági verseny</TextBlock>
+            </Grid>
         </TabItem>
     </TabControl>
 </Window>
