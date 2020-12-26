@@ -30,5 +30,10 @@ namespace RobonautCasparClient_v2.DO
                     return "";
             }
         }
+
+        public static string boolToIgenNem(bool b)
+        {
+            return b ? "igen" : "nem";
+        }
     }
 }

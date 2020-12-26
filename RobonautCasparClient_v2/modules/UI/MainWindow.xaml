@@ -42,7 +42,7 @@
                     <TextBlock Grid.Column="0" Grid.Row="1" Text="Caspar Szerver címe:" Margin="0,0,10,0"
                                HorizontalAlignment="Left" VerticalAlignment="Center" />
                     <TextBox Grid.Column="1" Grid.Row="1" Name="casparServerAddress" Height="23" TextWrapping="Wrap"
-                             Width="175" HorizontalAlignment="Left" VerticalAlignment="Center" Text="192.168.10.12" />
+                             Width="175" HorizontalAlignment="Left" VerticalAlignment="Center" Text="localhost" />
                     <!--192.168.10.12-->
                     <Button Name="casparServerConnectButton" Content="Csatlakozás" Grid.Column="2"
                             HorizontalAlignment="Left" Margin="0,1,0,0" Grid.Row="1" Width="120"
@@ -59,7 +59,7 @@
                                HorizontalAlignment="Left" VerticalAlignment="Center" />
                     <TextBox Grid.Column="6" Grid.Row="1" Name="dataServerAddress" Height="23" TextWrapping="Wrap"
                              Width="175" HorizontalAlignment="Left" VerticalAlignment="Center"
-                             Text="ws://localhost:8080" /><!--ws://192.168.5.42:18080-->
+                             Text="localhost" />
                     <Button x:Name="dataServerConnectButton" Content="Csatlakozás" Grid.Column="7"
                             HorizontalAlignment="Left" Margin="0,1,0,2" Grid.Row="1" Width="120"
                             HorizontalContentAlignment="Center" Click="dataServerConnectButton_Click" />
@@ -67,12 +67,6 @@
                                Text="Kapcsolat bontva" HorizontalAlignment="Center" VerticalAlignment="Center" />
                 </Grid>
                 <Grid Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Center">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="60" />
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Name="YearText" Grid.Column="0" Margin="0,0,0,0">Adatokhoz használni kívánt év:</TextBlock>
-                    <TextBox Name="CurrentYear" Grid.Column="1" Margin="10,0,0,0" TextChanged="yearUpdated">2020</TextBox>
 
                 </Grid>
                 <TextBlock Grid.Row="3" Text="Névinzert" FontSize="20" FontWeight="Bold" HorizontalAlignment="Left" />
@@ -184,12 +178,16 @@
                                 </DataGridTemplateColumn>
                                 <DataGridTextColumn IsReadOnly="True" Binding="{Binding TeamType}"
                                                     ClipboardContentBinding="{x:Null}" Header="Csapat típus" />
-                                <DataGridTextColumn IsReadOnly="True" Binding="{Binding TechnicalScore}"
+                                <DataGridTextColumn IsReadOnly="True" Binding="{Binding SkillScore}"
                                                     ClipboardContentBinding="{x:Null}" Header="Ügyességi" />
                                 <DataGridTextColumn IsReadOnly="True" Binding="{Binding SpeedScore}"
-                                                    ClipboardContentBinding="{x:Null}" Header="Gyorsasági pont" />
+                                                    ClipboardContentBinding="{x:Null}" Header="Gyorsasági" />
                                 <DataGridTextColumn IsReadOnly="True" Binding="{Binding SpeedBonusScore}"
                                                     ClipboardContentBinding="{x:Null}" Header="Gyorsasági bonus" />
+                                <DataGridTextColumn IsReadOnly="True" Binding="{Binding NumberOfOvertakes}"
+                                                    ClipboardContentBinding="{x:Null}" Header="Előzés" />
+                                <DataGridTextColumn IsReadOnly="True" Binding="{Binding FollowHumanRead}"
+                                                    ClipboardContentBinding="{x:Null}" Header="Követés" />
                                 <DataGridTemplateColumn IsReadOnly="True" Width="110" Header="Gyorsasági köridők">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
@@ -203,9 +201,12 @@
                                                     ClipboardContentBinding="{x:Null}" Header="Közönség pont" />
                                 <DataGridTextColumn IsReadOnly="True" Binding="{Binding QualificationScore}"
                                                     ClipboardContentBinding="{x:Null}" Header="Hozott" />
-
                                 <DataGridTextColumn IsReadOnly="True" Binding="{Binding TotalScore}"
                                                     ClipboardContentBinding="{x:Null}" Header="Össz" />
+                                <DataGridTextColumn IsReadOnly="True" Binding="{Binding JuniorRank}"
+                                                    ClipboardContentBinding="{x:Null}" Header="J hely" />
+                                <DataGridTextColumn IsReadOnly="True" Binding="{Binding Rank}"
+                                                    ClipboardContentBinding="{x:Null}" Header="Hely" />
                                 <!--<DataGridTextColumn IsReadOnly="True" Binding="{Binding OverallScoreJunior}" ClipboardContentBinding="{x:Null}" Header="Össz (junior)"/>
 -->
                                 <DataGridTemplateColumn ClipboardContentBinding="{x:Null}">
@@ -219,7 +220,7 @@
                                 <DataGridTemplateColumn ClipboardContentBinding="{x:Null}">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <Button Content="Ügyességi eredmény" Tag="{Binding TeamId}"
+                                            <Button Content="Ügyességi" Tag="{Binding TeamId}"
                                                     Click="showTechnicalContestResultButton_Click" />
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
@@ -227,7 +228,15 @@
                                 <DataGridTemplateColumn ClipboardContentBinding="{x:Null}">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <Button Content="Gyorsasági köridők" Tag="{Binding TeamId}"
+                                            <Button Content="Safety car" Tag="{Binding TeamId}"
+                                                    Click="showSafetyCarInfoButton_Click" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn ClipboardContentBinding="{x:Null}">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button Content="Gyorsasági" Tag="{Binding TeamId}"
                                                     Click="showSpeedContestResultButton_Click" />
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
@@ -251,16 +260,6 @@
                             </DataGrid.Columns>
                         </DataGrid>
                     </Grid>
-                </Grid>
-                <Grid Grid.Row="6" Margin="0,0,15,10" VerticalAlignment="Bottom" HorizontalAlignment="Right">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-                    <Label Grid.Column="0" Name="clientConnectionStatusText"
-                           Content="Feliratozó kliens nincs csatlakozva az adatszerverhez" />
-                    <Ellipse Grid.Column="1" Name="clientConnectionStatus" Width="10" Height="10" Fill="Tomato"
-                             Margin="0,0,5,0" />
                 </Grid>
             </Grid>
         </TabItem>

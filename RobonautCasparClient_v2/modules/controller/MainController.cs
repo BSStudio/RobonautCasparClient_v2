@@ -70,10 +70,8 @@ namespace RobonautCasparClient_v2.modules.controller
                 dataInteractor.connectedEvent += _window.dataServerConnected;
                 dataInteractor.connectionFailedEvent += _window.dataServerConnectionFailed;
                 dataInteractor.disconnectedEvent += _window.dataServerDisconnected;
-
-                dataInteractor.dataProviderClientConnectedEvent += _window.dataClientConnected;
-                dataInteractor.dataProviderClientDisconnectedEvent += _window.dataClientDisconnected;
-                dataInteractor.teamDatasRecievedEvent += _window.UpdateTeamData;
+                
+                dataInteractor.teamDataRecievedEvent += updateTeamsOnUI;
             }
         }
 
@@ -97,14 +95,18 @@ namespace RobonautCasparClient_v2.modules.controller
             techTimerUpdateTimer.Tick += updateTechTimerTick;
             speedTimerUpdateTimer.Interval = TimeSpan.FromMilliseconds(100);
 
-            dataInteractor.technicalScoreRecievedEvent += technicalScoreRecieved;
-            dataInteractor.teamResultRecievedEvent += updateTeamSpeedDisplay;
-            dataInteractor.teamResultRecievedEvent += updateUiDataFromResult;
+            dataInteractor.gateInfoRecievedEvent += GateInfoRecieved;
+            dataInteractor.speedRaceScoreRecievedEvent += updateTeamSpeedDisplay;
 
             dataInteractor.techTimerStartEvent += startTechTimer;
             dataInteractor.techTimerStopEvent += stopTechTimer;
             dataInteractor.stopperStartEvent += startSpeedTimer;
             dataInteractor.stopperStopEvent += stopSpeedTimer;
+        }
+
+        private void updateTeamsOnUI(TeamData newteamdata)
+        {
+            Window.UpdateTeamData(teamDataService.Teams);
         }
 
         public void connectToGraphicsServer(string url)
@@ -130,12 +132,6 @@ namespace RobonautCasparClient_v2.modules.controller
         public void sendYearToDataInteractor(int year)
         {
             dataInteractor.setYear(year);
-        }
-
-        private void updateUiDataFromResult(TeamResultDto teamResult)
-        {
-            teamDataService.updateWithTeamResult(teamResult);
-            _window.UpdateTeamData(teamDataService.Teams);
         }
 
         public void showName(string name, string title)
@@ -171,20 +167,20 @@ namespace RobonautCasparClient_v2.modules.controller
             graphicsInteractor.showTeamTechnicalContestDisplay(team);
         }
 
-        private void technicalScoreRecieved(TechnicalScoreDto techScore)
+        private void GateInfoRecieved(GateInformation gateInfo)
         {
             //pontmegjelenítő frissítés
-            TeamData team = teamDataService.updateWithTechScore(techScore);
+            TeamData team = teamDataService.updateWithGateInfo(gateInfo);
             graphicsInteractor.updateTeamTechnicalContestDisplay(team);
 
             //óra UI frissítés
-            technicalStartTime = techScore.TimeLeft;
+            technicalStartTime = gateInfo.TimeLeft;
             techTimerCounter.Restart();
 
             //óra grafikai frissítés
             if (TimingShown)
             {
-                graphicsInteractor.showTimer(techScore.TimeLeft, TimerDirection.DOWN);
+                graphicsInteractor.showTimer(gateInfo.TimeLeft, TimerDirection.DOWN);
             }
         }
 
@@ -194,9 +190,9 @@ namespace RobonautCasparClient_v2.modules.controller
             graphicsInteractor.showTeamSpeedContestDisplay(team);
         }
 
-        private void updateTeamSpeedDisplay(TeamResultDto teamResult)
+        private void updateTeamSpeedDisplay(SpeedRaceScore speedRaceScore)
         {
-            TeamData team = teamDataService.updateWithTeamResult(teamResult);
+            TeamData team = teamDataService.updateWithSpeedRaceScore(speedRaceScore);
             graphicsInteractor.updateTeamSpeedContestDisplay(team);
         }
 
@@ -284,7 +280,7 @@ namespace RobonautCasparClient_v2.modules.controller
             }
         }
 
-        private void startSpeedTimer()
+        private void startSpeedTimer(int startMs)
         {
             speedTimerCounter.Restart();
             speedTimerUpdateTimer.Start();
@@ -293,7 +289,7 @@ namespace RobonautCasparClient_v2.modules.controller
 
             if (TimingShown && ShownTimingType == TimerType.SPEED)
             {
-                graphicsInteractor.showTimer(0, TimerDirection.UP);
+                graphicsInteractor.showTimer(startMs, TimerDirection.UP);
             }
         }
 

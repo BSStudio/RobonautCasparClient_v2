@@ -11,18 +11,18 @@ namespace RobonautCasparClient_v2.DO
         public string TeamName { get; set; }
         public List<string> TeamMembers { get; set; }
         public string LogoPath { get; set; }
-        public int TechnicalScore { get; set; }
+        public int SkillScore { get; set; }
         public int SpeedScore { get; set; }
         public int SpeedBonusScore { get; set; }
         public List<int> SpeedTimes { get; set; }
-        public bool Follow { get; set; }
-        public int Overtake { get; set; }
+        public bool SafetyCarWasFollowed { get; set; }
+        public int NumberOfOvertakes { get; set; }
         public int Votes { get; set; }
         public int AudienceScore { get; set; }
         public int QualificationScore { get; set; }
         public int TotalScore { get; set; }
         public int Rank { get; set; }
-        public int RankJunior { get; set; }
+        public int JuniorRank { get; set; }
         
         public string TeamMembersString
         {
@@ -59,11 +59,41 @@ namespace RobonautCasparClient_v2.DO
             }
         }
 
+        public string SpeedTimesString
+        {
+            get
+            {
+                string speedTimesString = "";
+                bool first = true;
+                
+                foreach (var time in SpeedTimes)
+                {
+                    if (!first)
+                    {
+                        speedTimesString += ", ";
+                    }
+                    
+                    speedTimesString += Converters.TimeToString(time);
+                    first = false;
+                }
+
+                return speedTimesString;
+            }
+        }
+
         public int SumSpeedPoints
         {
             get
             {
                 return SpeedScore + SpeedBonusScore;
+            }
+        }
+
+        public string FollowHumanRead
+        {
+            get
+            {
+                return Converters.boolToIgenNem(SafetyCarWasFollowed);
             }
         }
     }

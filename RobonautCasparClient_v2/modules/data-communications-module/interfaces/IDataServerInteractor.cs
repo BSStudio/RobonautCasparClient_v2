@@ -49,28 +49,33 @@ namespace RobonautCasparClient_v2.modules.interfaces
         protected void fireTechTimerStopEvent(int stopMs) =>
             techTimerStopEvent(stopMs);
 
-        public delegate void stopperStartDelegate();
+        public delegate void stopperStartDelegate(int startMs);
         public event stopperStartDelegate stopperStartEvent;
-        protected void fireStopperStartEvent() => stopperStartEvent();
+        protected void fireStopperStartEvent(int startMs) => stopperStartEvent(startMs);
         
         public delegate void stopperStopDelegate(int stopMs);
         public event stopperStopDelegate stopperStopEvent;
         protected void fireStopperStopEvent(int stopMs) => stopperStopEvent(stopMs);
 
-        public delegate void technicalScoreRecievedDelegate(TechnicalScoreDto techScore);
-        public event technicalScoreRecievedDelegate technicalScoreRecievedEvent;
-        protected void fireTechnicalScoreRecievedEvent(TechnicalScoreDto techScore) =>
-            technicalScoreRecievedEvent(techScore);
+        public delegate void gateInfoRecievedDelegate(GateInformation gateInformation);
+        public event gateInfoRecievedDelegate gateInfoRecievedEvent;
+        protected void fireGateInfoRecievedEvent(GateInformation gateInformation) =>
+            gateInfoRecievedEvent(gateInformation);
 
-        public delegate void safetyCarEventRecievedDelegate(SafetyCarEventDto safetyCarEvent);
-        public event safetyCarEventRecievedDelegate safetyCarEventRecievedEvent;
-        protected void fireSafetyCarUpdateRecievedEvent(SafetyCarEventDto safetyCarEvent) =>
-            safetyCarEventRecievedEvent(safetyCarEvent);
+        public delegate void safetyCarOvertakeRecievedDelegate(SafetyCarOvertakeInformation overtakeInformation);
+        public event safetyCarOvertakeRecievedDelegate safetyCarOvertakeRecievedEvent;
+        protected void fireSafetyCarOvertakeRecievedEvent(SafetyCarOvertakeInformation overtakeInformation) =>
+            safetyCarOvertakeRecievedEvent(overtakeInformation);
 
-        public delegate void teamResultRecievedDelegate(TeamResultDto teamResult);
-        public event teamResultRecievedDelegate teamResultRecievedEvent;
-        protected void fireTeamResultRecievedEvent(TeamResultDto teamResult) =>
-            teamResultRecievedEvent(teamResult);
+        public delegate void safetyCarFollowRecievedDelegate(SafetyCarFollowInformation followInformation);
+        public event safetyCarFollowRecievedDelegate safetyCarFollowRecievedEvent;
+        protected void fireSafetyCarFollowRecievedEvent(SafetyCarFollowInformation followInformation) =>
+            safetyCarFollowRecievedEvent(followInformation);
+
+        public delegate void speedRaceScoreRecievedDelegate(SpeedRaceScore speedRaceScore);
+        public event speedRaceScoreRecievedDelegate speedRaceScoreRecievedEvent;
+        protected void fireSpeedRaceScoreRecievedEvent(SpeedRaceScore speedRaceScore) =>
+            speedRaceScoreRecievedEvent(speedRaceScore);
 
         public abstract void setYear(int year);
 

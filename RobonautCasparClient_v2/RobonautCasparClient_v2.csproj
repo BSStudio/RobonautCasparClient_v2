@@ -119,18 +119,20 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DO\communication\SafetyCarEventDto.cs" />
-    <Compile Include="DO\communication\SpeedScoreDto.cs" />
-    <Compile Include="DO\communication\TeamResultDto.cs" />
-    <Compile Include="DO\communication\TechnicalScoreDto.cs" />
+    <Compile Include="DO\communication\GateInformation.cs" />
+    <Compile Include="DO\communication\SafetyCarFollowInformation.cs" />
+    <Compile Include="DO\communication\SafetyCarOvertakeInformation.cs" />
+    <Compile Include="DO\communication\SkillTimer.cs" />
+    <Compile Include="DO\communication\SpeedRaceScore.cs" />
+    <Compile Include="DO\communication\SpeedTimer.cs" />
     <Compile Include="modules\data-communications-module\interfaces\IDataServerInteractor.cs" />
     <Compile Include="modules\data-communications-module\RabbitMqDataInteractor.cs" />
-    <Compile Include="modules\data-communications-module\WebSocketDataInteractor.cs" />
     <Compile Include="modules\graphics-module\CasparServerInteractor.cs" />
     <Compile Include="modules\graphics-module\interfaces\IGraphicsServerInteractor.cs" />
     <Compile Include="Util\FullScreenTableType.cs" />
     <Compile Include="Util\TeamDataService.cs" />
     <Compile Include="Util\TeamType.cs" />
+    <Compile Include="Util\TimerAction.cs" />
     <Compile Include="Util\TimerDirection.cs" />
     <Compile Include="Util\TimerType.cs" />
     <Compile Include="Util\Converters.cs" />

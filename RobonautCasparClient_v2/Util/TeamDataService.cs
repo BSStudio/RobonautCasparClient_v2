@@ -1,23 +1,22 @@
 ﻿using System.Collections.Generic;
-using System.Reflection.Emit;
 using RobonautCasparClient_v2.DO.communication;
 
 namespace RobonautCasparClient_v2.DO
 {
     public class TeamDataService
     {
-        private static TeamDataService instance;
+        private static TeamDataService _instance;
 
         public static TeamDataService Instance
         {
             get
             {
-                if (instance == null)
+                if (_instance == null)
                 {
-                    instance = new TeamDataService();
+                    _instance = new TeamDataService();
                 }
 
-                return instance;
+                return _instance;
             }
         }
 
@@ -44,13 +43,15 @@ namespace RobonautCasparClient_v2.DO
                 teamToUpdate.Votes = team.Votes;
                 teamToUpdate.AudienceScore = team.AudienceScore;
                 teamToUpdate.QualificationScore = team.QualificationScore;
+                teamToUpdate.NumberOfOvertakes = team.NumberOfOvertakes;
+                teamToUpdate.SafetyCarWasFollowed = team.SafetyCarWasFollowed;
                 teamToUpdate.SpeedScore = team.SpeedScore;
                 teamToUpdate.SpeedTimes = team.SpeedTimes;
                 teamToUpdate.SpeedBonusScore = team.SpeedBonusScore;
-                teamToUpdate.TechnicalScore = team.TechnicalScore;
+                teamToUpdate.SkillScore = team.SkillScore;
                 teamToUpdate.TotalScore = team.TotalScore;
                 teamToUpdate.Rank = team.Rank;
-                teamToUpdate.RankJunior = team.RankJunior;
+                teamToUpdate.JuniorRank = team.JuniorRank;
             }
         }
 
@@ -59,49 +60,25 @@ namespace RobonautCasparClient_v2.DO
             return Teams.Find(team => team.TeamId == teamId);
         }
 
-        public TeamData updateWithTechScore(TechnicalScoreDto techScore)
+        public TeamData updateWithGateInfo(GateInformation gateInfo)
         {
-            var teamToUpdate = Teams.Find(team => team.Year == techScore.Year && team.TeamId == techScore.TeamId);
+            var teamToUpdate = Teams.Find(team => team.TeamId == gateInfo.TeamId);
 
             if (teamToUpdate != null)
             {
-                teamToUpdate.TechnicalScore = techScore.TotalTechnicalScore;
+                teamToUpdate.SkillScore = gateInfo.TotalSkillScore;
             }
 
             return teamToUpdate;
         }
 
-        public TeamData updateWithSafetyCarBonus(SafetyCarEventDto safetyCarEvent)
+        public TeamData updateWithSpeedRaceScore(SpeedRaceScore speedRaceScore)
         {
-            var teamToUpdate = Teams.Find(team => team.Year == safetyCarEvent.Year && team.TeamId == safetyCarEvent.TeamId);
+            var teamToUpdate = Teams.Find(team => team.TeamId == speedRaceScore.TeamId);
 
             if (teamToUpdate != null)
             {
-                teamToUpdate.Follow = safetyCarEvent.Follow;
-                teamToUpdate.Overtake = safetyCarEvent.Overtake;
-                teamToUpdate.SpeedBonusScore = safetyCarEvent.TotalSpeedBonus;
-            }
-
-            return teamToUpdate;
-        }
-
-        public TeamData updateWithTeamResult(TeamResultDto teamResult)
-        {
-            var teamToUpdate = Teams.Find(team => team.Year == teamResult.Year && team.TeamId == teamResult.TeamId);
-
-            if (teamToUpdate != null)
-            {
-                teamToUpdate.TechnicalScore = teamResult.TechnicalScore;
-                teamToUpdate.SpeedScore = teamResult.SpeedScore;
-                teamToUpdate.SpeedTimes = teamResult.speedTimes;
-                teamToUpdate.Follow = teamResult.Follow;
-                teamToUpdate.Overtake = teamResult.Overtake;
-                teamToUpdate.Votes = teamResult.Votes;
-                teamToUpdate.AudienceScore = teamResult.AudienceScore;
-                teamToUpdate.QualificationScore = teamResult.QualificationScore;
-                teamToUpdate.TotalScore = teamResult.TotalScore;
-                teamToUpdate.Rank = teamResult.Rank;
-                teamToUpdate.RankJunior = teamResult.RankJunior;
+                teamToUpdate.SpeedTimes = speedRaceScore.SpeedTimes;
             }
 
             return teamToUpdate;

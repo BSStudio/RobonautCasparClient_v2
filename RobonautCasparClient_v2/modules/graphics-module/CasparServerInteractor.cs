@@ -143,7 +143,7 @@ namespace RobonautCasparClient_v2.modules
             {
                 CasparCGDataCollection cgData = new CasparCGDataCollection();
                 cgData.SetData("teamname", teamData.TeamName);
-                cgData.SetData("point", teamData.TechnicalScore.ToString());
+                cgData.SetData("point", teamData.SkillScore.ToString());
 
                 casparDevice.Channels[CHANNEL].CG.Add(TEAMINFO_LAYER, 0, "CSAPAT_UGYESSEGI", true, cgData);
 
@@ -156,7 +156,7 @@ namespace RobonautCasparClient_v2.modules
             if (IsConnected && TechDisplayShown)
             {
                 CasparCGDataCollection cgData = new CasparCGDataCollection();
-                cgData.SetData("point", teamData.TechnicalScore.ToString());
+                cgData.SetData("point", teamData.SkillScore.ToString());
 
                 casparDevice.Channels[CHANNEL].CG.Update(TEAMINFO_LAYER, 0, cgData);
             }
@@ -167,7 +167,7 @@ namespace RobonautCasparClient_v2.modules
             if (IsConnected)
             {
                 CasparCGDataCollection cgData = new CasparCGDataCollection();
-                cgData.SetData("tech_point", teamData.TechnicalScore.ToString());
+                cgData.SetData("tech_point", teamData.SkillScore.ToString());
 
                 int lap = 1;
                 foreach (var time in teamData.SpeedTimes)
@@ -187,7 +187,7 @@ namespace RobonautCasparClient_v2.modules
             if (IsConnected && SpeedDisplayShown)
             {
                 CasparCGDataCollection cgData = new CasparCGDataCollection();
-                cgData.SetData("tech_point", teamData.TechnicalScore.ToString());
+                cgData.SetData("tech_point", teamData.SkillScore.ToString());
 
                 int lap = 1;
                 foreach (var time in teamData.SpeedTimes)
@@ -239,7 +239,7 @@ namespace RobonautCasparClient_v2.modules
                 switch (rankType)
                 {
                     case TeamType.JUNIOR:
-                        rank = teamData.RankJunior;
+                        rank = teamData.JuniorRank;
                         break;
                     case TeamType.SENIOR:
                         rank = teamData.Rank;
@@ -250,7 +250,7 @@ namespace RobonautCasparClient_v2.modules
                 CGdata.SetData("teamname", teamData.TeamName);
                 CGdata.SetData("teammembers", teamData.TeamMembersString);
                 CGdata.SetData("broughtpoint", "Hozott pont: " + teamData.QualificationScore);
-                CGdata.SetData("sumskillpoint", "Ügyességi pont: " + teamData.TechnicalScore);
+                CGdata.SetData("sumskillpoint", "Ügyességi pont: " + teamData.SkillScore);
                 CGdata.SetData("sumspeedpoint", "Gyorsasági pont: " + teamData.SpeedScore);
                 CGdata.SetData("audiencepoint", "Közönség pont: " + teamData.AudienceScore);
                 CGdata.SetData("sumpoint", "Összpontszám: " + teamData.TotalScore);
@@ -406,7 +406,7 @@ namespace RobonautCasparClient_v2.modules
 
         private void updateTechnicalPointsCgData(CasparCGDataCollection cgData, List<TeamData> teamDatas)
         {
-            teamDatas.Sort((a, b) => b.TechnicalScore - a.TechnicalScore);
+            teamDatas.Sort((a, b) => b.SkillScore - a.SkillScore);
 
             int firstElement = CurrentFullScreenPage * SCOREBOARD_ITEMS_PER_PAGE;
             int lastElement = firstElement + SCOREBOARD_ITEMS_PER_PAGE <= teamDatas.Count
@@ -422,7 +422,7 @@ namespace RobonautCasparClient_v2.modules
 
                     cgData.SetData("result_rank_" + cgIndex, (i + 1).ToString());
                     cgData.SetData("result_teamname_" + cgIndex, currentTeam.TeamName);
-                    cgData.SetData("result_point_" + cgIndex, currentTeam.TechnicalScore.ToString());
+                    cgData.SetData("result_point_" + cgIndex, currentTeam.SkillScore.ToString());
                 }
                 else
                 {
@@ -533,7 +533,7 @@ namespace RobonautCasparClient_v2.modules
         private void updateJuniorFinalResultCgData(CasparCGDataCollection cgData, List<TeamData> teamDatas)
         {
             teamDatas = teamDatas.Where(team => team.TeamType == TeamType.JUNIOR).ToList();
-            teamDatas.Sort((a, b) => a.RankJunior - b.RankJunior);
+            teamDatas.Sort((a, b) => a.JuniorRank - b.JuniorRank);
 
             int firstElement = CurrentFullScreenPage * SCOREBOARD_ITEMS_PER_PAGE;
             int lastElement = firstElement + SCOREBOARD_ITEMS_PER_PAGE <= teamDatas.Count

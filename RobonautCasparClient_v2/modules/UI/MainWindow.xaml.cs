@@ -26,8 +26,6 @@ namespace RobonautCasparClient_v2
 
             mainController.Window = this;
 
-            CurrentYear.Text = DateTime.Now.Year.ToString();
-
             ConnectedToDataServer = false;
             ConnectedToGraphicsServer = false;
             TeamGraphicsShown = false;
@@ -37,13 +35,9 @@ namespace RobonautCasparClient_v2
         {
             Dispatcher.Invoke(() =>
             {
-                CurrentYear.IsEnabled = false;
                 dataServerStatus.Text = "Csatlakozva";
                 dataServerConnectButton.Content = "Kapcsolat bontása";
                 dataServerConnectionFeedback.Fill = new SolidColorBrush(Colors.Green);
-
-                clientConnectionStatusText.Content = "Versenyvezérlő nincs csatlakozva az adatszerverhez";
-                clientConnectionStatus.Fill = new SolidColorBrush(Colors.Orange);
             });
             ConnectedToDataServer = true;
         }
@@ -52,15 +46,10 @@ namespace RobonautCasparClient_v2
         {
             Dispatcher.Invoke(() =>
             {
-                CurrentYear.IsEnabled = true;
-
                 dataServerStatus.Text = "Kapcsolat bontva";
                 dataServerConnectButton.Content = "Csatlakozás";
                 ConnectedToDataServer = false;
                 dataServerConnectionFeedback.Fill = new SolidColorBrush(Colors.Tomato);
-
-                clientConnectionStatusText.Content = "A feliratozó kliens nincs csatlakozva az adatszerverhez";
-                clientConnectionStatus.Fill = new SolidColorBrush(Colors.Tomato);
             });
             ConnectedToDataServer = false;
         }
@@ -93,24 +82,6 @@ namespace RobonautCasparClient_v2
             });
 
             ConnectedToGraphicsServer = false;
-        }
-
-        public void dataClientConnected()
-        {
-            Dispatcher.Invoke(() =>
-            {
-                clientConnectionStatusText.Content = "Versenyvezérlő csatlakozva az adatszerverhez";
-                clientConnectionStatus.Fill = new SolidColorBrush(Colors.Green);
-            });
-        }
-
-        public void dataClientDisconnected()
-        {
-            Dispatcher.Invoke(() =>
-            {
-                clientConnectionStatusText.Content = "Versenyvezérlő nincs csatlakozva az adatszerverhez";
-                clientConnectionStatus.Fill = new SolidColorBrush(Colors.Orange);
-            });
         }
 
         public void UpdateTeamData(List<TeamData> teamDatas)
@@ -148,11 +119,6 @@ namespace RobonautCasparClient_v2
             {
                 mainController.disconnectFromDataServer();
             }
-        }
-
-        private void yearUpdated(object sender, RoutedEventArgs e)
-        {
-            mainController.sendYearToDataInteractor(Int32.Parse(CurrentYear.Text));
         }
 
         private void addToNameListButton_OnClick(object sender, RoutedEventArgs e)
@@ -257,6 +223,11 @@ namespace RobonautCasparClient_v2
                     mainController.hideTeamGraphics();
                     TeamGraphicsShown = false;
                 }
+        }
+
+        private void showSafetyCarInfoButton_Click(object sender, RoutedEventArgs e)
+        {
+            
         }
 
         private void showSpeedContestResultButton_Click(object sender, RoutedEventArgs e)
