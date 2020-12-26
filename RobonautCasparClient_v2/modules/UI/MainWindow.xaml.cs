@@ -19,6 +19,7 @@ namespace RobonautCasparClient_v2
         private bool ConnectedToGraphicsServer { get; set; }
         private bool ConnectedToDataServer { get; set; }
         private bool TeamGraphicsShown { get; set; }
+        private bool SafetyCarInfoShown { get; set; }
 
         public MainWindow()
         {
@@ -29,6 +30,7 @@ namespace RobonautCasparClient_v2
             ConnectedToDataServer = false;
             ConnectedToGraphicsServer = false;
             TeamGraphicsShown = false;
+            SafetyCarInfoShown = false;
         }
 
         public void dataServerConnected()
@@ -180,14 +182,14 @@ namespace RobonautCasparClient_v2
 
         private void removeTeamGraphicsButton_Click(object sender, RoutedEventArgs e)
         {
-            mainController.hideTeamGraphics();
-            TeamGraphicsShown = false;
+            hideTeamGraphics();
         }
 
         private void removeAllGraphicsButton_Click(object sender, RoutedEventArgs e)
         {
             mainController.hideAllGraphics();
             TeamGraphicsShown = false;
+            SafetyCarInfoShown = false;
         }
 
         private void refreshDataButton_Click(object sender, RoutedEventArgs e)
@@ -205,8 +207,7 @@ namespace RobonautCasparClient_v2
                 }
                 else
                 {
-                    mainController.hideTeamGraphics();
-                    TeamGraphicsShown = false;
+                    hideTeamGraphics();
                 }
         }
 
@@ -220,14 +221,23 @@ namespace RobonautCasparClient_v2
                 }
                 else
                 {
-                    mainController.hideTeamGraphics();
-                    TeamGraphicsShown = false;
+                    hideTeamGraphics();
                 }
         }
 
         private void showSafetyCarInfoButton_Click(object sender, RoutedEventArgs e)
         {
-            
+            if(mainController.ConnectedToGraphicsServer)
+                if (!SafetyCarInfoShown)
+                {
+                    mainController.showSafetyCarInfoDisplay((int) ((Button) sender).Tag);
+                    SafetyCarInfoShown = true;
+                }
+                else
+                {
+                    mainController.hideSafetaCarInfoDisplay();
+                    SafetyCarInfoShown = false;
+                }
         }
 
         private void showSpeedContestResultButton_Click(object sender, RoutedEventArgs e)
@@ -240,8 +250,7 @@ namespace RobonautCasparClient_v2
                 }
                 else
                 {
-                    mainController.hideTeamGraphics();
-                    TeamGraphicsShown = false;
+                    hideTeamGraphics();
                 }
         }
 
@@ -255,8 +264,7 @@ namespace RobonautCasparClient_v2
                 }
                 else
                 {
-                    mainController.hideTeamGraphics();
-                    TeamGraphicsShown = false;
+                    hideTeamGraphics();
                 }
         }
 
@@ -270,8 +278,7 @@ namespace RobonautCasparClient_v2
                 }
                 else
                 {
-                    mainController.hideTeamGraphics();
-                    TeamGraphicsShown = false;
+                    hideTeamGraphics();
                 }
         }
 
@@ -328,6 +335,13 @@ namespace RobonautCasparClient_v2
         public void updateSpeedTimerDisplay(long time)
         {
             Dispatcher.Invoke(() => { uiStopper.Text = Converters.TimeToString((int) time); });
+        }
+
+        private void hideTeamGraphics()
+        {
+            mainController.hideTeamGraphics();
+            TeamGraphicsShown = false;
+            SafetyCarInfoShown = false;
         }
     }
 }

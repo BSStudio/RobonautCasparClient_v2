@@ -97,6 +97,8 @@ namespace RobonautCasparClient_v2.modules.controller
 
             dataInteractor.gateInfoRecievedEvent += GateInfoRecieved;
             dataInteractor.speedRaceScoreRecievedEvent += updateTeamSpeedDisplay;
+            dataInteractor.safetyCarFollowRecievedEvent += updateSafetyCarInfoDisplayWithFollow;
+            dataInteractor.safetyCarOvertakeRecievedEvent += updateSafetyCarInfoDisplayWithOvertake;
 
             dataInteractor.techTimerStartEvent += startTechTimer;
             dataInteractor.techTimerStopEvent += stopTechTimer;
@@ -127,11 +129,6 @@ namespace RobonautCasparClient_v2.modules.controller
         public void disconnectFromDataServer()
         {
             dataInteractor.disconnect();
-        }
-
-        public void sendYearToDataInteractor(int year)
-        {
-            dataInteractor.setYear(year);
         }
 
         public void showName(string name, string title)
@@ -194,6 +191,29 @@ namespace RobonautCasparClient_v2.modules.controller
         {
             TeamData team = teamDataService.updateWithSpeedRaceScore(speedRaceScore);
             graphicsInteractor.updateTeamSpeedContestDisplay(team);
+        }
+
+        public void showSafetyCarInfoDisplay(int teamId)
+        {
+            TeamData team = teamDataService.getTeam(teamId);
+            graphicsInteractor.showSafetyCarInfoDisplay(team);
+        }
+
+        public void hideSafetaCarInfoDisplay()
+        {
+            graphicsInteractor.hideSafetyCarInfoDisplay();
+        }
+
+        public void updateSafetyCarInfoDisplayWithFollow(SafetyCarFollowInformation followInformation)
+        {
+            TeamData team = teamDataService.updateWithSafetyCarFollowInfo(followInformation);
+            graphicsInteractor.updateSafetyCarInfoDisplay(team);
+        }
+
+        public void updateSafetyCarInfoDisplayWithOvertake(SafetyCarOvertakeInformation overtakeInformation)
+        {
+            TeamData team = teamDataService.updateWithSafetyCarOvertakeInfo(overtakeInformation);
+            graphicsInteractor.updateSafetyCarInfoDisplay(team);
         }
 
         public void requestData()

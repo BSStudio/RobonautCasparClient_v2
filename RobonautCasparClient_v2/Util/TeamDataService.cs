@@ -83,5 +83,29 @@ namespace RobonautCasparClient_v2.DO
 
             return teamToUpdate;
         }
+
+        public TeamData updateWithSafetyCarFollowInfo(SafetyCarFollowInformation followInformation)
+        {
+            var teamToUpdate = Teams.Find(team => team.TeamId == followInformation.TeamId);
+
+            if (teamToUpdate != null)
+            {
+                teamToUpdate.SafetyCarWasFollowed = followInformation.SafetyCarFollowed;
+            }
+
+            return teamToUpdate;
+        }
+
+        public TeamData updateWithSafetyCarOvertakeInfo(SafetyCarOvertakeInformation overtakeInformation)
+        {
+            var teamToUpdate = Teams.Find(team => team.TeamId == overtakeInformation.TeamId);
+
+            if (teamToUpdate != null)
+            {
+                teamToUpdate.NumberOfOvertakes = overtakeInformation.NumberOfOvertakes;
+            }
+
+            return teamToUpdate;
+        }
     }
 }

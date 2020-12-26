@@ -78,6 +78,15 @@ namespace RobonautCasparClient_v2.Modules.interfaces
 
         public abstract void updateTeamSpeedContestDisplay(TeamData teamData);
 
+        /*
+         * Safety carral való interakciók (követés, előzés) kijezéséhez való inzert megjelenítése
+         */
+        public abstract void showSafetyCarInfoDisplay(TeamData teamData);
+        
+        public abstract void updateSafetyCarInfoDisplay(TeamData teamData);
+
+        public abstract void hideSafetyCarInfoDisplay();
+
          /*
          * A meghatározott irányba számláló inzert megjelenítése
          * Ha már meg van jelenítve az inzert, akkor csak frissíti a tartalmat

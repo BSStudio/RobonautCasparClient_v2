@@ -213,6 +213,7 @@
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <Button Content="Megnevezés" Tag="{Binding TeamId}"
+                                                    Padding="4"
                                                     Click="teamNamingButton_Click" />
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
@@ -221,6 +222,7 @@
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <Button Content="Ügyességi" Tag="{Binding TeamId}"
+                                                    Padding="4"
                                                     Click="showTechnicalContestResultButton_Click" />
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
@@ -229,6 +231,7 @@
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <Button Content="Safety car" Tag="{Binding TeamId}"
+                                                    Padding="4"
                                                     Click="showSafetyCarInfoButton_Click" />
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
@@ -237,6 +240,7 @@
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <Button Content="Gyorsasági" Tag="{Binding TeamId}"
+                                                    Padding="4"
                                                     Click="showSpeedContestResultButton_Click" />
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
@@ -244,7 +248,8 @@
                                 <DataGridTemplateColumn ClipboardContentBinding="{x:Null}">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <Button Content="Összpontszám+Junior helyezés" Tag="{Binding TeamId}"
+                                            <Button Content="Eredmény+Junior helyezés" Tag="{Binding TeamId}"
+                                                    Padding="4"
                                                     Click="showTeamResultJuniorRankButton_Click" />
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
@@ -252,7 +257,8 @@
                                 <DataGridTemplateColumn ClipboardContentBinding="{x:Null}">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <Button Content="Összpontszám+Össz. helyezés" Tag="{Binding TeamId}"
+                                            <Button Content="Eredmény+Össz. helyezés" Tag="{Binding TeamId}"
+                                                    Padding="4"
                                                     Click="showTeamResultTotalRankButton_Click" />
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>

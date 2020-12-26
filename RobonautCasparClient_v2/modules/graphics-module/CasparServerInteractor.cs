@@ -35,12 +35,14 @@ namespace RobonautCasparClient_v2.modules
         public const int CHANNEL = 0; //1
         public const int NAME_LAYER = 10;
         public const int TEAMINFO_LAYER = 11;
-        public const int TIMER_LAYER = 12;
-        public const int SCOREBOARD_LAYER = 13;
+        public const int SAFETY_CAR_INFO_LAYER = 12;
+        public const int TIMER_LAYER = 13;
+        public const int SCOREBOARD_LAYER = 14;
 
         private bool TimerShown { get; set; }
         private bool TechDisplayShown { get; set; }
         private bool SpeedDisplayShown { get; set; }
+        private bool SafetyCarDisplayShown { get; set; }
         private bool FullScreenGraphicsShown { get; set; }
         private FullScreenTableType FullScreenGraphicsTypeShown { get; set; }
         private int CurrentFullScreenPage { get; set; }
@@ -57,6 +59,7 @@ namespace RobonautCasparClient_v2.modules
             TimerShown = false;
             TechDisplayShown = false;
             SpeedDisplayShown = false;
+            SafetyCarDisplayShown = false;
             FullScreenGraphicsShown = false;
             CurrentFullScreenPage = 0;
 
@@ -127,6 +130,7 @@ namespace RobonautCasparClient_v2.modules
         public override void stopTeamDataGraphics()
         {
             stopLayer(TEAMINFO_LAYER);
+            stopLayer(SAFETY_CAR_INFO_LAYER);
         }
 
         public override void stopAllGraphics()
@@ -135,6 +139,7 @@ namespace RobonautCasparClient_v2.modules
             stopLayer(TEAMINFO_LAYER);
             stopLayer(TIMER_LAYER);
             stopLayer(SCOREBOARD_LAYER);
+            stopLayer(SAFETY_CAR_INFO_LAYER);
         }
 
         public override void showTeamTechnicalContestDisplay(TeamData teamData)
@@ -197,6 +202,40 @@ namespace RobonautCasparClient_v2.modules
                 }
 
                 casparDevice.Channels[CHANNEL].CG.Update(TEAMINFO_LAYER, 0, cgData);
+            }
+        }
+
+        public override void showSafetyCarInfoDisplay(TeamData teamData)
+        {
+            if (IsConnected && !SafetyCarDisplayShown)
+            {
+                CasparCGDataCollection cgData = new CasparCGDataCollection();
+                cgData.SetData("overtake", teamData.NumberOfOvertakes.ToString());
+                cgData.SetData("follow", teamData.SafetyCarWasFollowed.ToString());
+                
+                casparDevice.Channels[CHANNEL].CG.Add(SAFETY_CAR_INFO_LAYER, 0, "ROBONAUT_SAFETY_CAR_INFO", true, cgData);
+                
+                SafetyCarDisplayShown = true;
+            }
+        }
+
+        public override void updateSafetyCarInfoDisplay(TeamData teamData)
+        {
+            if (IsConnected && SafetyCarDisplayShown)
+            {
+                CasparCGDataCollection cgData = new CasparCGDataCollection();
+                cgData.SetData("overtake", teamData.NumberOfOvertakes.ToString());
+                cgData.SetData("follow", teamData.SafetyCarWasFollowed.ToString());
+                
+                casparDevice.Channels[CHANNEL].CG.Update(SAFETY_CAR_INFO_LAYER, 0, cgData);
+            }
+        }
+
+        public override void hideSafetyCarInfoDisplay()
+        {
+            if (IsConnected && SafetyCarDisplayShown)
+            {
+                stopLayer(SAFETY_CAR_INFO_LAYER);
             }
         }
 
@@ -615,6 +654,9 @@ namespace RobonautCasparClient_v2.modules
                         break;
                     case SCOREBOARD_LAYER:
                         FullScreenGraphicsShown = false;
+                        break;
+                    case SAFETY_CAR_INFO_LAYER:
+                        SafetyCarDisplayShown = false;
                         break;
                 }
             }
