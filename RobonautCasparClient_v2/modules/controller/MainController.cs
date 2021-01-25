@@ -52,6 +52,25 @@ namespace RobonautCasparClient_v2.modules.controller
         private bool SpeedTimingRolling { get; set; }
         private int LastSpeedTimerTime { get; set; }
 
+        private int shownTableItemsAmount_;
+        public int ShownTableItemsAmount
+        {
+            get
+            {
+                return shownTableItemsAmount_;
+            }
+            set
+            {
+                shownTableItemsAmount_ = value;
+                graphicsInteractor.setShownFullscreenGraphicsItemAmount(value);
+                /*
+                if (FullscreenGraphicsShown)
+                {
+                    graphicsInteractor.updateFullScreenGraphicsTable(teamDataService.getLastGivenTeams(shownTableItemsAmount_));
+                }*/
+            }
+        }
+
         public bool ConnectedToGraphicsServer
         {
             get { return graphicsInteractor.getConnectionToServer(); }
@@ -86,6 +105,8 @@ namespace RobonautCasparClient_v2.modules.controller
             ShownTimingType = TimerType.TECHNICAL;
 
             FullscreenGraphicsShown = false;
+
+            ShownTableItemsAmount = -1;
 
             speedTimerUpdateTimer = new DispatcherTimer();
             speedTimerUpdateTimer.Tick += updateSpeedTimerOnUi;
@@ -349,7 +370,15 @@ namespace RobonautCasparClient_v2.modules.controller
         {
             if (ConnectedToGraphicsServer)
             {
-                graphicsInteractor.showFullscreenGraphics(type, teamDataService.Teams);
+                if (type == FullScreenTableType.FINAL || type == FullScreenTableType.FINAL_JUNIOR)
+                {
+                    graphicsInteractor.showFullscreenGraphics(type, teamDataService.getLastGivenTeams(ShownTableItemsAmount));
+                }
+                else
+                {
+                    graphicsInteractor.showFullscreenGraphics(type, teamDataService.Teams);
+                }
+                
                 FullscreenGraphicsShown = true;
             }
         }

@@ -46,6 +46,7 @@ namespace RobonautCasparClient_v2.modules
         private bool FullScreenGraphicsShown { get; set; }
         private FullScreenTableType FullScreenGraphicsTypeShown { get; set; }
         private int CurrentFullScreenPage { get; set; }
+        private int ShownItemsAmount { get; set; }
 
         private readonly CasparDevice casparDevice = new CasparDevice();
 
@@ -96,6 +97,11 @@ namespace RobonautCasparClient_v2.modules
         public override bool getConnectionToServer()
         {
             return IsConnected;
+        }
+
+        public override void setShownFullscreenGraphicsItemAmount(int amount)
+        {
+            ShownItemsAmount = amount;
         }
 
         public override void showNameInsert(string name, string title)
@@ -586,7 +592,7 @@ namespace RobonautCasparClient_v2.modules
                 {
                     var currentTeam = teamDatas[i];
 
-                    cgData.SetData("result_rank_" + cgIndex, (i + 1).ToString());
+                    cgData.SetData("result_rank_" + cgIndex, currentTeam.JuniorRank.ToString());
                     cgData.SetData("result_teamname_" + cgIndex, currentTeam.TeamName);
                     cgData.SetData("result_point_" + cgIndex, currentTeam.TotalScore.ToString());
                 }
@@ -603,7 +609,7 @@ namespace RobonautCasparClient_v2.modules
 
         private void updateFinalResultCgData(CasparCGDataCollection cgData, List<TeamData> teamDatas)
         {
-            teamDatas.Sort((a, b) => b.Rank - a.Rank);
+            teamDatas.Sort((a, b) => a.Rank - b.Rank);
 
             int firstElement = CurrentFullScreenPage * SCOREBOARD_ITEMS_PER_PAGE;
             int lastElement = firstElement + SCOREBOARD_ITEMS_PER_PAGE <= teamDatas.Count
@@ -617,7 +623,7 @@ namespace RobonautCasparClient_v2.modules
                 {
                     var currentTeam = teamDatas[i];
 
-                    cgData.SetData("result_rank_" + cgIndex, (i + 1).ToString());
+                    cgData.SetData("result_rank_" + cgIndex, currentTeam.Rank.ToString());
                     cgData.SetData("result_teamname_" + cgIndex, currentTeam.TeamName);
                     cgData.SetData("result_point_" + cgIndex, currentTeam.TotalScore.ToString());
                 }

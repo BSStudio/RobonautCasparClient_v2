@@ -129,8 +129,8 @@
     <Compile Include="modules\data-communications-module\RabbitMqDataInteractor.cs" />
     <Compile Include="modules\graphics-module\CasparServerInteractor.cs" />
     <Compile Include="modules\graphics-module\interfaces\IGraphicsServerInteractor.cs" />
+    <Compile Include="modules\service\TeamDataService.cs" />
     <Compile Include="Util\FullScreenTableType.cs" />
-    <Compile Include="Util\TeamDataService.cs" />
     <Compile Include="Util\TeamType.cs" />
     <Compile Include="Util\TimerAction.cs" />
     <Compile Include="Util\TimerDirection.cs" />

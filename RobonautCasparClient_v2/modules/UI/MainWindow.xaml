@@ -101,9 +101,22 @@
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
                     <StackPanel Orientation="Vertical" Grid.Column="0">
-                        <TextBlock Text="Össz. eredmények" Margin="0,0,5,10" FontSize="20" FontWeight="Bold"
+                        <TextBlock Text="Össz. eredmények"
+                                   Margin="0,0,5,10" FontSize="20" FontWeight="Bold"
                                    HorizontalAlignment="Left" />
-                        <Button Height="30" Margin="10,0,10,5" Content="Hozott pontok ranglistája"
+                        <StackPanel Orientation="Horizontal">
+                            <TextBox Width="73" IsEnabled="False" Margin="10,0,2,5" 
+                                     VerticalContentAlignment="Center" 
+                                     Name="NumberOfShownTeamsInTable"
+                                     HorizontalContentAlignment="Center">Összes</TextBox>
+                            <Button Height="30" Margin="2,0,2,5" Padding="10, 0"
+                                    Click="decreaseShownTeamsInTable">-</Button>
+                            <Button Height="30" Margin="2,0,2,5" Padding="10, 0"
+                                    Click="increaseShownTeamsInTable">+</Button>
+                            <Button Height="30" Margin="2,0,2,5" Padding="10, 0"
+                                    Click="showAllTeamsInTable">Összes</Button>
+                        </StackPanel>
+                        <Button Height="30" Margin="10,10,10,5" Content="Hozott pontok ranglistája"
                                 Click="showQualificationPointsTableButton_Click" />
                         <Button Height="30" Content="Ügyességi verseny pontok" Margin="10,0,10,5"
                                 Click="showTechnicalPointsTableButton_Click" />

@@ -6,19 +6,21 @@ namespace RobonautCasparClient_v2.Modules.interfaces
     public abstract class IGraphicsServerInteractor
     {
         public delegate void casparConnectedDelegate();
+
         public event casparConnectedDelegate casparConnected;
 
         public delegate void casparDisconnectedDelegate();
+
         public event casparDisconnectedDelegate casparDisconnected;
 
         protected void fireCasparConnected()
         {
-         casparConnected();
+            casparConnected();
         }
 
         protected void fireCasparDisconnected()
         {
-         casparDisconnected();
+            casparDisconnected();
         }
 
         /*
@@ -82,16 +84,16 @@ namespace RobonautCasparClient_v2.Modules.interfaces
          * Safety carral való interakciók (követés, előzés) kijezéséhez való inzert megjelenítése
          */
         public abstract void showSafetyCarInfoDisplay(TeamData teamData);
-        
+
         public abstract void updateSafetyCarInfoDisplay(TeamData teamData);
 
         public abstract void hideSafetyCarInfoDisplay();
 
-         /*
-         * A meghatározott irányba számláló inzert megjelenítése
-         * Ha már meg van jelenítve az inzert, akkor csak frissíti a tartalmat
-         */
-         public abstract void showTimer(int startMs, TimerDirection dir);
+        /*
+        * A meghatározott irányba számláló inzert megjelenítése
+        * Ha már meg van jelenítve az inzert, akkor csak frissíti a tartalmat
+        */
+        public abstract void showTimer(int startMs, TimerDirection dir);
 
         /*
          * Elrejti a számlálót
@@ -109,14 +111,21 @@ namespace RobonautCasparClient_v2.Modules.interfaces
          * Ha egy oldalra nem férnek ki a csapatok egy oldalra, akkor magától többre bontja és lépteti
          */
         public abstract void showFullscreenGraphics(FullScreenTableType type, List<TeamData> teamDatas);
-         
+
         /*
          * visszater azzal, hogy meg van-e jelenitve a grafika a tablazat utan
          * true = meg van jelenitve
          * false = nem volt mar uj adat, eltunt
          */
         public abstract bool stepFullScreenGraphics(List<TeamData> teamDatas);
-        
+
+        /*
+         * Meg lehet vele adni, hogy hátulról számítva hány elemet jelenítsen meg a táblázatokban
+         *
+         * Ha a mennyiség -1, akkor mindet megjeleníti
+         */
+        public abstract void setShownFullscreenGraphicsItemAmount(int amount);
+
         /*
          * elrejti a teljes képernyős grafikát
          */

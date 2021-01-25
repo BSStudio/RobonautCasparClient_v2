@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using RobonautCasparClient_v2.DO;
 using RobonautCasparClient_v2.modules.controller;
@@ -20,6 +22,7 @@ namespace RobonautCasparClient_v2
         private bool ConnectedToDataServer { get; set; }
         private bool TeamGraphicsShown { get; set; }
         private bool SafetyCarInfoShown { get; set; }
+        private int ShownTeamsAmount { get; set; }
 
         public MainWindow()
         {
@@ -31,6 +34,7 @@ namespace RobonautCasparClient_v2
             ConnectedToGraphicsServer = false;
             TeamGraphicsShown = false;
             SafetyCarInfoShown = false;
+            ShownTeamsAmount = -1;
         }
 
         public void dataServerConnected()
@@ -342,6 +346,37 @@ namespace RobonautCasparClient_v2
             mainController.hideTeamGraphics();
             TeamGraphicsShown = false;
             SafetyCarInfoShown = false;
+        }
+
+        private void increaseShownTeamsInTable(object sender, RoutedEventArgs e)
+        {
+            ShownTeamsAmount++;
+
+            mainController.ShownTableItemsAmount = ShownTeamsAmount;
+
+            NumberOfShownTeamsInTable.Text = ShownTeamsAmount.ToString();
+        }
+
+        private void decreaseShownTeamsInTable(object sender, RoutedEventArgs e)
+        {
+            ShownTeamsAmount--;
+            if (ShownTeamsAmount < -1)
+                ShownTeamsAmount = -1;
+
+            mainController.ShownTableItemsAmount = ShownTeamsAmount;
+
+            if (ShownTeamsAmount == -1)
+                NumberOfShownTeamsInTable.Text = "Összes";
+            else
+                NumberOfShownTeamsInTable.Text = ShownTeamsAmount.ToString();
+        }
+
+        private void showAllTeamsInTable(object sender, RoutedEventArgs e)
+        {
+            ShownTeamsAmount = -1;
+            mainController.ShownTableItemsAmount = -1;
+
+            NumberOfShownTeamsInTable.Text = "Összes";
         }
     }
 }

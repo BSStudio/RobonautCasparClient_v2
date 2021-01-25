@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Linq;
 using RobonautCasparClient_v2.DO.communication;
 
 namespace RobonautCasparClient_v2.DO
@@ -58,6 +60,30 @@ namespace RobonautCasparClient_v2.DO
         public TeamData getTeam(int teamId)
         {
             return Teams.Find(team => team.TeamId == teamId);
+        }
+
+        public List<TeamData> getLastGivenTeams(int numOfItems)
+        {
+            if (numOfItems == -1)
+                return Teams;
+            
+            int thresholdRank = maxRank() - numOfItems;
+            
+            return Teams
+                .Where(team => team.Rank > thresholdRank)
+                .ToList();
+        }
+
+        private int maxRank()
+        {
+            int max = -1;
+            
+            foreach (var team in Teams)
+            {
+                if (team.Rank > max) max = team.Rank;
+            }
+
+            return max;
         }
 
         public TeamData updateWithGateInfo(GateInformation gateInfo)
