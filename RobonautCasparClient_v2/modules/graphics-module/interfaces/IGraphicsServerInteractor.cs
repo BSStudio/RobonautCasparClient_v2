@@ -35,6 +35,8 @@ namespace RobonautCasparClient_v2.Modules.interfaces
 
         public abstract bool getConnectionToServer();
 
+        public abstract void setGraphicsChannel(int channel);
+        
         /*
          * Megjelenít egy névinzertet
          */

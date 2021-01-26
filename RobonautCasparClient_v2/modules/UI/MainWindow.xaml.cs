@@ -378,5 +378,19 @@ namespace RobonautCasparClient_v2
 
             NumberOfShownTeamsInTable.Text = "Összes";
         }
+
+        private void CasparSetChannelButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            var text = casparChannel.Text;
+
+            if (int.TryParse(text, out int channel))
+            {
+                mainController.setGraphicsChannel(channel);
+            }
+            else
+            {
+                MessageBox.Show("Kérlek számot adj meg Caspar csatornaként!", "Hiba");
+            }
+        }
     }
 }

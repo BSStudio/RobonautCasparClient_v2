@@ -127,6 +127,11 @@ namespace RobonautCasparClient_v2.modules.controller
             dataInteractor.stopperStopEvent += stopSpeedTimer;
         }
 
+        public void setGraphicsChannel(int channel)
+        {
+            graphicsInteractor.setGraphicsChannel(channel);
+        }
+        
         private void updateTeamsOnUI(TeamData newteamdata)
         {
             Window.UpdateTeamData(teamDataService.Teams);

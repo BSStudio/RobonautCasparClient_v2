@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RobonautCasparClient_v2"
         mc:Ignorable="d"
-        Title="RobonAUT feliratozó" WindowState="Maximized" Icon="robonaut_logo.ico">
+        Title="RobonAUT feliratozó" WindowState="Maximized" Icon="robonaut_logo.ico" d:DesignWidth="1300.5">
     <TabControl>
         <TabItem Header="Grafika vezérlés">
             <Grid Margin="5,0,0,0">
@@ -21,7 +21,7 @@
                            HorizontalAlignment="Center" />
                 <Grid Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="120" />
+                        <ColumnDefinition Width="150" />
                         <ColumnDefinition Width="185" />
                         <ColumnDefinition Width="140" />
                         <ColumnDefinition Width="100" />
@@ -34,22 +34,33 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="1*" />
                         <RowDefinition Height="1*" />
+                        <RowDefinition Height="1*" />
                     </Grid.RowDefinitions>
                     <Rectangle Fill="Tomato" Name="casparServerConnectionFeedback" Margin="-5" IsHitTestVisible="False"
-                               Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Grid.ColumnSpan="4" />
+                               Grid.Column="0" Grid.Row="0" Grid.RowSpan="4" Grid.ColumnSpan="4" />
                     <TextBlock Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="4" Text="CasparCG Szerver kapcsolódás"
-                               Margin="0,0,0,5" FontWeight="Bold" />
+                               Margin="0,0,0,5" FontWeight="Bold"/>
                     <TextBlock Grid.Column="0" Grid.Row="1" Text="Caspar Szerver címe:" Margin="0,0,10,0"
                                HorizontalAlignment="Left" VerticalAlignment="Center" />
                     <TextBox Grid.Column="1" Grid.Row="1" Name="casparServerAddress" Height="23" TextWrapping="Wrap"
                              Width="175" HorizontalAlignment="Left" VerticalAlignment="Center" Text="localhost" />
-                    <!--192.168.10.12-->
+                    <!--192.168.10.20-->
                     <Button Name="casparServerConnectButton" Content="Csatlakozás" Grid.Column="2"
                             HorizontalAlignment="Left" Margin="0,1,0,0" Grid.Row="1" Width="120"
                             HorizontalContentAlignment="Center" VerticalAlignment="Top"
                             RenderTransformOrigin="0.542,-0.133" Click="graphicsServerConnectButton_Click" />
                     <TextBlock Grid.Column="3" Grid.Row="1" Margin="0,0,10,0" Name="casparServerStatus"
                                Text="Kapcsolat bontva" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    <TextBlock Grid.Column="0" Grid.Row="2" Margin="0,0,10,0"
+                               HorizontalAlignment="Left" VerticalAlignment="Center">
+                        Caspar kijátszócsatorna:
+                    </TextBlock>
+                    <TextBox Grid.Column="1" Grid.Row="2" Name="casparChannel" Height="23" Width="175" Margin="0, 2, 0, 0"
+                             HorizontalAlignment="Left" VerticalAlignment="Center" Text="0"></TextBox>
+                    <Button Name="casparSetChannelButton" Content="Beállítás" Grid.Column="2"
+                            HorizontalAlignment="Left" Margin="0,1,0,0" Grid.Row="2" Width="120"
+                            HorizontalContentAlignment="Center" VerticalAlignment="Top"
+                            RenderTransformOrigin="0.542,-0.133" Click="CasparSetChannelButton_OnClick" />
 
                     <Rectangle Fill="Tomato" Name="dataServerConnectionFeedback" Margin="-5" IsHitTestVisible="False"
                                Grid.Column="5" Grid.Row="0" Grid.RowSpan="2" Grid.ColumnSpan="4" />
@@ -61,7 +72,7 @@
                              Width="175" HorizontalAlignment="Left" VerticalAlignment="Center"
                              Text="localhost" />
                     <Button x:Name="dataServerConnectButton" Content="Csatlakozás" Grid.Column="7"
-                            HorizontalAlignment="Left" Margin="0,1,0,2" Grid.Row="1" Width="120"
+                            HorizontalAlignment="Left" Margin="0,1,0,0" Grid.Row="1" Width="120"
                             HorizontalContentAlignment="Center" Click="dataServerConnectButton_Click" />
                     <TextBlock Grid.Column="8" Grid.Row="1" Margin="0,0,10,0" Name="dataServerStatus"
                                Text="Kapcsolat bontva" HorizontalAlignment="Center" VerticalAlignment="Center" />
