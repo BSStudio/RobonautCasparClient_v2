@@ -159,35 +159,17 @@ namespace RobonautCasparClient_v2
             }
         }
 
-        private void hideNameInsertButton_Click(object sender, RoutedEventArgs e)
-        {
-            mainController.hideName();
-        }
+        private void hideNameInsertButton_Click(object sender, RoutedEventArgs e) => mainController.hideName();
 
-        private void showStopperButton_Click(object sender, RoutedEventArgs e)
-        {
-            mainController.showSpeedTimer();
-        }
+        private void showStopperButton_Click(object sender, RoutedEventArgs e) => mainController.showSpeedTimer();
 
-        private void hideStopperButton_Click(object sender, RoutedEventArgs e)
-        {
-            mainController.hideTiming();
-        }
+        private void hideStopperButton_Click(object sender, RoutedEventArgs e) => mainController.hideTiming();
 
-        private void showTechTimerButton_Click(object sender, RoutedEventArgs e)
-        {
-            mainController.showTechTimer();
-        }
+        private void showTechTimerButton_Click(object sender, RoutedEventArgs e) => mainController.showTechTimer();
 
-        private void hideTechTimerButton_Click(object sender, RoutedEventArgs e)
-        {
-            mainController.hideTiming();
-        }
+        private void hideTechTimerButton_Click(object sender, RoutedEventArgs e) => mainController.hideTiming();
 
-        private void removeTeamGraphicsButton_Click(object sender, RoutedEventArgs e)
-        {
-            hideTeamGraphics();
-        }
+        private void removeTeamGraphicsButton_Click(object sender, RoutedEventArgs e) => hideTeamGraphicsWithSafety();
 
         private void removeAllGraphicsButton_Click(object sender, RoutedEventArgs e)
         {
@@ -196,10 +178,7 @@ namespace RobonautCasparClient_v2
             SafetyCarInfoShown = false;
         }
 
-        private void refreshDataButton_Click(object sender, RoutedEventArgs e)
-        {
-            mainController.requestData();
-        }
+        private void refreshDataButton_Click(object sender, RoutedEventArgs e) => mainController.requestData();
 
         private void teamNamingButton_Click(object sender, RoutedEventArgs e)
         {
@@ -231,7 +210,7 @@ namespace RobonautCasparClient_v2
 
         private void showSafetyCarInfoButton_Click(object sender, RoutedEventArgs e)
         {
-            if(mainController.ConnectedToGraphicsServer)
+            if (mainController.ConnectedToGraphicsServer)
                 if (!SafetyCarInfoShown)
                 {
                     mainController.showSafetyCarInfoDisplay((int) ((Button) sender).Tag);
@@ -239,7 +218,7 @@ namespace RobonautCasparClient_v2
                 }
                 else
                 {
-                    mainController.hideSafetaCarInfoDisplay();
+                    mainController.hideSafetyCarInfoDisplay();
                     SafetyCarInfoShown = false;
                 }
         }
@@ -286,50 +265,32 @@ namespace RobonautCasparClient_v2
                 }
         }
 
-        private void showQualificationPointsTableButton_Click(object sender, RoutedEventArgs e)
-        {
+        private void showQualificationPointsTableButton_Click(object sender, RoutedEventArgs e) =>
             mainController.showFullScreenGraphics(FullScreenTableType.QUALIFICATION_POINTS);
-        }
 
-        private void showTotalAudiencePointsTableButton_Click(object sender, RoutedEventArgs e)
-        {
+        private void showTotalAudiencePointsTableButton_Click(object sender, RoutedEventArgs e) =>
             mainController.showFullScreenGraphics(FullScreenTableType.AUDIENCE_POINTS);
-        }
-        
-        private void showTechnicalPointsTableButton_Click(object sender, RoutedEventArgs e)
-        {
+
+        private void showTechnicalPointsTableButton_Click(object sender, RoutedEventArgs e) =>
             mainController.showFullScreenGraphics(FullScreenTableType.TECHNICAL_POINTS);
-        }
-        
-        private void showSpeedTimesTableButton_Click(object sender, RoutedEventArgs e)
-        {
+
+        private void showSpeedTimesTableButton_Click(object sender, RoutedEventArgs e) =>
             mainController.showFullScreenGraphics(FullScreenTableType.SPEED_TIMES);
-        }
-        
-        private void showSpeedPointsTableButton_Click(object sender, RoutedEventArgs e)
-        {
+
+        private void showSpeedPointsTableButton_Click(object sender, RoutedEventArgs e) =>
             mainController.showFullScreenGraphics(FullScreenTableType.SPEED_POINTS);
-        }
 
-        private void showJuniorFinalResultTableButton_Click(object sender, RoutedEventArgs e)
-        {
+        private void showJuniorFinalResultTableButton_Click(object sender, RoutedEventArgs e) =>
             mainController.showFullScreenGraphics(FullScreenTableType.FINAL_JUNIOR);
-        }
 
-        private void showTotalFinalResultTableButton_Click(object sender, RoutedEventArgs e)
-        {
+        private void showTotalFinalResultTableButton_Click(object sender, RoutedEventArgs e) =>
             mainController.showFullScreenGraphics(FullScreenTableType.FINAL);
-        }
 
-        private void nextFullScreenGraphicsPageButton_Click(object sender, RoutedEventArgs e)
-        {
+        private void nextFullScreenGraphicsPageButton_Click(object sender, RoutedEventArgs e) =>
             mainController.nextFullScreenPage();
-        }
 
-        private void hideFullScreenGraphicsPageButton_Click(object sender, RoutedEventArgs e)
-        {
+        private void hideFullScreenGraphicsPageButton_Click(object sender, RoutedEventArgs e) =>
             mainController.hideFullScreenGraphics();
-        }
 
         public void updateTechTimerDisplay(long time)
         {
@@ -341,11 +302,18 @@ namespace RobonautCasparClient_v2
             Dispatcher.Invoke(() => { uiStopper.Text = Converters.TimeToString((int) time); });
         }
 
+        private void hideTeamGraphicsWithSafety()
+        {
+            mainController.hideTeamGraphics();
+            mainController.hideSafetyCarInfoDisplay();
+            TeamGraphicsShown = false;
+            SafetyCarInfoShown = false;
+        }
+
         private void hideTeamGraphics()
         {
             mainController.hideTeamGraphics();
             TeamGraphicsShown = false;
-            SafetyCarInfoShown = false;
         }
 
         private void increaseShownTeamsInTable(object sender, RoutedEventArgs e)

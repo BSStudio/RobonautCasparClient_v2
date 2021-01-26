@@ -142,7 +142,6 @@ namespace RobonautCasparClient_v2.modules
         public override void stopTeamDataGraphics()
         {
             stopLayer(TEAMINFO_LAYER);
-            stopLayer(SAFETY_CAR_INFO_LAYER);
         }
 
         public override void stopAllGraphics()

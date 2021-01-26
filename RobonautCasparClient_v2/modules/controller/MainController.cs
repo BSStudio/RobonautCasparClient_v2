@@ -225,7 +225,7 @@ namespace RobonautCasparClient_v2.modules.controller
             graphicsInteractor.showSafetyCarInfoDisplay(team);
         }
 
-        public void hideSafetaCarInfoDisplay()
+        public void hideSafetyCarInfoDisplay()
         {
             graphicsInteractor.hideSafetyCarInfoDisplay();
         }

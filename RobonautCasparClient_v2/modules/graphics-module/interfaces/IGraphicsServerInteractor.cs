@@ -53,7 +53,7 @@ namespace RobonautCasparClient_v2.Modules.interfaces
         public abstract void showTeamNameWithMembers(TeamData teamData);
 
         /*
-         * Elrejt minden csapatokkal kapcsolatos inzertet
+         * Elrejt minden csapatokkal kapcsolatos inzertet kivéve a safetycar inzertet
          */
         public abstract void stopTeamDataGraphics();
 
