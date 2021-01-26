@@ -206,11 +206,17 @@ namespace RobonautCasparClient_v2.modules
                 CasparCGDataCollection cgData = new CasparCGDataCollection();
                 cgData.SetData("tech_point", teamData.SkillScore.ToString());
 
-                int lap = 1;
-                foreach (var time in teamData.SpeedTimes)
+                for (int lap = 1; lap <= 3; lap++)
                 {
-                    cgData.SetData("time_" + lap, Converters.TimeToString(time));
-                    lap++;
+                    if (teamData.SpeedTimes.Count >= lap)
+                    {
+                        var time = teamData.SpeedTimes[lap - 1];
+                        cgData.SetData("time_" + lap, Converters.TimeToString(time));
+                    }
+                    else
+                    {
+                        cgData.SetData("time_" + lap, "");
+                    }
                 }
 
                 casparDevice.Channels[Channel].CG.Update(TEAMINFO_LAYER, 0, cgData);
