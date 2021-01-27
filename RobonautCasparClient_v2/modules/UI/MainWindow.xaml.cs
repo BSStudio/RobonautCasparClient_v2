@@ -18,23 +18,17 @@ namespace RobonautCasparClient_v2
     {
         private readonly MainController mainController = MainController.Instance;
 
-        private bool ConnectedToGraphicsServer { get; set; }
-        private bool ConnectedToDataServer { get; set; }
-        private bool TeamGraphicsShown { get; set; }
-        private bool SafetyCarInfoShown { get; set; }
-        private int ShownTeamsAmount { get; set; }
+        private bool ConnectedToGraphicsServer { get; set; } = false;
+        private bool ConnectedToDataServer { get; set; } = false;
+        private bool TeamGraphicsShown { get; set; } = false;
+        private bool SafetyCarInfoShown { get; set; } = false;
+        private int ShownTeamsAmount { get; set; } = 0;
 
         public MainWindow()
         {
             InitializeComponent();
 
             mainController.Window = this;
-
-            ConnectedToDataServer = false;
-            ConnectedToGraphicsServer = false;
-            TeamGraphicsShown = false;
-            SafetyCarInfoShown = false;
-            ShownTeamsAmount = -1;
         }
 
         public void dataServerConnected()
@@ -272,7 +266,7 @@ namespace RobonautCasparClient_v2
             mainController.showFullScreenGraphics(FullScreenTableType.AUDIENCE_POINTS);
 
         private void showTechnicalPointsTableButton_Click(object sender, RoutedEventArgs e) =>
-            mainController.showFullScreenGraphics(FullScreenTableType.TECHNICAL_POINTS);
+            mainController.showFullScreenGraphics(FullScreenTableType.SKILL_POINTS);
 
         private void showSpeedTimesTableButton_Click(object sender, RoutedEventArgs e) =>
             mainController.showFullScreenGraphics(FullScreenTableType.SPEED_TIMES);
@@ -318,7 +312,10 @@ namespace RobonautCasparClient_v2
 
         private void increaseShownTeamsInTable(object sender, RoutedEventArgs e)
         {
+            var numOfTeams = TeamDataService.Instance.Teams.Count;
             ShownTeamsAmount++;
+            if (ShownTeamsAmount > numOfTeams)
+                ShownTeamsAmount = numOfTeams;
 
             mainController.ShownTableItemsAmount = ShownTeamsAmount;
 
@@ -328,12 +325,12 @@ namespace RobonautCasparClient_v2
         private void decreaseShownTeamsInTable(object sender, RoutedEventArgs e)
         {
             ShownTeamsAmount--;
-            if (ShownTeamsAmount < -1)
-                ShownTeamsAmount = -1;
+            if (ShownTeamsAmount < 0)
+                ShownTeamsAmount = 0;
 
             mainController.ShownTableItemsAmount = ShownTeamsAmount;
 
-            if (ShownTeamsAmount == -1)
+            if (ShownTeamsAmount == 0)
                 NumberOfShownTeamsInTable.Text = "Összes";
             else
                 NumberOfShownTeamsInTable.Text = ShownTeamsAmount.ToString();
@@ -341,8 +338,8 @@ namespace RobonautCasparClient_v2
 
         private void showAllTeamsInTable(object sender, RoutedEventArgs e)
         {
-            ShownTeamsAmount = -1;
-            mainController.ShownTableItemsAmount = -1;
+            ShownTeamsAmount = 0;
+            mainController.ShownTableItemsAmount = 0;
 
             NumberOfShownTeamsInTable.Text = "Összes";
         }

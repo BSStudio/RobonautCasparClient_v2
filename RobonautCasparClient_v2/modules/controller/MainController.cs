@@ -375,14 +375,7 @@ namespace RobonautCasparClient_v2.modules.controller
         {
             if (ConnectedToGraphicsServer)
             {
-                if (type == FullScreenTableType.FINAL || type == FullScreenTableType.FINAL_JUNIOR)
-                {
-                    graphicsInteractor.showFullscreenGraphics(type, teamDataService.getLastGivenTeams(ShownTableItemsAmount));
-                }
-                else
-                {
-                    graphicsInteractor.showFullscreenGraphics(type, teamDataService.Teams);
-                }
+                graphicsInteractor.showFullscreenGraphics(type, teamDataService.Teams, ShownTableItemsAmount);
                 
                 FullscreenGraphicsShown = true;
             }
@@ -392,7 +385,7 @@ namespace RobonautCasparClient_v2.modules.controller
         {
             if (FullscreenGraphicsShown)
             {
-                FullscreenGraphicsShown = graphicsInteractor.stepFullScreenGraphics(teamDataService.Teams);
+                FullscreenGraphicsShown = graphicsInteractor.stepFullScreenGraphics(teamDataService.Teams, ShownTableItemsAmount);
             }
         }
 

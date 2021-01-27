@@ -112,14 +112,14 @@ namespace RobonautCasparClient_v2.Modules.interfaces
          *
          * Ha egy oldalra nem férnek ki a csapatok egy oldalra, akkor magától többre bontja és lépteti
          */
-        public abstract void showFullscreenGraphics(FullScreenTableType type, List<TeamData> teamDatas);
+        public abstract void showFullscreenGraphics(FullScreenTableType type, List<TeamData> teamDatas, int lastThisMany);
 
         /*
          * visszater azzal, hogy meg van-e jelenitve a grafika a tablazat utan
          * true = meg van jelenitve
          * false = nem volt mar uj adat, eltunt
          */
-        public abstract bool stepFullScreenGraphics(List<TeamData> teamDatas);
+        public abstract bool stepFullScreenGraphics(List<TeamData> teamDatas, int lastThisMany);
 
         /*
          * Meg lehet vele adni, hogy hátulról számítva hány elemet jelenítsen meg a táblázatokban

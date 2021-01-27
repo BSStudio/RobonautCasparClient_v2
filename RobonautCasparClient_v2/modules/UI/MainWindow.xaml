@@ -115,6 +115,9 @@
                         <TextBlock Text="Össz. eredmények"
                                    Margin="0,0,5,10" FontSize="20" FontWeight="Bold"
                                    HorizontalAlignment="Left" />
+                        <TextBlock Text="Utolsó hány elem?"
+                                   Margin="10,0,5,10" FontSize="12"
+                                   HorizontalAlignment="Left" />
                         <StackPanel Orientation="Horizontal">
                             <TextBox Width="73" IsEnabled="False" Margin="10,0,2,5" 
                                      VerticalContentAlignment="Center" 
@@ -190,7 +193,7 @@
                                   VerticalScrollBarVisibility="Auto">
                             <DataGrid.Columns>
                                 <DataGridTextColumn IsReadOnly="True" Binding="{Binding TeamId}"
-                                                    ClipboardContentBinding="{x:Null}" Header="Csapat ID" />
+                                                    ClipboardContentBinding="{x:Null}" Header="ID" />
                                 <DataGridTextColumn IsReadOnly="True" Binding="{Binding TeamName}"
                                                     ClipboardContentBinding="{x:Null}" Header="Csapat név" />
                                 <DataGridTemplateColumn IsReadOnly="True" Width="120" Header="Csapattagok">

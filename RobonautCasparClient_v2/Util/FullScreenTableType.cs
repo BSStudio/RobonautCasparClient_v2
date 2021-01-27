@@ -4,7 +4,7 @@
     {
         QUALIFICATION_POINTS,
         AUDIENCE_POINTS,
-        TECHNICAL_POINTS,
+        SKILL_POINTS,
         SPEED_TIMES,
         SPEED_POINTS,
         FINAL,
