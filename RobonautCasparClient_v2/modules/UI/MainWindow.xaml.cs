@@ -24,6 +24,11 @@ namespace RobonautCasparClient_v2
         private bool SafetyCarInfoShown { get; set; } = false;
         private int ShownTeamsAmount { get; set; } = 0;
 
+        private Button selectedTeamGraphicsButton = null;
+        private Button selectedSafetyCarGraphicsButton = null;
+        private Button selectedResultTableButton = null;
+        private readonly Brush activeButtonBrush = new SolidColorBrush(Colors.ForestGreen);
+
         public MainWindow()
         {
             InitializeComponent();
@@ -163,13 +168,22 @@ namespace RobonautCasparClient_v2
 
         private void hideTechTimerButton_Click(object sender, RoutedEventArgs e) => mainController.hideTiming();
 
-        private void removeTeamGraphicsButton_Click(object sender, RoutedEventArgs e) => hideTeamGraphicsWithSafety();
+        private void removeTeamGraphicsButton_Click(object sender, RoutedEventArgs e)
+        {
+            hideTeamGraphicsWithSafety();
+
+            resetColor(selectedTeamGraphicsButton);
+            resetColor(selectedSafetyCarGraphicsButton);
+        }
 
         private void removeAllGraphicsButton_Click(object sender, RoutedEventArgs e)
         {
             mainController.hideAllGraphics();
             TeamGraphicsShown = false;
             SafetyCarInfoShown = false;
+
+            resetColor(selectedTeamGraphicsButton);
+            resetColor(selectedSafetyCarGraphicsButton);
         }
 
         private void refreshDataButton_Click(object sender, RoutedEventArgs e) => mainController.requestData();
@@ -179,7 +193,10 @@ namespace RobonautCasparClient_v2
             if (mainController.ConnectedToGraphicsServer)
                 if (!TeamGraphicsShown)
                 {
-                    mainController.showTeamNaming((int) ((Button) sender).Tag);
+                    var currentButton = (Button) sender;
+                    setActiveTeamInfoButton(currentButton);
+
+                    mainController.showTeamNaming((int) currentButton.Tag);
                     TeamGraphicsShown = true;
                 }
                 else
@@ -193,7 +210,10 @@ namespace RobonautCasparClient_v2
             if (mainController.ConnectedToGraphicsServer)
                 if (!TeamGraphicsShown)
                 {
-                    mainController.showTeamTechnicalContestDisplay((int) ((Button) sender).Tag);
+                    var currentButton = (Button) sender;
+                    setActiveTeamInfoButton(currentButton);
+
+                    mainController.showTeamTechnicalContestDisplay((int) currentButton.Tag);
                     TeamGraphicsShown = true;
                 }
                 else
@@ -207,13 +227,18 @@ namespace RobonautCasparClient_v2
             if (mainController.ConnectedToGraphicsServer)
                 if (!SafetyCarInfoShown)
                 {
-                    mainController.showSafetyCarInfoDisplay((int) ((Button) sender).Tag);
+                    var currentButton = (Button) sender;
+                    setActiveSafetyCarButton(currentButton);
+
+                    mainController.showSafetyCarInfoDisplay((int) currentButton.Tag);
                     SafetyCarInfoShown = true;
                 }
                 else
                 {
                     mainController.hideSafetyCarInfoDisplay();
                     SafetyCarInfoShown = false;
+
+                    resetColor(selectedSafetyCarGraphicsButton);
                 }
         }
 
@@ -222,7 +247,10 @@ namespace RobonautCasparClient_v2
             if (mainController.ConnectedToGraphicsServer)
                 if (!TeamGraphicsShown)
                 {
-                    mainController.showTeamSpeedContestDisplay((int) ((Button) sender).Tag);
+                    var currentButton = (Button) sender;
+                    setActiveTeamInfoButton(currentButton);
+
+                    mainController.showTeamSpeedContestDisplay((int) currentButton.Tag);
                     TeamGraphicsShown = true;
                 }
                 else
@@ -236,7 +264,10 @@ namespace RobonautCasparClient_v2
             if (mainController.ConnectedToGraphicsServer)
                 if (!TeamGraphicsShown)
                 {
-                    mainController.showTeamAllStatsInsert((int) ((Button) sender).Tag, TeamType.JUNIOR);
+                    var currentButton = (Button) sender;
+                    setActiveTeamInfoButton(currentButton);
+
+                    mainController.showTeamAllStatsInsert((int) currentButton.Tag, TeamType.JUNIOR);
                     TeamGraphicsShown = true;
                 }
                 else
@@ -250,7 +281,10 @@ namespace RobonautCasparClient_v2
             if (mainController.ConnectedToGraphicsServer)
                 if (!TeamGraphicsShown)
                 {
-                    mainController.showTeamAllStatsInsert((int) ((Button) sender).Tag, TeamType.SENIOR);
+                    var currentButton = (Button) sender;
+                    setActiveTeamInfoButton(currentButton);
+
+                    mainController.showTeamAllStatsInsert((int) currentButton.Tag, TeamType.SENIOR);
                     TeamGraphicsShown = true;
                 }
                 else
@@ -259,32 +293,59 @@ namespace RobonautCasparClient_v2
                 }
         }
 
-        private void showQualificationPointsTableButton_Click(object sender, RoutedEventArgs e) =>
+        private void showQualificationPointsTableButton_Click(object sender, RoutedEventArgs e)
+        {
             mainController.showFullScreenGraphics(FullScreenTableType.QUALIFICATION_POINTS);
+            setActiveResultTableButton((Button) sender);
+        }
 
-        private void showTotalAudiencePointsTableButton_Click(object sender, RoutedEventArgs e) =>
+        private void showTotalAudiencePointsTableButton_Click(object sender, RoutedEventArgs e)
+        {
             mainController.showFullScreenGraphics(FullScreenTableType.AUDIENCE_POINTS);
+            setActiveResultTableButton((Button) sender);
+        }
 
-        private void showTechnicalPointsTableButton_Click(object sender, RoutedEventArgs e) =>
+        private void showTechnicalPointsTableButton_Click(object sender, RoutedEventArgs e)
+        {
             mainController.showFullScreenGraphics(FullScreenTableType.SKILL_POINTS);
+            setActiveResultTableButton((Button) sender);
+        }
 
-        private void showSpeedTimesTableButton_Click(object sender, RoutedEventArgs e) =>
+        private void showSpeedTimesTableButton_Click(object sender, RoutedEventArgs e)
+        {
             mainController.showFullScreenGraphics(FullScreenTableType.SPEED_TIMES);
+            setActiveResultTableButton((Button) sender);
+        }
 
-        private void showSpeedPointsTableButton_Click(object sender, RoutedEventArgs e) =>
+        private void showSpeedPointsTableButton_Click(object sender, RoutedEventArgs e)
+        {
             mainController.showFullScreenGraphics(FullScreenTableType.SPEED_POINTS);
+            setActiveResultTableButton((Button) sender);
+        }
 
-        private void showJuniorFinalResultTableButton_Click(object sender, RoutedEventArgs e) =>
+        private void showJuniorFinalResultTableButton_Click(object sender, RoutedEventArgs e)
+        {
             mainController.showFullScreenGraphics(FullScreenTableType.FINAL_JUNIOR);
+            setActiveResultTableButton((Button) sender);
+        }
 
-        private void showTotalFinalResultTableButton_Click(object sender, RoutedEventArgs e) =>
+        private void showTotalFinalResultTableButton_Click(object sender, RoutedEventArgs e)
+        {
             mainController.showFullScreenGraphics(FullScreenTableType.FINAL);
+            setActiveResultTableButton((Button) sender);
+        }
 
-        private void nextFullScreenGraphicsPageButton_Click(object sender, RoutedEventArgs e) =>
-            mainController.nextFullScreenPage();
+        private void nextFullScreenGraphicsPageButton_Click(object sender, RoutedEventArgs e)
+        {
+            if(!mainController.nextFullScreenPage())
+                resetColor(selectedResultTableButton);
+        }
 
-        private void hideFullScreenGraphicsPageButton_Click(object sender, RoutedEventArgs e) =>
+        private void hideFullScreenGraphicsPageButton_Click(object sender, RoutedEventArgs e)
+        {
             mainController.hideFullScreenGraphics();
+            resetColor(selectedResultTableButton);
+        }
 
         public void updateTechTimerDisplay(long time)
         {
@@ -308,6 +369,8 @@ namespace RobonautCasparClient_v2
         {
             mainController.hideTeamGraphics();
             TeamGraphicsShown = false;
+
+            resetColor(selectedTeamGraphicsButton);
         }
 
         private void increaseShownTeamsInTable(object sender, RoutedEventArgs e)
@@ -336,7 +399,7 @@ namespace RobonautCasparClient_v2
                 NumberOfShownTeamsInTable.Text = ShownTeamsAmount.ToString();
         }
 
-        private void showAllTeamsInTable(object sender, RoutedEventArgs e)
+        private void setShowAllTeamsInTable(object sender, RoutedEventArgs e)
         {
             ShownTeamsAmount = 0;
             mainController.ShownTableItemsAmount = 0;
@@ -356,6 +419,40 @@ namespace RobonautCasparClient_v2
             {
                 MessageBox.Show("Kérlek számot adj meg Caspar csatornaként!", "Hiba");
             }
+        }
+
+        private void setActiveSafetyCarButton(Button button)
+        {
+            if (ConnectedToGraphicsServer)
+            {
+                button.Background = activeButtonBrush;
+                selectedSafetyCarGraphicsButton = button;
+            }
+        }
+
+        private void setActiveTeamInfoButton(Button button)
+        {
+            if (ConnectedToGraphicsServer)
+            {
+                button.Background = activeButtonBrush;
+                selectedTeamGraphicsButton = button;
+            }
+        }
+
+        private void setActiveResultTableButton(Button button)
+        {
+            if (ConnectedToGraphicsServer)
+            {
+                resetColor(selectedResultTableButton);
+                button.Background = activeButtonBrush;
+                selectedResultTableButton = button;
+            }
+        }
+        
+        private void resetColor(Button button)
+        {
+            if (button != null)
+                button.Background = new SolidColorBrush(Colors.LightGray);
         }
     }
 }

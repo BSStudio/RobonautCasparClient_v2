@@ -128,7 +128,7 @@
                             <Button Height="30" Margin="2,0,2,5" Padding="10, 0"
                                     Click="increaseShownTeamsInTable">+</Button>
                             <Button Height="30" Margin="2,0,2,5" Padding="10, 0"
-                                    Click="showAllTeamsInTable">Összes</Button>
+                                    Click="setShowAllTeamsInTable">Összes</Button>
                         </StackPanel>
                         <Button Height="30" Margin="10,10,10,5" Content="Hozott pontok ranglistája"
                                 Click="showQualificationPointsTableButton_Click" />

@@ -381,12 +381,14 @@ namespace RobonautCasparClient_v2.modules.controller
             }
         }
 
-        public void nextFullScreenPage()
+        public bool nextFullScreenPage()
         {
             if (FullscreenGraphicsShown)
             {
                 FullscreenGraphicsShown = graphicsInteractor.stepFullScreenGraphics(teamDataService.Teams, ShownTableItemsAmount);
             }
+
+            return FullscreenGraphicsShown;
         }
 
         public void hideFullScreenGraphics()
