@@ -313,7 +313,7 @@ namespace RobonautCasparClient_v2.modules
             }
         }
 
-        public override void showFullscreenGraphics(FullScreenTableType type, List<TeamData> teamDatas,
+        public override void showFullscreenGraphics(FullScreenTableType type, List<(int rank, TeamData teamData)> teamDatasWithRanks,
             int lastThisMany)
         {
             if (IsConnected)
@@ -323,8 +323,7 @@ namespace RobonautCasparClient_v2.modules
 
                 FullScreenGraphicsTypeShown = type;
 
-                var generatedFilteredTeamRanks = filterLastGivenTeams(
-                    generateTeamRanks(teamDatas, FullScreenGraphicsTypeShown), lastThisMany);
+                var generatedFilteredTeamRanks = filterLastGivenTeams(teamDatasWithRanks, lastThisMany);
 
                 switch (type)
                 {
@@ -374,15 +373,13 @@ namespace RobonautCasparClient_v2.modules
             }
         }
 
-        public override bool stepFullScreenGraphics(List<TeamData> teamDatas, int lastThisMany)
+        public override bool stepFullScreenGraphics(List<(int rank, TeamData teamData)> teamDatasWithRanks, int lastThisMany)
         {
             if (IsConnected)
             {
                 if (FullScreenGraphicsShown)
                 {
-                    var generatedFilteredTeamRanks =
-                                             filterLastGivenTeams(generateTeamRanks(teamDatas, FullScreenGraphicsTypeShown),
-                                                 lastThisMany);
+                    var generatedFilteredTeamRanks = filterLastGivenTeams(teamDatasWithRanks, lastThisMany);
                     
                     var numOfTeams = generatedFilteredTeamRanks.Count;
 
@@ -430,156 +427,6 @@ namespace RobonautCasparClient_v2.modules
             }
 
             return FullScreenGraphicsShown;
-        }
-
-        private List<(int rank, TeamData teamData)> generateTeamRanks(List<TeamData> teams, FullScreenTableType type)
-        {
-            List<(int rank, TeamData teamData)> rankList = new List<(int rank, TeamData teamData)>();
-
-            var rank = 0;
-            var rankJump = 1;
-            var lastScore = -1;
-
-            switch (type)
-            {
-                case FullScreenTableType.QUALIFICATION_POINTS:
-                    teams.Sort((a, b) => b.QualificationScore - a.QualificationScore);
-
-                    foreach (var team in teams)
-                    {
-                        if (lastScore != team.QualificationScore)
-                        {
-                            rank+= rankJump;
-                            rankJump = 1;
-                            lastScore = team.QualificationScore;
-                        }
-                        else
-                        {
-                            rankJump++;
-                        }
-                        
-                        rankList.Add((rank, team));
-                    }
-
-                    break;
-                case FullScreenTableType.AUDIENCE_POINTS:
-                    teams.Sort((a, b) => b.Votes - a.Votes);
-
-                    foreach (var team in teams)
-                    {
-                        if (lastScore != team.Votes)
-                        {
-                            rank+= rankJump;
-                            lastScore = team.Votes;
-                        }
-                        else
-                        {
-                            rankJump++;
-                        }
-
-                        rankList.Add((rank, team));
-                    }
-
-                    break;
-                case FullScreenTableType.SKILL_POINTS:
-                    teams.Sort((a, b) => b.SkillScore - a.SkillScore);
-
-                    foreach (var team in teams)
-                    {
-                        if (lastScore != team.SkillScore)
-                        {
-                            rank+= rankJump;
-                            lastScore = team.SkillScore;
-                        }
-                        else
-                        {
-                            rankJump++;
-                        }
-
-                        rankList.Add((rank, team));
-                    }
-
-                    break;
-                case FullScreenTableType.SPEED_TIMES:
-                    teams.Sort((a, b) => a.FastestTime - b.FastestTime);
-
-                    foreach (var team in teams)
-                    {
-                        if (lastScore != team.FastestTime)
-                        {
-                            rank+= rankJump;
-                            lastScore = team.FastestTime;
-                        }
-                        else
-                        {
-                            rankJump++;
-                        }
-
-                        rankList.Add((rank, team));
-                    }
-
-                    break;
-                case FullScreenTableType.SPEED_POINTS:
-                    teams.Sort((a, b) => b.CombinedScore.SpeedScore - a.CombinedScore.SpeedScore);
-
-                    foreach (var team in teams)
-                    {
-                        if (lastScore != team.CombinedScore.SpeedScore)
-                        {
-                            rank+= rankJump;
-                            lastScore = team.CombinedScore.SpeedScore;
-                        }
-                        else
-                        {
-                            rankJump++;
-                        }
-
-                        rankList.Add((rank, team));
-                    }
-
-                    break;
-                case FullScreenTableType.FINAL_JUNIOR:
-                    teams = teams.Where(team => team.TeamType == TeamType.JUNIOR).ToList();
-                    teams.Sort((a, b) => b.JuniorScore.TotalScore - a.JuniorScore.TotalScore);
-
-                    foreach (var team in teams)
-                    {
-                        if (lastScore != team.JuniorScore.TotalScore)
-                        {
-                            rank+= rankJump;
-                            lastScore = team.JuniorScore.TotalScore;
-                        }
-                        else
-                        {
-                            rankJump++;
-                        }
-
-                        rankList.Add((rank, team));
-                    }
-
-                    break;
-                case FullScreenTableType.FINAL:
-                    teams.Sort((a, b) => b.CombinedScore.TotalScore - a.CombinedScore.TotalScore);
-
-                    foreach (var team in teams)
-                    {
-                        if (lastScore != team.CombinedScore.TotalScore)
-                        {
-                            rank+= rankJump;
-                            lastScore = team.CombinedScore.TotalScore;
-                        }
-                        else
-                        {
-                            rankJump++;
-                        }
-
-                        rankList.Add((rank, team));
-                    }
-
-                    break;
-            }
-
-            return rankList;
         }
 
         private List<(int rank, TeamData teamData)> filterLastGivenTeams(List<(int rank, TeamData teamData)> teams,

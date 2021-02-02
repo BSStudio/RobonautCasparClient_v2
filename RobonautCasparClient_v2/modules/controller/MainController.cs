@@ -375,17 +375,17 @@ namespace RobonautCasparClient_v2.modules.controller
         {
             if (ConnectedToGraphicsServer)
             {
-                graphicsInteractor.showFullscreenGraphics(type, teamDataService.Teams, ShownTableItemsAmount);
+                graphicsInteractor.showFullscreenGraphics(type, teamDataService.getTeamsWithSpecialRank(type), ShownTableItemsAmount);
                 
                 FullscreenGraphicsShown = true;
             }
         }
 
-        public bool nextFullScreenPage()
+        public bool nextFullScreenPage(FullScreenTableType type)
         {
             if (FullscreenGraphicsShown)
             {
-                FullscreenGraphicsShown = graphicsInteractor.stepFullScreenGraphics(teamDataService.Teams, ShownTableItemsAmount);
+                FullscreenGraphicsShown = graphicsInteractor.stepFullScreenGraphics(teamDataService.getTeamsWithSpecialRank(type), ShownTableItemsAmount);
             }
 
             return FullscreenGraphicsShown;

@@ -23,6 +23,7 @@ namespace RobonautCasparClient_v2
         private bool TeamGraphicsShown { get; set; } = false;
         private bool SafetyCarInfoShown { get; set; } = false;
         private int ShownTeamsAmount { get; set; } = 0;
+        public FullScreenTableType LastShownTableType { get; set; }
 
         private Button selectedTeamGraphicsButton = null;
         private Button selectedSafetyCarGraphicsButton = null;
@@ -295,49 +296,49 @@ namespace RobonautCasparClient_v2
 
         private void showQualificationPointsTableButton_Click(object sender, RoutedEventArgs e)
         {
-            mainController.showFullScreenGraphics(FullScreenTableType.QUALIFICATION_POINTS);
+            showFullScreenGraphics(FullScreenTableType.QUALIFICATION_POINTS);
             setActiveResultTableButton((Button) sender);
         }
 
         private void showTotalAudiencePointsTableButton_Click(object sender, RoutedEventArgs e)
         {
-            mainController.showFullScreenGraphics(FullScreenTableType.AUDIENCE_POINTS);
+            showFullScreenGraphics(FullScreenTableType.AUDIENCE_POINTS);
             setActiveResultTableButton((Button) sender);
         }
 
         private void showTechnicalPointsTableButton_Click(object sender, RoutedEventArgs e)
         {
-            mainController.showFullScreenGraphics(FullScreenTableType.SKILL_POINTS);
+            showFullScreenGraphics(FullScreenTableType.SKILL_POINTS);
             setActiveResultTableButton((Button) sender);
         }
 
         private void showSpeedTimesTableButton_Click(object sender, RoutedEventArgs e)
         {
-            mainController.showFullScreenGraphics(FullScreenTableType.SPEED_TIMES);
+            showFullScreenGraphics(FullScreenTableType.SPEED_TIMES);
             setActiveResultTableButton((Button) sender);
         }
 
         private void showSpeedPointsTableButton_Click(object sender, RoutedEventArgs e)
         {
-            mainController.showFullScreenGraphics(FullScreenTableType.SPEED_POINTS);
+            showFullScreenGraphics(FullScreenTableType.SPEED_POINTS);
             setActiveResultTableButton((Button) sender);
         }
 
         private void showJuniorFinalResultTableButton_Click(object sender, RoutedEventArgs e)
         {
-            mainController.showFullScreenGraphics(FullScreenTableType.FINAL_JUNIOR);
+            showFullScreenGraphics(FullScreenTableType.FINAL_JUNIOR);
             setActiveResultTableButton((Button) sender);
         }
 
         private void showTotalFinalResultTableButton_Click(object sender, RoutedEventArgs e)
         {
-            mainController.showFullScreenGraphics(FullScreenTableType.FINAL);
+            showFullScreenGraphics(FullScreenTableType.FINAL);
             setActiveResultTableButton((Button) sender);
         }
 
         private void nextFullScreenGraphicsPageButton_Click(object sender, RoutedEventArgs e)
         {
-            if(!mainController.nextFullScreenPage())
+            if(!mainController.nextFullScreenPage(LastShownTableType))
                 resetColor(selectedResultTableButton);
         }
 
@@ -345,6 +346,12 @@ namespace RobonautCasparClient_v2
         {
             mainController.hideFullScreenGraphics();
             resetColor(selectedResultTableButton);
+        }
+
+        private void showFullScreenGraphics(FullScreenTableType type)
+        {
+            mainController.showFullScreenGraphics(type);
+            LastShownTableType = type;
         }
 
         public void updateTechTimerDisplay(long time)

@@ -105,6 +105,156 @@ namespace RobonautCasparClient_v2.DO
 
             return ranksList;
         }
+        
+        public List<(int rank, TeamData teamData)> getTeamsWithSpecialRank(FullScreenTableType type)
+        {
+            List<(int rank, TeamData teamData)> rankList = new List<(int rank, TeamData teamData)>();
+
+            var rank = 0;
+            var rankJump = 1;
+            var lastScore = -1;
+
+            switch (type)
+            {
+                case FullScreenTableType.QUALIFICATION_POINTS:
+                    Teams.Sort((a, b) => b.QualificationScore - a.QualificationScore);
+
+                    foreach (var team in Teams)
+                    {
+                        if (lastScore != team.QualificationScore)
+                        {
+                            rank+= rankJump;
+                            rankJump = 1;
+                            lastScore = team.QualificationScore;
+                        }
+                        else
+                        {
+                            rankJump++;
+                        }
+                        
+                        rankList.Add((rank, team));
+                    }
+
+                    break;
+                case FullScreenTableType.AUDIENCE_POINTS:
+                    Teams.Sort((a, b) => b.Votes - a.Votes);
+
+                    foreach (var team in Teams)
+                    {
+                        if (lastScore != team.Votes)
+                        {
+                            rank+= rankJump;
+                            lastScore = team.Votes;
+                        }
+                        else
+                        {
+                            rankJump++;
+                        }
+
+                        rankList.Add((rank, team));
+                    }
+
+                    break;
+                case FullScreenTableType.SKILL_POINTS:
+                    Teams.Sort((a, b) => b.SkillScore - a.SkillScore);
+
+                    foreach (var team in Teams)
+                    {
+                        if (lastScore != team.SkillScore)
+                        {
+                            rank+= rankJump;
+                            lastScore = team.SkillScore;
+                        }
+                        else
+                        {
+                            rankJump++;
+                        }
+
+                        rankList.Add((rank, team));
+                    }
+
+                    break;
+                case FullScreenTableType.SPEED_TIMES:
+                    Teams.Sort((a, b) => a.FastestTime - b.FastestTime);
+
+                    foreach (var team in Teams)
+                    {
+                        if (lastScore != team.FastestTime)
+                        {
+                            rank+= rankJump;
+                            lastScore = team.FastestTime;
+                        }
+                        else
+                        {
+                            rankJump++;
+                        }
+
+                        rankList.Add((rank, team));
+                    }
+
+                    break;
+                case FullScreenTableType.SPEED_POINTS:
+                    Teams.Sort((a, b) => b.CombinedScore.SpeedScore - a.CombinedScore.SpeedScore);
+
+                    foreach (var team in Teams)
+                    {
+                        if (lastScore != team.CombinedScore.SpeedScore)
+                        {
+                            rank+= rankJump;
+                            lastScore = team.CombinedScore.SpeedScore;
+                        }
+                        else
+                        {
+                            rankJump++;
+                        }
+
+                        rankList.Add((rank, team));
+                    }
+
+                    break;
+                case FullScreenTableType.FINAL_JUNIOR:
+                    var teams = Teams.Where(team => team.TeamType == TeamType.JUNIOR).ToList();
+                    teams.Sort((a, b) => b.JuniorScore.TotalScore - a.JuniorScore.TotalScore);
+
+                    foreach (var team in teams)
+                    {
+                        if (lastScore != team.JuniorScore.TotalScore)
+                        {
+                            rank+= rankJump;
+                            lastScore = team.JuniorScore.TotalScore;
+                        }
+                        else
+                        {
+                            rankJump++;
+                        }
+
+                        rankList.Add((rank, team));
+                    }
+
+                    break;
+                case FullScreenTableType.FINAL:
+                    Teams.Sort((a, b) => b.CombinedScore.TotalScore - a.CombinedScore.TotalScore);
+
+                    foreach (var team in Teams)
+                    {
+                        if (lastScore != team.CombinedScore.TotalScore)
+                        {
+                            rank+= rankJump;
+                            lastScore = team.CombinedScore.TotalScore;
+                        }
+                        else
+                        {
+                            rankJump++;
+                        }
+
+                        rankList.Add((rank, team));
+                    }
+
+                    break;
+            }
+
+            return rankList;
+        }
 
         public int getTeamRank(TeamData team, TeamType teamType)
         {
