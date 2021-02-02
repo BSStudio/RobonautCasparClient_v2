@@ -105,7 +105,7 @@ namespace RobonautCasparClient_v2.Modules.interfaces
         /*
          * Megjelenít egy csapathoz tartozó minden információt felvonultató inzertet
          */
-        public abstract void showTeamAllStats(TeamData teamData, TeamType rankType);
+        public abstract void showTeamAllStats(TeamData teamData, int rank, TeamType rankType);
 
         /*
          * Teljes képernyős tabellák megjelenítése megadott típussal, megadott csapat adatokkal

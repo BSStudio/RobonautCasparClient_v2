@@ -12,17 +12,14 @@ namespace RobonautCasparClient_v2.DO
         public List<string> TeamMembers { get; set; }
         public string LogoPath { get; set; }
         public int SkillScore { get; set; }
-        public int SpeedScore { get; set; }
-        public int SpeedBonusScore { get; set; }
         public List<int> SpeedTimes { get; set; }
         public bool SafetyCarWasFollowed { get; set; }
         public int NumberOfOvertakes { get; set; }
         public int Votes { get; set; }
         public int AudienceScore { get; set; }
         public int QualificationScore { get; set; }
-        public int TotalScore { get; set; }
-        public int Rank { get; set; }
-        public int JuniorRank { get; set; }
+        public Score CombinedScore { get; set; }
+        public Score JuniorScore { get; set; }
         
         public string TeamMembersString
         {
@@ -78,14 +75,6 @@ namespace RobonautCasparClient_v2.DO
                 }
 
                 return speedTimesString;
-            }
-        }
-
-        public int SumSpeedPoints
-        {
-            get
-            {
-                return SpeedScore + SpeedBonusScore;
             }
         }
 

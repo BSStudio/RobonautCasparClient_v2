@@ -2,6 +2,6 @@
 {
     public enum TeamType
     {
-        JUNIOR, SENIOR
+        JUNIOR, SENIOR, COMBINED
     }
 }

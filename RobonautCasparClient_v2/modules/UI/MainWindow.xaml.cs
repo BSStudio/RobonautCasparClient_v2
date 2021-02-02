@@ -89,9 +89,9 @@ namespace RobonautCasparClient_v2
             ConnectedToGraphicsServer = false;
         }
 
-        public void UpdateTeamData(List<TeamData> teamDatas)
+        public void UpdateTeamData(List<TeamWithRanks> teamDatas)
         {
-            Dispatcher.Invoke(() => { teamsGrid.ItemsSource = teamDatas.OrderBy(c => c.TeamId); });
+            Dispatcher.Invoke(() => { teamsGrid.ItemsSource = teamDatas.OrderBy(c => c.TeamData.TeamId); });
         }
 
         private void graphicsServerConnectButton_Click(object sender, RoutedEventArgs e)

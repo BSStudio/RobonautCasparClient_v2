@@ -47,19 +47,112 @@ namespace RobonautCasparClient_v2.DO
                 teamToUpdate.QualificationScore = team.QualificationScore;
                 teamToUpdate.NumberOfOvertakes = team.NumberOfOvertakes;
                 teamToUpdate.SafetyCarWasFollowed = team.SafetyCarWasFollowed;
-                teamToUpdate.SpeedScore = team.SpeedScore;
                 teamToUpdate.SpeedTimes = team.SpeedTimes;
-                teamToUpdate.SpeedBonusScore = team.SpeedBonusScore;
                 teamToUpdate.SkillScore = team.SkillScore;
-                teamToUpdate.TotalScore = team.TotalScore;
-                teamToUpdate.Rank = team.Rank;
-                teamToUpdate.JuniorRank = team.JuniorRank;
+                teamToUpdate.JuniorScore = team.JuniorScore;
+                teamToUpdate.CombinedScore = team.CombinedScore;
             }
         }
 
         public TeamData getTeam(int teamId)
         {
             return Teams.Find(team => team.TeamId == teamId);
+        }
+
+        public List<TeamWithRanks> getTeamsWithRanks()
+        {
+            List<TeamWithRanks> ranksList = new List<TeamWithRanks>();
+            
+            Teams.Sort((a, b) => b.CombinedScore.TotalScore - a.CombinedScore.TotalScore);
+            
+            var rank = 0;
+            var rankJump = 1;
+            var lastScore = -1;
+            
+            var juniorRank = 0;
+            var juniorRankJump = 1;
+            var juniorLastScore = -1;
+
+            foreach (var team in Teams)
+            {
+                if (lastScore != team.CombinedScore.TotalScore)
+                {
+                    rank += rankJump;
+                    rankJump = 1;
+                    lastScore = team.CombinedScore.TotalScore;
+                }
+                else
+                {
+                    rankJump++;
+                }
+
+                if (team.TeamType == TeamType.JUNIOR)
+                {
+                    if (juniorLastScore != team.JuniorScore.TotalScore)
+                    {
+                        juniorRank += juniorRankJump;
+                        juniorRankJump = 1;
+                        juniorLastScore = team.JuniorScore.TotalScore;
+                    }
+                    else
+                    {
+                        juniorRankJump++;
+                    }
+                }
+                
+                ranksList.Add(new TeamWithRanks(team, rank, team.TeamType == TeamType.JUNIOR ? juniorRank : -1));
+            }
+
+            return ranksList;
+        }
+
+        public int getTeamRank(TeamData team, TeamType teamType)
+        {
+            List<TeamData> currentTeams = new List<TeamData>();
+
+            if (teamType == TeamType.JUNIOR)
+            {
+                currentTeams = Teams
+                    .Where(teamD => teamD.TeamType == TeamType.JUNIOR)
+                    .ToList();
+
+                currentTeams.Sort((a, b) => b.JuniorScore.TotalScore - a.JuniorScore.TotalScore);
+            }
+            else
+            {
+                currentTeams = Teams;
+
+                currentTeams.Sort((a, b) => b.CombinedScore.TotalScore - a.CombinedScore.TotalScore);
+            }
+
+            var rank = 0;
+            var rankJump = 1;
+            var lastScore = -1;
+
+            foreach (var _team in currentTeams)
+            {
+                var currentScore = teamType == TeamType.JUNIOR
+                    ? _team.JuniorScore.TotalScore
+                    : _team.CombinedScore.TotalScore;
+                
+                if (lastScore != currentScore)
+                {
+                    rank += rankJump;
+                    rankJump = 1;
+                    lastScore = currentScore;
+                }
+                else
+                {
+                    rankJump++;
+                }
+
+                if (team.TeamId == _team.TeamId && team.Year == _team.Year)
+                {
+                    return rank;
+                }
+            }
+
+            return -1;
         }
 
         public TeamData updateWithGateInfo(GateInformation gateInfo)

@@ -288,30 +288,25 @@ namespace RobonautCasparClient_v2.modules
             stopLayer(TIMER_LAYER);
         }
 
-        public override void showTeamAllStats(TeamData teamData, TeamType rankType)
+        public override void showTeamAllStats(TeamData teamData, int rank, TeamType rankType)
         {
             if (IsConnected)
             {
-                int rank = 0;
-
-                switch (rankType)
-                {
-                    case TeamType.JUNIOR:
-                        rank = teamData.JuniorRank;
-                        break;
-                    case TeamType.SENIOR:
-                        rank = teamData.Rank;
-                        break;
-                }
-
+                var speedScore = rankType == TeamType.JUNIOR
+                    ? teamData.JuniorScore.SpeedScore
+                    : teamData.CombinedScore.SpeedScore;
+                var totalScore = rankType == TeamType.JUNIOR
+                    ? teamData.JuniorScore.TotalScore
+                    : teamData.CombinedScore.TotalScore;
+                
                 CasparCGDataCollection CGdata = new CasparCGDataCollection();
                 CGdata.SetData("teamname", teamData.TeamName);
                 CGdata.SetData("teammembers", teamData.TeamMembersString);
                 CGdata.SetData("broughtpoint", "Hozott pont: " + teamData.QualificationScore);
                 CGdata.SetData("sumskillpoint", "Ügyességi pont: " + teamData.SkillScore);
-                CGdata.SetData("sumspeedpoint", "Gyorsasági pont: " + teamData.SpeedScore);
+                CGdata.SetData("sumspeedpoint", "Gyorsasági pont: " + speedScore);
                 CGdata.SetData("audiencepoint", "Közönség pont: " + teamData.AudienceScore);
-                CGdata.SetData("sumpoint", "Összpontszám: " + teamData.TotalScore);
+                CGdata.SetData("sumpoint", "Összpontszám: " + totalScore);
                 CGdata.SetData("rank", rank.ToString());
 
                 casparDevice.Channels[Channel].CG.Add(TEAMINFO_LAYER, 0, "CSAPAT_OSSZETETT", true, CGdata);
@@ -525,14 +520,14 @@ namespace RobonautCasparClient_v2.modules
 
                     break;
                 case FullScreenTableType.SPEED_POINTS:
-                    teams.Sort((a, b) => b.SpeedScore - a.SpeedScore);
+                    teams.Sort((a, b) => b.CombinedScore.SpeedScore - a.CombinedScore.SpeedScore);
 
                     foreach (var team in teams)
                     {
-                        if (lastScore != team.SpeedScore)
+                        if (lastScore != team.CombinedScore.SpeedScore)
                         {
                             rank+= rankJump;
-                            lastScore = team.SpeedScore;
+                            lastScore = team.CombinedScore.SpeedScore;
                         }
                         else
                         {
@@ -545,14 +540,14 @@ namespace RobonautCasparClient_v2.modules
                     break;
                 case FullScreenTableType.FINAL_JUNIOR:
                     teams = teams.Where(team => team.TeamType == TeamType.JUNIOR).ToList();
-                    teams.Sort((a, b) => a.JuniorRank - b.JuniorRank);
+                    teams.Sort((a, b) => b.JuniorScore.TotalScore - a.JuniorScore.TotalScore);
 
                     foreach (var team in teams)
                     {
-                        if (lastScore != team.JuniorRank)
+                        if (lastScore != team.JuniorScore.TotalScore)
                         {
                             rank+= rankJump;
-                            lastScore = team.JuniorRank;
+                            lastScore = team.JuniorScore.TotalScore;
                         }
                         else
                         {
@@ -564,14 +559,14 @@ namespace RobonautCasparClient_v2.modules
 
                     break;
                 case FullScreenTableType.FINAL:
-                    teams.Sort((a, b) => a.Rank - b.Rank);
+                    teams.Sort((a, b) => b.CombinedScore.TotalScore - a.CombinedScore.TotalScore);
 
                     foreach (var team in teams)
                     {
-                        if (lastScore != team.Rank)
+                        if (lastScore != team.CombinedScore.TotalScore)
                         {
                             rank+= rankJump;
-                            lastScore = team.Rank;
+                            lastScore = team.CombinedScore.TotalScore;
                         }
                         else
                         {
@@ -715,7 +710,7 @@ namespace RobonautCasparClient_v2.modules
 
                     cgData.SetData("result_rank_" + cgIndex, currentTeam.rank.ToString());
                     cgData.SetData("result_teamname_" + cgIndex, currentTeam.teamData.TeamName);
-                    cgData.SetData("result_point_" + cgIndex, currentTeam.teamData.SumSpeedPoints.ToString());
+                    cgData.SetData("result_point_" + cgIndex, currentTeam.teamData.CombinedScore.SpeedScore.ToString());
                 }
                 else
                 {
@@ -776,7 +771,7 @@ namespace RobonautCasparClient_v2.modules
 
                     cgData.SetData("result_rank_" + cgIndex, currentTeam.rank.ToString());
                     cgData.SetData("result_teamname_" + cgIndex, currentTeam.teamData.TeamName);
-                    cgData.SetData("result_point_" + cgIndex, currentTeam.teamData.TotalScore.ToString());
+                    cgData.SetData("result_point_" + cgIndex, currentTeam.teamData.JuniorScore.TotalScore.ToString());
                 }
                 else
                 {
@@ -806,7 +801,7 @@ namespace RobonautCasparClient_v2.modules
 
                     cgData.SetData("result_rank_" + cgIndex, currentTeam.rank.ToString());
                     cgData.SetData("result_teamname_" + cgIndex, currentTeam.teamData.TeamName);
-                    cgData.SetData("result_point_" + cgIndex, currentTeam.teamData.TotalScore.ToString());
+                    cgData.SetData("result_point_" + cgIndex, currentTeam.teamData.CombinedScore.TotalScore.ToString());
                 }
                 else
                 {

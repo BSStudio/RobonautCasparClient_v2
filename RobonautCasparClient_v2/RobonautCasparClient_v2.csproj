@@ -125,6 +125,8 @@
     <Compile Include="DO\communication\SkillTimer.cs" />
     <Compile Include="DO\communication\SpeedRaceScore.cs" />
     <Compile Include="DO\communication\SpeedTimer.cs" />
+    <Compile Include="DO\Score.cs" />
+    <Compile Include="DO\TeamWithRanks.cs" />
     <Compile Include="modules\data-communications-module\interfaces\IDataServerInteractor.cs" />
     <Compile Include="modules\data-communications-module\RabbitMqDataInteractor.cs" />
     <Compile Include="modules\graphics-module\CasparServerInteractor.cs" />

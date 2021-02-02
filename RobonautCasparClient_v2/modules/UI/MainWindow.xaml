@@ -6,324 +6,300 @@
         xmlns:local="clr-namespace:RobonautCasparClient_v2"
         mc:Ignorable="d"
         Title="RobonAUT feliratozó" WindowState="Maximized" Icon="robonaut_logo.ico" d:DesignWidth="1300.5">
-    <TabControl>
-        <TabItem Header="Grafika vezérlés">
-            <Grid Margin="5,0,0,0">
+    <Grid Margin="5,0,0,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50" />
+            <RowDefinition Height="55" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="30" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" Text="RobonAUT feliratozó kliens v2" FontSize="32" FontWeight="Bold"
+                   HorizontalAlignment="Center" />
+        <Grid Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="150" />
+                <ColumnDefinition Width="185" />
+                <ColumnDefinition Width="140" />
+                <ColumnDefinition Width="100" />
+                <ColumnDefinition Width="20" />
+                <ColumnDefinition Width="120" />
+                <ColumnDefinition Width="185" />
+                <ColumnDefinition Width="140" />
+                <ColumnDefinition Width="100" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="1*" />
+            </Grid.RowDefinitions>
+            <Rectangle Fill="Tomato" Name="casparServerConnectionFeedback" Margin="-5" IsHitTestVisible="False"
+                       Grid.Column="0" Grid.Row="0" Grid.RowSpan="4" Grid.ColumnSpan="4" />
+            <TextBlock Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="4" Text="CasparCG Szerver kapcsolódás"
+                       Margin="0,0,0,5" FontWeight="Bold" />
+            <TextBlock Grid.Column="0" Grid.Row="1" Text="Caspar Szerver címe:" Margin="0,0,10,0"
+                       HorizontalAlignment="Left" VerticalAlignment="Center" />
+            <TextBox Grid.Column="1" Grid.Row="1" Name="casparServerAddress" Height="23" TextWrapping="Wrap"
+                     Width="175" HorizontalAlignment="Left" VerticalAlignment="Center" Text="localhost" />
+            <!--192.168.10.20-->
+            <Button Name="casparServerConnectButton" Content="Csatlakozás" Grid.Column="2"
+                    HorizontalAlignment="Left" Margin="0,1,0,0" Grid.Row="1" Width="120"
+                    HorizontalContentAlignment="Center" VerticalAlignment="Top"
+                    RenderTransformOrigin="0.542,-0.133" Click="graphicsServerConnectButton_Click" />
+            <TextBlock Grid.Column="3" Grid.Row="1" Margin="0,0,10,0" Name="casparServerStatus"
+                       Text="Kapcsolat bontva" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            <TextBlock Grid.Column="0" Grid.Row="2" Margin="0,0,10,0"
+                       HorizontalAlignment="Left" VerticalAlignment="Center">
+                Caspar kijátszócsatorna:
+            </TextBlock>
+            <TextBox Grid.Column="1" Grid.Row="2" Name="casparChannel" Height="23" Width="175" Margin="0, 2, 0, 0"
+                     HorizontalAlignment="Left" VerticalAlignment="Center" Text="0" />
+            <Button Name="casparSetChannelButton" Content="Beállítás" Grid.Column="2"
+                    HorizontalAlignment="Left" Margin="0,1,0,0" Grid.Row="2" Width="120"
+                    HorizontalContentAlignment="Center" VerticalAlignment="Top"
+                    RenderTransformOrigin="0.542,-0.133" Click="CasparSetChannelButton_OnClick" />
+
+            <Rectangle Fill="Tomato" Name="dataServerConnectionFeedback" Margin="-5" IsHitTestVisible="False"
+                       Grid.Column="5" Grid.Row="0" Grid.RowSpan="2" Grid.ColumnSpan="4" />
+            <TextBlock Grid.Column="5" Grid.Row="0" Grid.ColumnSpan="4" Text="Adat Szerver Kapcsolódás"
+                       Margin="0,0,0,5" FontWeight="Bold" />
+            <TextBlock Grid.Column="5" Grid.Row="1" Text="Adat Szerver címe:" Margin="0,0,10,0"
+                       HorizontalAlignment="Left" VerticalAlignment="Center" />
+            <TextBox Grid.Column="6" Grid.Row="1" Name="dataServerAddress" Height="23" TextWrapping="Wrap"
+                     Width="175" HorizontalAlignment="Left" VerticalAlignment="Center"
+                     Text="localhost" />
+            <Button x:Name="dataServerConnectButton" Content="Csatlakozás" Grid.Column="7"
+                    HorizontalAlignment="Left" Margin="0,1,0,0" Grid.Row="1" Width="120"
+                    HorizontalContentAlignment="Center" Click="dataServerConnectButton_Click" />
+            <TextBlock Grid.Column="8" Grid.Row="1" Margin="0,0,10,0" Name="dataServerStatus"
+                       Text="Kapcsolat bontva" HorizontalAlignment="Center" VerticalAlignment="Center" />
+        </Grid>
+        <Grid Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Center" />
+        <TextBlock Grid.Row="3" Text="Névinzert" FontSize="20" FontWeight="Bold" HorizontalAlignment="Left" />
+        <Grid Grid.Row="4" HorizontalAlignment="Left" VerticalAlignment="Center">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="35" />
+                <ColumnDefinition Width="180" />
+                <ColumnDefinition Width="55" />
+                <ColumnDefinition Width="180" />
+                <ColumnDefinition Width="80" />
+                <ColumnDefinition Width="350" />
+                <ColumnDefinition Width="100" />
+                <ColumnDefinition Width="100" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Margin="0,0,0,0" Text="Név:" Height="25" VerticalAlignment="Center" />
+            <TextBox Grid.Column="1" x:Name="namingName" Height="25" VerticalAlignment="Center" />
+            <TextBlock Grid.Column="2" Margin="5,0,0,0" Text="Titulus:" Height="25" VerticalAlignment="Center" />
+            <TextBox Grid.Column="3" x:Name="namingTitle" Height="25" VerticalAlignment="Center" />
+            <Button Grid.Column="4" Name="addToNameListButton" Content="Listába"
+                    Click="addToNameListButton_OnClick" Height="25" Margin="15,0,0,0"
+                    VerticalAlignment="Center" />
+            <ComboBox Grid.Column="5" Name="NamesComboBox" Margin="5,0,0,0" Height="25"
+                      VerticalAlignment="Center" />
+            <Button Grid.Column="6" Name="namingTakeButton" Content="Megnevez"
+                    Click="showNameInsertButton_Click" Height="25" VerticalAlignment="Center" Margin="15,0,0,0" />
+            <Button Grid.Column="7" Name="namingClearButton" Content="Levétel"
+                    Click="hideNameInsertButton_Click" Height="25" VerticalAlignment="Center" Margin="5,0,0,0" />
+        </Grid>
+        <Grid Grid.Row="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="220" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Vertical" Grid.Column="0">
+                <TextBlock Text="Össz. eredmények"
+                           Margin="0,0,5,10" FontSize="20" FontWeight="Bold"
+                           HorizontalAlignment="Left" />
+                <TextBlock Text="Utolsó hány elem?"
+                           Margin="10,0,5,10" FontSize="12"
+                           HorizontalAlignment="Left" />
+                <StackPanel Orientation="Horizontal">
+                    <TextBox Width="73" IsEnabled="False" Margin="10,0,2,5"
+                             VerticalContentAlignment="Center"
+                             Name="NumberOfShownTeamsInTable"
+                             HorizontalContentAlignment="Center">
+                        Összes
+                    </TextBox>
+                    <Button Height="30" Margin="2,0,2,5" Padding="10, 0"
+                            Click="decreaseShownTeamsInTable">
+                        -
+                    </Button>
+                    <Button Height="30" Margin="2,0,2,5" Padding="10, 0"
+                            Click="increaseShownTeamsInTable">
+                        +
+                    </Button>
+                    <Button Height="30" Margin="2,0,2,5" Padding="10, 0"
+                            Click="setShowAllTeamsInTable">
+                        Összes
+                    </Button>
+                </StackPanel>
+                <Button Height="30" Margin="10,10,10,5" Content="Hozott pontok ranglistája"
+                        Click="showQualificationPointsTableButton_Click" />
+                <Button Height="30" Content="Ügyességi verseny pontok" Margin="10,0,10,5"
+                        Click="showTechnicalPointsTableButton_Click" />
+                <Button Height="30" Content="Gyorsasági verseny időeredmények" Margin="10,0,10,5"
+                        Click="showSpeedTimesTableButton_Click" />
+                <Button Height="30" Content="Gyorsasági verseny pontok" Margin="10,0,10,5"
+                        Click="showSpeedPointsTableButton_Click" />
+                <Button Height="30" Content="Közönségi pontok ranglistája" Margin="10,0,10,5"
+                        Click="showTotalAudiencePointsTableButton_Click" />
+                <Button Height="30" Content="Összesített eredmény - Junior" Margin="10,0,10,5"
+                        Click="showJuniorFinalResultTableButton_Click" />
+                <Button Height="30" Content="Összesített eredmény - Összes" Margin="10,0,10,5"
+                        Click="showTotalFinalResultTableButton_Click" />
+                <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Button Height="30" Width="100" Content="Következő oldal" Margin="10,0,10,5"
+                            Click="nextFullScreenGraphicsPageButton_Click" />
+                    <Button Height="30" Width="80" Content="Levétel" Margin="10,0,10,5"
+                            Click="hideFullScreenGraphicsPageButton_Click" />
+                </WrapPanel>
+                <TextBlock Text="Gyorsasági időmérő" Margin="0,0,5,10" FontSize="20" FontWeight="Bold"
+                           HorizontalAlignment="Left" />
+                <TextBlock Name="uiStopper" Text="00:00.000" FontSize="20" Margin="0,0,5,10"
+                           HorizontalAlignment="Center" />
+                <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Button Height="30" Width="80" Name="showStopperButton" Content="Óra feltétele"
+                            Margin="10,0,10,0" Click="showStopperButton_Click" />
+                    <Button Height="30" Width="80" Name="hideStopperButton" Content="Óra levétele"
+                            Margin="10,0,10,0" Click="hideStopperButton_Click" />
+                </WrapPanel>
+
+                <TextBlock Text="Technikai időmérő" Margin="0,10,5,10" FontSize="20" FontWeight="Bold"
+                           HorizontalAlignment="Left" />
+                <TextBlock Name="uiTechTimer" Text="00:00.000" FontSize="20" Margin="0,0,5,10"
+                           HorizontalAlignment="Center" />
+                <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Button Height="30" Width="80" Name="showTechTimerButton" Content="Óra feltétele"
+                            Margin="10,0,10,0" Click="showTechTimerButton_Click" />
+                    <Button Height="30" Width="80" Name="hideTechTimerButton" Content="Óra levétele"
+                            Margin="10,0,10,0" Click="hideTechTimerButton_Click" />
+                </WrapPanel>
+
+                <Button Margin="10,15,10,0" Height="30" Content="Csapatgrafikák levétele"
+                        Click="removeTeamGraphicsButton_Click" />
+                <Button Margin="10,15,10,0" Height="30" Content="Minden grafika levétele"
+                        Click="removeAllGraphicsButton_Click" />
+            </StackPanel>
+            <Grid Grid.Column="1" Margin="0,0,0,60">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="50" />
-                    <RowDefinition Height="55" />
-                    <RowDefinition Height="30" />
-                    <RowDefinition Height="30" />
-                    <RowDefinition Height="30" />
+                    <RowDefinition Height="35" />
                     <RowDefinition />
                 </Grid.RowDefinitions>
-                <TextBlock Grid.Row="0" Text="RobonAUT feliratozó kliens v2" FontSize="32" FontWeight="Bold"
-                           HorizontalAlignment="Center" />
-                <Grid Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="150" />
-                        <ColumnDefinition Width="185" />
-                        <ColumnDefinition Width="140" />
-                        <ColumnDefinition Width="100" />
-                        <ColumnDefinition Width="20" />
-                        <ColumnDefinition Width="120" />
-                        <ColumnDefinition Width="185" />
-                        <ColumnDefinition Width="140" />
-                        <ColumnDefinition Width="100" />
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="1*" />
-                        <RowDefinition Height="1*" />
-                        <RowDefinition Height="1*" />
-                    </Grid.RowDefinitions>
-                    <Rectangle Fill="Tomato" Name="casparServerConnectionFeedback" Margin="-5" IsHitTestVisible="False"
-                               Grid.Column="0" Grid.Row="0" Grid.RowSpan="4" Grid.ColumnSpan="4" />
-                    <TextBlock Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="4" Text="CasparCG Szerver kapcsolódás"
-                               Margin="0,0,0,5" FontWeight="Bold"/>
-                    <TextBlock Grid.Column="0" Grid.Row="1" Text="Caspar Szerver címe:" Margin="0,0,10,0"
-                               HorizontalAlignment="Left" VerticalAlignment="Center" />
-                    <TextBox Grid.Column="1" Grid.Row="1" Name="casparServerAddress" Height="23" TextWrapping="Wrap"
-                             Width="175" HorizontalAlignment="Left" VerticalAlignment="Center" Text="localhost" />
-                    <!--192.168.10.20-->
-                    <Button Name="casparServerConnectButton" Content="Csatlakozás" Grid.Column="2"
-                            HorizontalAlignment="Left" Margin="0,1,0,0" Grid.Row="1" Width="120"
-                            HorizontalContentAlignment="Center" VerticalAlignment="Top"
-                            RenderTransformOrigin="0.542,-0.133" Click="graphicsServerConnectButton_Click" />
-                    <TextBlock Grid.Column="3" Grid.Row="1" Margin="0,0,10,0" Name="casparServerStatus"
-                               Text="Kapcsolat bontva" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                    <TextBlock Grid.Column="0" Grid.Row="2" Margin="0,0,10,0"
-                               HorizontalAlignment="Left" VerticalAlignment="Center">
-                        Caspar kijátszócsatorna:
-                    </TextBlock>
-                    <TextBox Grid.Column="1" Grid.Row="2" Name="casparChannel" Height="23" Width="175" Margin="0, 2, 0, 0"
-                             HorizontalAlignment="Left" VerticalAlignment="Center" Text="0"/>
-                    <Button Name="casparSetChannelButton" Content="Beállítás" Grid.Column="2"
-                            HorizontalAlignment="Left" Margin="0,1,0,0" Grid.Row="2" Width="120"
-                            HorizontalContentAlignment="Center" VerticalAlignment="Top"
-                            RenderTransformOrigin="0.542,-0.133" Click="CasparSetChannelButton_OnClick" />
-
-                    <Rectangle Fill="Tomato" Name="dataServerConnectionFeedback" Margin="-5" IsHitTestVisible="False"
-                               Grid.Column="5" Grid.Row="0" Grid.RowSpan="2" Grid.ColumnSpan="4" />
-                    <TextBlock Grid.Column="5" Grid.Row="0" Grid.ColumnSpan="4" Text="Adat Szerver Kapcsolódás"
-                               Margin="0,0,0,5" FontWeight="Bold" />
-                    <TextBlock Grid.Column="5" Grid.Row="1" Text="Adat Szerver címe:" Margin="0,0,10,0"
-                               HorizontalAlignment="Left" VerticalAlignment="Center" />
-                    <TextBox Grid.Column="6" Grid.Row="1" Name="dataServerAddress" Height="23" TextWrapping="Wrap"
-                             Width="175" HorizontalAlignment="Left" VerticalAlignment="Center"
-                             Text="localhost" />
-                    <Button x:Name="dataServerConnectButton" Content="Csatlakozás" Grid.Column="7"
-                            HorizontalAlignment="Left" Margin="0,1,0,0" Grid.Row="1" Width="120"
-                            HorizontalContentAlignment="Center" Click="dataServerConnectButton_Click" />
-                    <TextBlock Grid.Column="8" Grid.Row="1" Margin="0,0,10,0" Name="dataServerStatus"
-                               Text="Kapcsolat bontva" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                </Grid>
-                <Grid Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Center">
-
-                </Grid>
-                <TextBlock Grid.Row="3" Text="Névinzert" FontSize="20" FontWeight="Bold" HorizontalAlignment="Left" />
-                <Grid Grid.Row="4" HorizontalAlignment="Left" VerticalAlignment="Center">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="35" />
-                        <ColumnDefinition Width="180" />
-                        <ColumnDefinition Width="55" />
-                        <ColumnDefinition Width="180" />
-                        <ColumnDefinition Width="80" />
-                        <ColumnDefinition Width="350" />
-                        <ColumnDefinition Width="100" />
-                        <ColumnDefinition Width="100" />
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0" Margin="0,0,0,0" Text="Név:" Height="25" VerticalAlignment="Center" />
-                    <TextBox Grid.Column="1" x:Name="namingName" Height="25" VerticalAlignment="Center" />
-                    <TextBlock Grid.Column="2" Margin="5,0,0,0" Text="Titulus:" Height="25" VerticalAlignment="Center" />
-                    <TextBox Grid.Column="3" x:Name="namingTitle" Height="25" VerticalAlignment="Center" />
-                    <Button Grid.Column="4" Name="addToNameListButton" Content="Listába"
-                            Click="addToNameListButton_OnClick" Height="25" Margin="15,0,0,0"
-                            VerticalAlignment="Center" />
-                    <ComboBox Grid.Column="5" Name="NamesComboBox" Margin="5,0,0,0" Height="25"
-                              VerticalAlignment="Center" />
-                    <Button Grid.Column="6" Name="namingTakeButton" Content="Megnevez"
-                            Click="showNameInsertButton_Click" Height="25" VerticalAlignment="Center" Margin="15,0,0,0" />
-                    <Button Grid.Column="7" Name="namingClearButton" Content="Levétel"
-                            Click="hideNameInsertButton_Click" Height="25" VerticalAlignment="Center" Margin="5,0,0,0" />
-                </Grid>
-                <Grid Grid.Row="5">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="220" />
-                        <ColumnDefinition />
-                    </Grid.ColumnDefinitions>
-                    <StackPanel Orientation="Vertical" Grid.Column="0">
-                        <TextBlock Text="Össz. eredmények"
-                                   Margin="0,0,5,10" FontSize="20" FontWeight="Bold"
-                                   HorizontalAlignment="Left" />
-                        <TextBlock Text="Utolsó hány elem?"
-                                   Margin="10,0,5,10" FontSize="12"
-                                   HorizontalAlignment="Left" />
-                        <StackPanel Orientation="Horizontal">
-                            <TextBox Width="73" IsEnabled="False" Margin="10,0,2,5" 
-                                     VerticalContentAlignment="Center" 
-                                     Name="NumberOfShownTeamsInTable"
-                                     HorizontalContentAlignment="Center">Összes</TextBox>
-                            <Button Height="30" Margin="2,0,2,5" Padding="10, 0"
-                                    Click="decreaseShownTeamsInTable">-</Button>
-                            <Button Height="30" Margin="2,0,2,5" Padding="10, 0"
-                                    Click="increaseShownTeamsInTable">+</Button>
-                            <Button Height="30" Margin="2,0,2,5" Padding="10, 0"
-                                    Click="setShowAllTeamsInTable">Összes</Button>
-                        </StackPanel>
-                        <Button Height="30" Margin="10,10,10,5" Content="Hozott pontok ranglistája"
-                                Click="showQualificationPointsTableButton_Click" />
-                        <Button Height="30" Content="Ügyességi verseny pontok" Margin="10,0,10,5"
-                                Click="showTechnicalPointsTableButton_Click" />
-                        <Button Height="30" Content="Gyorsasági verseny időeredmények" Margin="10,0,10,5"
-                                Click="showSpeedTimesTableButton_Click" />
-                        <Button Height="30" Content="Gyorsasági verseny pontok" Margin="10,0,10,5" Click="showSpeedPointsTableButton_Click"></Button>
-                        <Button Height="30" Content="Közönségi pontok ranglistája" Margin="10,0,10,5"
-                                Click="showTotalAudiencePointsTableButton_Click" />
-                        <Button Height="30" Content="Összesített eredmény - Junior" Margin="10,0,10,5"
-                                Click="showJuniorFinalResultTableButton_Click" />
-                        <Button Height="30" Content="Összesített eredmény - Összes" Margin="10,0,10,5"
-                                Click="showTotalFinalResultTableButton_Click" />
-                        <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                            <Button Height="30" Width="100" Content="Következő oldal" Margin="10,0,10,5"
-                                    Click="nextFullScreenGraphicsPageButton_Click" />
-                            <Button Height="30" Width="80" Content="Levétel" Margin="10,0,10,5"
-                                    Click="hideFullScreenGraphicsPageButton_Click" />
-                        </WrapPanel>
-                        <TextBlock Text="Gyorsasági időmérő" Margin="0,0,5,10" FontSize="20" FontWeight="Bold"
-                                   HorizontalAlignment="Left" />
-                        <TextBlock Name="uiStopper" Text="00:00.000" FontSize="20" Margin="0,0,5,10"
-                                   HorizontalAlignment="Center" />
-                        <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                            <Button Height="30" Width="80" Name="showStopperButton" Content="Óra feltétele"
-                                    Margin="10,0,10,0" Click="showStopperButton_Click" />
-                            <Button Height="30" Width="80" Name="hideStopperButton" Content="Óra levétele"
-                                    Margin="10,0,10,0" Click="hideStopperButton_Click" />
-                        </WrapPanel>
-
-                        <TextBlock Text="Technikai időmérő" Margin="0,10,5,10" FontSize="20" FontWeight="Bold"
-                                   HorizontalAlignment="Left" />
-                        <TextBlock Name="uiTechTimer" Text="00:00.000" FontSize="20" Margin="0,0,5,10"
-                                   HorizontalAlignment="Center" />
-                        <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                            <Button Height="30" Width="80" Name="showTechTimerButton" Content="Óra feltétele"
-                                    Margin="10,0,10,0" Click="showTechTimerButton_Click" />
-                            <Button Height="30" Width="80" Name="hideTechTimerButton" Content="Óra levétele"
-                                    Margin="10,0,10,0" Click="hideTechTimerButton_Click" />
-                        </WrapPanel>
-
-                        <Button Margin="10,15,10,0" Height="30" Content="Csapatgrafikák levétele"
-                                Click="removeTeamGraphicsButton_Click" />
-                        <Button Margin="10,15,10,0" Height="30" Content="Minden grafika levétele"
-                                Click="removeAllGraphicsButton_Click" />
-                    </StackPanel>
-                    <Grid Grid.Column="1" Margin="0,0,0,60">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="35" />
-                            <RowDefinition />
-                        </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" Text="Csapatok" FontSize="20" FontWeight="Bold"
-                                   HorizontalAlignment="Left" />
-                        <Button Grid.Row="0" Height="30" Margin="0,0,5,0" HorizontalAlignment="Right"
-                                Click="refreshDataButton_Click">
-                            Adatok frissítése
-                        </Button>
-                        <DataGrid Grid.Row="1" x:Name="teamsGrid" AutoGenerateColumns="False"
-                                  CanUserAddRows="False" CanUserDeleteRows="False"
-                                  AlternationCount="-2" RowHeight="50" ScrollViewer.CanContentScroll="False"
-                                  VerticalScrollBarVisibility="Auto">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn IsReadOnly="True" Binding="{Binding TeamId}"
-                                                    ClipboardContentBinding="{x:Null}" Header="ID" />
-                                <DataGridTextColumn IsReadOnly="True" Binding="{Binding TeamName}"
-                                                    ClipboardContentBinding="{x:Null}" Header="Csapat név" />
-                                <DataGridTemplateColumn IsReadOnly="True" Width="120" Header="Csapattagok">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBlock TextWrapping="Wrap" Text="{Binding TeamMembersString}" />
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
-                                <DataGridTextColumn IsReadOnly="True" Binding="{Binding TeamType}"
-                                                    ClipboardContentBinding="{x:Null}" Header="Csapat típus" />
-                                <DataGridTextColumn IsReadOnly="True" Binding="{Binding SkillScore}"
-                                                    ClipboardContentBinding="{x:Null}" Header="Ügyességi" />
-                                <DataGridTextColumn IsReadOnly="True" Binding="{Binding SpeedScore}"
-                                                    ClipboardContentBinding="{x:Null}" Header="Gyorsasági" />
-                                <DataGridTextColumn IsReadOnly="True" Binding="{Binding SpeedBonusScore}"
-                                                    ClipboardContentBinding="{x:Null}" Header="Gyorsasági bonus" />
-                                <DataGridTextColumn IsReadOnly="True" Binding="{Binding NumberOfOvertakes}"
-                                                    ClipboardContentBinding="{x:Null}" Header="Előzés" />
-                                <DataGridTextColumn IsReadOnly="True" Binding="{Binding FollowHumanRead}"
-                                                    ClipboardContentBinding="{x:Null}" Header="Követés" />
-                                <DataGridTemplateColumn IsReadOnly="True" Width="110" Header="Gyorsasági köridők">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBlock TextWrapping="Wrap" Text="{Binding SpeedTimesString}" />
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
-                                <DataGridTextColumn IsReadOnly="True" Binding="{Binding Votes}"
-                                                    ClipboardContentBinding="{x:Null}" Header="Szavazatok" />
-                                <DataGridTextColumn IsReadOnly="True" Binding="{Binding AudienceScore}"
-                                                    ClipboardContentBinding="{x:Null}" Header="Közönség pont" />
-                                <DataGridTextColumn IsReadOnly="True" Binding="{Binding QualificationScore}"
-                                                    ClipboardContentBinding="{x:Null}" Header="Hozott" />
-                                <DataGridTextColumn IsReadOnly="True" Binding="{Binding TotalScore}"
-                                                    ClipboardContentBinding="{x:Null}" Header="Össz" />
-                                <DataGridTextColumn IsReadOnly="True" Binding="{Binding JuniorRank}"
-                                                    ClipboardContentBinding="{x:Null}" Header="J hely" />
-                                <DataGridTextColumn IsReadOnly="True" Binding="{Binding Rank}"
-                                                    ClipboardContentBinding="{x:Null}" Header="Hely" />
-                                <!--<DataGridTextColumn IsReadOnly="True" Binding="{Binding OverallScoreJunior}" ClipboardContentBinding="{x:Null}" Header="Össz (junior)"/>
+                <TextBlock Grid.Row="0" Text="Csapatok" FontSize="20" FontWeight="Bold"
+                           HorizontalAlignment="Left" />
+                <Button Grid.Row="0" Height="30" Margin="0,0,5,0" HorizontalAlignment="Right"
+                        Click="refreshDataButton_Click">
+                    Adatok frissítése
+                </Button>
+                <DataGrid Grid.Row="1" x:Name="teamsGrid" AutoGenerateColumns="False"
+                          CanUserAddRows="False" CanUserDeleteRows="False"
+                          AlternationCount="-2" RowHeight="50" ScrollViewer.CanContentScroll="False"
+                          VerticalScrollBarVisibility="Auto">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn IsReadOnly="True" Binding="{Binding TeamData.TeamId}"
+                                            ClipboardContentBinding="{x:Null}" Header="ID" />
+                        <DataGridTextColumn IsReadOnly="True" Binding="{Binding TeamData.TeamName}"
+                                            ClipboardContentBinding="{x:Null}" Header="Csapat név" />
+                        <DataGridTemplateColumn IsReadOnly="True" Width="120" Header="Csapattagok">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock TextWrapping="Wrap" Text="{Binding TeamData.TeamMembersString}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn IsReadOnly="True" Binding="{Binding TeamData.TeamType}"
+                                            ClipboardContentBinding="{x:Null}" Header="Csapat típus" />
+                        <DataGridTextColumn IsReadOnly="True" Binding="{Binding TeamData.SkillScore}"
+                                            ClipboardContentBinding="{x:Null}" Header="Ügyességi" />
+                        <DataGridTextColumn IsReadOnly="True" Binding="{Binding TeamData.JuniorScore.SpeedScore}"
+                                            ClipboardContentBinding="{x:Null}" Header="J gyorsasági" />
+                        <DataGridTextColumn IsReadOnly="True" Binding="{Binding TeamData.CombinedScore.SpeedScore}"
+                                            ClipboardContentBinding="{x:Null}" Header="Gyorsasági" />
+                        <DataGridTextColumn IsReadOnly="True" Binding="{Binding TeamData.NumberOfOvertakes}"
+                                            ClipboardContentBinding="{x:Null}" Header="Előzés" />
+                        <DataGridTextColumn IsReadOnly="True" Binding="{Binding TeamData.FollowHumanRead}"
+                                            ClipboardContentBinding="{x:Null}" Header="Követés" />
+                        <DataGridTemplateColumn IsReadOnly="True" Width="110" Header="Gyorsasági köridők">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock TextWrapping="Wrap" Text="{Binding TeamData.SpeedTimesString}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn IsReadOnly="True" Binding="{Binding TeamData.Votes}"
+                                            ClipboardContentBinding="{x:Null}" Header="Szavazatok" />
+                        <DataGridTextColumn IsReadOnly="True" Binding="{Binding TeamData.AudienceScore}"
+                                            ClipboardContentBinding="{x:Null}" Header="Közönség pont" />
+                        <DataGridTextColumn IsReadOnly="True" Binding="{Binding TeamData.QualificationScore}"
+                                            ClipboardContentBinding="{x:Null}" Header="Hozott" />
+                        <DataGridTextColumn IsReadOnly="True" Binding="{Binding TeamData.JuniorScore.TotalScore}"
+                                            ClipboardContentBinding="{x:Null}" Header="J össz" />
+                        <DataGridTextColumn IsReadOnly="True" Binding="{Binding TeamData.CombinedScore.TotalScore}"
+                                            ClipboardContentBinding="{x:Null}" Header="Össz" />
+                        <DataGridTextColumn IsReadOnly="True" Binding="{Binding JuniorRank}"
+                                            ClipboardContentBinding="{x:Null}" Header="J hely" />
+                        <DataGridTextColumn IsReadOnly="True" Binding="{Binding Rank}"
+                                            ClipboardContentBinding="{x:Null}" Header="Hely" />
+                        <!--<DataGridTextColumn IsReadOnly="True" Binding="{Binding OverallScoreJunior}" ClipboardContentBinding="{x:Null}" Header="Össz (junior)"/>
 -->
-                                <DataGridTemplateColumn ClipboardContentBinding="{x:Null}">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <Button Content="Megnevezés" Tag="{Binding TeamId}"
-                                                    Padding="4"
-                                                    Click="teamNamingButton_Click" />
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
-                                <DataGridTemplateColumn ClipboardContentBinding="{x:Null}">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <Button Content="Ügyességi" Tag="{Binding TeamId}"
-                                                    Padding="4"
-                                                    Click="showTechnicalContestResultButton_Click" />
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
-                                <DataGridTemplateColumn ClipboardContentBinding="{x:Null}">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <Button Content="Safety car" Tag="{Binding TeamId}"
-                                                    Padding="4"
-                                                    Click="showSafetyCarInfoButton_Click" />
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
-                                <DataGridTemplateColumn ClipboardContentBinding="{x:Null}">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <Button Content="Gyorsasági" Tag="{Binding TeamId}"
-                                                    Padding="4"
-                                                    Click="showSpeedContestResultButton_Click" />
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
-                                <DataGridTemplateColumn ClipboardContentBinding="{x:Null}">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <Button Content="Eredmény+Junior helyezés" Tag="{Binding TeamId}"
-                                                    Padding="4"
-                                                    Click="showTeamResultJuniorRankButton_Click" />
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
-                                <DataGridTemplateColumn ClipboardContentBinding="{x:Null}">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <Button Content="Eredmény+Össz. helyezés" Tag="{Binding TeamId}"
-                                                    Padding="4"
-                                                    Click="showTeamResultTotalRankButton_Click" />
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
-                            </DataGrid.Columns>
-                        </DataGrid>
-                    </Grid>
-                </Grid>
+                        <DataGridTemplateColumn ClipboardContentBinding="{x:Null}">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="Megnevezés" Tag="{Binding TeamData.TeamId}"
+                                            Padding="4"
+                                            Click="teamNamingButton_Click" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn ClipboardContentBinding="{x:Null}">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="Ügyességi" Tag="{Binding TeamData.TeamId}"
+                                            Padding="4"
+                                            Click="showTechnicalContestResultButton_Click" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn ClipboardContentBinding="{x:Null}">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="Safety car" Tag="{Binding TeamData.TeamId}"
+                                            Padding="4"
+                                            Click="showSafetyCarInfoButton_Click" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn ClipboardContentBinding="{x:Null}">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="Gyorsasági" Tag="{Binding TeamData.TeamId}"
+                                            Padding="4"
+                                            Click="showSpeedContestResultButton_Click" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn ClipboardContentBinding="{x:Null}">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="Eredmény+Junior helyezés" Tag="{Binding TeamData.TeamId}"
+                                            Padding="4"
+                                            Click="showTeamResultJuniorRankButton_Click" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn ClipboardContentBinding="{x:Null}">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="Eredmény+Össz. helyezés" Tag="{Binding TeamData.TeamId}"
+                                            Padding="4"
+                                            Click="showTeamResultTotalRankButton_Click" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
             </Grid>
-        </TabItem>
-        <TabItem Header="Adatvezérlés">
-            <Grid Margin="8, 4, 8, 0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="500"></ColumnDefinition>
-                    <ColumnDefinition Width="500"></ColumnDefinition>
-                    <ColumnDefinition Width="500"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                <StackPanel Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Left">
-                    <TextBlock FontSize="20" FontWeight="Bold" HorizontalAlignment="Center">Csapat hozzáadása</TextBlock>
-                    <Label FontSize="14">Csapatnév</Label>
-                    <TextBox Name="TeamNameTextBox" Width="300" FontSize="14" Margin="8, 0, 0, 8"></TextBox>
-                    <Label FontSize="14">Csapat azonosító</Label>
-                    <TextBox Name="TeamIdTextBox" Width="300" FontSize="14" Margin="8, 0, 0, 8"></TextBox>
-                    <Label FontSize="14">Év</Label>
-                    <TextBox Name="TeamYearTextBox" Width="300" FontSize="14" Margin="8, 0, 0, 8"></TextBox>
-                    <Label FontSize="14">Típus</Label>
-                    <ComboBox Name="TeamTypeComboBox" FontSize="14" Margin="8, 0, 0, 8">
-                        <ComboBoxItem>Junior</ComboBoxItem>
-                        <ComboBoxItem>Senior</ComboBoxItem>
-                    </ComboBox>
-                    <Label FontSize="14">Csapattagok (vesszővel elválasztva)</Label>
-                    <TextBox Name="TeamMembersTextBox" Width="300" FontSize="14" Margin="8, 0, 0, 8"></TextBox>
-                    <Button Width="90" FontSize="16" HorizontalAlignment="Left" Padding="4" Margin="8, 8, 0, 0">Hozzáadás</Button>
-                </StackPanel>
-                
-                <TextBlock Grid.Column="1" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center">Ügyességi verseny</TextBlock>
-                <TextBlock Grid.Column="2" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center">Gyorsasági verseny</TextBlock>
-            </Grid>
-        </TabItem>
-    </TabControl>
+        </Grid>
+    </Grid>
 </Window>

@@ -134,7 +134,7 @@ namespace RobonautCasparClient_v2.modules.controller
         
         private void updateTeamsOnUI(TeamData newteamdata)
         {
-            Window.UpdateTeamData(teamDataService.Teams);
+            Window.UpdateTeamData(teamDataService.getTeamsWithRanks());
         }
 
         public void connectToGraphicsServer(string url)
@@ -250,7 +250,7 @@ namespace RobonautCasparClient_v2.modules.controller
         public void showTeamAllStatsInsert(int teamId, TeamType rankType)
         {
             TeamData team = teamDataService.getTeam(teamId);
-            graphicsInteractor.showTeamAllStats(team, rankType);
+            graphicsInteractor.showTeamAllStats(team, teamDataService.getTeamRank(team, rankType), rankType);
         }
 
         public void showTechTimer()
