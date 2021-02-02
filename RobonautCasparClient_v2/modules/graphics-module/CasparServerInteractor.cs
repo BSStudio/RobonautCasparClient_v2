@@ -442,6 +442,7 @@ namespace RobonautCasparClient_v2.modules
             List<(int rank, TeamData teamData)> rankList = new List<(int rank, TeamData teamData)>();
 
             var rank = 0;
+            var rankJump = 1;
             var lastScore = -1;
 
             switch (type)
@@ -453,10 +454,15 @@ namespace RobonautCasparClient_v2.modules
                     {
                         if (lastScore != team.QualificationScore)
                         {
-                            rank++;
+                            rank+= rankJump;
+                            rankJump = 1;
                             lastScore = team.QualificationScore;
                         }
-
+                        else
+                        {
+                            rankJump++;
+                        }
+                        
                         rankList.Add((rank, team));
                     }
 
@@ -468,8 +474,12 @@ namespace RobonautCasparClient_v2.modules
                     {
                         if (lastScore != team.Votes)
                         {
-                            rank++;
+                            rank+= rankJump;
                             lastScore = team.Votes;
+                        }
+                        else
+                        {
+                            rankJump++;
                         }
 
                         rankList.Add((rank, team));
@@ -483,8 +493,12 @@ namespace RobonautCasparClient_v2.modules
                     {
                         if (lastScore != team.SkillScore)
                         {
-                            rank++;
+                            rank+= rankJump;
                             lastScore = team.SkillScore;
+                        }
+                        else
+                        {
+                            rankJump++;
                         }
 
                         rankList.Add((rank, team));
@@ -498,8 +512,12 @@ namespace RobonautCasparClient_v2.modules
                     {
                         if (lastScore != team.FastestTime)
                         {
-                            rank++;
+                            rank+= rankJump;
                             lastScore = team.FastestTime;
+                        }
+                        else
+                        {
+                            rankJump++;
                         }
 
                         rankList.Add((rank, team));
@@ -513,8 +531,12 @@ namespace RobonautCasparClient_v2.modules
                     {
                         if (lastScore != team.SpeedScore)
                         {
-                            rank++;
+                            rank+= rankJump;
                             lastScore = team.SpeedScore;
+                        }
+                        else
+                        {
+                            rankJump++;
                         }
 
                         rankList.Add((rank, team));
@@ -529,8 +551,12 @@ namespace RobonautCasparClient_v2.modules
                     {
                         if (lastScore != team.JuniorRank)
                         {
-                            rank++;
+                            rank+= rankJump;
                             lastScore = team.JuniorRank;
+                        }
+                        else
+                        {
+                            rankJump++;
                         }
 
                         rankList.Add((rank, team));
@@ -544,8 +570,12 @@ namespace RobonautCasparClient_v2.modules
                     {
                         if (lastScore != team.Rank)
                         {
-                            rank++;
+                            rank+= rankJump;
                             lastScore = team.Rank;
+                        }
+                        else
+                        {
+                            rankJump++;
                         }
 
                         rankList.Add((rank, team));
