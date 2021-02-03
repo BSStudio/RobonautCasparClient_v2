@@ -35,6 +35,16 @@ namespace RobonautCasparClient_v2
             InitializeComponent();
 
             mainController.Window = this;
+
+            this.PreviewKeyUp += new KeyEventHandler(handleEsc);
+        }
+
+        private void handleEsc(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                hideAllGraphics();
+            }
         }
 
         public void dataServerConnected()
@@ -179,12 +189,20 @@ namespace RobonautCasparClient_v2
 
         private void removeAllGraphicsButton_Click(object sender, RoutedEventArgs e)
         {
-            mainController.hideAllGraphics();
-            TeamGraphicsShown = false;
-            SafetyCarInfoShown = false;
+            hideAllGraphics();
+        }
 
-            resetColor(selectedTeamGraphicsButton);
-            resetColor(selectedSafetyCarGraphicsButton);
+        private void hideAllGraphics()
+        {
+            if (ConnectedToGraphicsServer)
+            {
+                mainController.hideAllGraphics();
+                TeamGraphicsShown = false;
+                SafetyCarInfoShown = false;
+
+                resetColor(selectedTeamGraphicsButton);
+                resetColor(selectedSafetyCarGraphicsButton);
+            }
         }
 
         private void refreshDataButton_Click(object sender, RoutedEventArgs e) => mainController.requestData();
