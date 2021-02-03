@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RobonautCasparClient_v2"
+        xmlns:do="clr-namespace:RobonautCasparClient_v2.DO"
         mc:Ignorable="d"
         Title="RobonAUT feliratozó" WindowState="Maximized" Icon="robonaut_logo.ico" d:DesignWidth="1300.5">
     <Grid Margin="5,0,0,0">
@@ -161,7 +162,7 @@
                             Margin="10,0,10,0" Click="hideStopperButton_Click" />
                 </WrapPanel>
 
-                <TextBlock Text="Technikai időmérő" Margin="0,10,5,10" FontSize="20" FontWeight="Bold"
+                <TextBlock Text="Ügyességi időmérő" Margin="0,10,5,10" FontSize="20" FontWeight="Bold"
                            HorizontalAlignment="Left" />
                 <TextBlock Name="uiTechTimer" Text="00:00.000" FontSize="20" Margin="0,0,5,10"
                            HorizontalAlignment="Center" />
@@ -205,13 +206,9 @@
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                         <DataGridTextColumn IsReadOnly="True" Binding="{Binding TeamData.TeamType}"
-                                            ClipboardContentBinding="{x:Null}" Header="Csapat típus" />
+                                            ClipboardContentBinding="{x:Null}" Header="Szint" />
                         <DataGridTextColumn IsReadOnly="True" Binding="{Binding TeamData.SkillScore}"
                                             ClipboardContentBinding="{x:Null}" Header="Ügyességi" />
-                        <DataGridTextColumn IsReadOnly="True" Binding="{Binding TeamData.JuniorScore.SpeedScore}"
-                                            ClipboardContentBinding="{x:Null}" Header="J gyorsasági" />
-                        <DataGridTextColumn IsReadOnly="True" Binding="{Binding TeamData.CombinedScore.SpeedScore}"
-                                            ClipboardContentBinding="{x:Null}" Header="Gyorsasági" />
                         <DataGridTextColumn IsReadOnly="True" Binding="{Binding TeamData.NumberOfOvertakes}"
                                             ClipboardContentBinding="{x:Null}" Header="Előzés" />
                         <DataGridTextColumn IsReadOnly="True" Binding="{Binding TeamData.FollowHumanRead}"
@@ -223,12 +220,16 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
+                        <DataGridTextColumn IsReadOnly="True" Binding="{Binding TeamData.JuniorScore.SpeedScore}"
+                                            ClipboardContentBinding="{x:Null}" Header="J gyorsasági" />
+                        <DataGridTextColumn IsReadOnly="True" Binding="{Binding TeamData.CombinedScore.SpeedScore}"
+                                            ClipboardContentBinding="{x:Null}" Header="Gyorsasági" />
                         <DataGridTextColumn IsReadOnly="True" Binding="{Binding TeamData.Votes}"
                                             ClipboardContentBinding="{x:Null}" Header="Szavazatok" />
                         <DataGridTextColumn IsReadOnly="True" Binding="{Binding TeamData.AudienceScore}"
                                             ClipboardContentBinding="{x:Null}" Header="Közönség pont" />
                         <DataGridTextColumn IsReadOnly="True" Binding="{Binding TeamData.QualificationScore}"
-                                            ClipboardContentBinding="{x:Null}" Header="Hozott" />
+                                            ClipboardContentBinding="{x:Null}" Header="Kvalifikációs" />
                         <DataGridTextColumn IsReadOnly="True" Binding="{Binding TeamData.JuniorScore.TotalScore}"
                                             ClipboardContentBinding="{x:Null}" Header="J össz" />
                         <DataGridTextColumn IsReadOnly="True" Binding="{Binding TeamData.CombinedScore.TotalScore}"
@@ -237,8 +238,6 @@
                                             ClipboardContentBinding="{x:Null}" Header="J hely" />
                         <DataGridTextColumn IsReadOnly="True" Binding="{Binding Rank}"
                                             ClipboardContentBinding="{x:Null}" Header="Hely" />
-                        <!--<DataGridTextColumn IsReadOnly="True" Binding="{Binding OverallScoreJunior}" ClipboardContentBinding="{x:Null}" Header="Össz (junior)"/>
--->
                         <DataGridTemplateColumn ClipboardContentBinding="{x:Null}">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
@@ -279,6 +278,7 @@
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <Button Content="Eredmény+Junior helyezés" Tag="{Binding TeamData.TeamId}"
+                                            IsEnabled="{Binding TeamData.IsJunior}"
                                             Padding="4"
                                             Click="showTeamResultJuniorRankButton_Click" />
                                 </DataTemplate>

@@ -85,5 +85,13 @@ namespace RobonautCasparClient_v2.DO
                 return Converters.boolToIgenNem(SafetyCarWasFollowed);
             }
         }
+
+        public bool IsJunior
+        {
+            get
+            {
+                return TeamType == TeamType.JUNIOR;
+            }
+        }
     }
 }
