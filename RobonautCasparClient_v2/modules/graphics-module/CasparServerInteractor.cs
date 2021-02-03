@@ -301,7 +301,6 @@ namespace RobonautCasparClient_v2.modules
                 
                 CasparCGDataCollection CGdata = new CasparCGDataCollection();
                 CGdata.SetData("teamname", teamData.TeamName);
-                CGdata.SetData("teammembers", teamData.TeamMembersString);
                 CGdata.SetData("broughtpoint", "Hozott pont: " + teamData.QualificationScore);
                 CGdata.SetData("sumskillpoint", "Ügyességi pont: " + teamData.SkillScore);
                 CGdata.SetData("sumspeedpoint", "Gyorsasági pont: " + speedScore);

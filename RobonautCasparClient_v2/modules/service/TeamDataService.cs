@@ -70,33 +70,22 @@ namespace RobonautCasparClient_v2.DO
             var lastScore = -1;
             
             var juniorRank = 0;
-            var juniorRankJump = 1;
             var juniorLastScore = -1;
 
             foreach (var team in Teams)
             {
                 if (lastScore != team.CombinedScore.TotalScore)
                 {
-                    rank += rankJump;
-                    rankJump = 1;
+                    rank++;
                     lastScore = team.CombinedScore.TotalScore;
-                }
-                else
-                {
-                    rankJump++;
                 }
 
                 if (team.TeamType == TeamType.JUNIOR)
                 {
                     if (juniorLastScore != team.JuniorScore.TotalScore)
                     {
-                        juniorRank += juniorRankJump;
-                        juniorRankJump = 1;
+                        juniorRank++;
                         juniorLastScore = team.JuniorScore.TotalScore;
-                    }
-                    else
-                    {
-                        juniorRankJump++;
                     }
                 }
                 
@@ -111,7 +100,6 @@ namespace RobonautCasparClient_v2.DO
             List<(int rank, TeamData teamData)> rankList = new List<(int rank, TeamData teamData)>();
 
             var rank = 0;
-            var rankJump = 1;
             var lastScore = -1;
 
             switch (type)
@@ -124,7 +112,6 @@ namespace RobonautCasparClient_v2.DO
                         if (lastScore != team.QualificationScore)
                         {
                             rank++;
-                            rankJump = 1;
                             lastScore = team.QualificationScore;
                         }
                         
