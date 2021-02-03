@@ -107,6 +107,17 @@ namespace RobonautCasparClient_v2
 
         private void graphicsServerConnectButton_Click(object sender, RoutedEventArgs e)
         {
+            connectToGraphicsServer();
+        }
+
+        private void CasparServerAddress_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.Key == Key.Return)
+                connectToGraphicsServer();
+        }
+
+        private void connectToGraphicsServer()
+        {
             if (!ConnectedToGraphicsServer)
                 if (casparServerAddress.Text != "")
                 {
@@ -121,6 +132,17 @@ namespace RobonautCasparClient_v2
         }
 
         private void dataServerConnectButton_Click(object sender, RoutedEventArgs e)
+        {
+            connectToDataServer();
+        }
+        
+        private void DataServerAddress_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Return)
+                connectToDataServer();
+        }
+
+        private void connectToDataServer()
         {
             if (!ConnectedToDataServer)
                 if (dataServerAddress.Text != "")
@@ -356,7 +378,7 @@ namespace RobonautCasparClient_v2
 
         private void nextFullScreenGraphicsPageButton_Click(object sender, RoutedEventArgs e)
         {
-            if(!mainController.nextFullScreenPage(LastShownTableType))
+            if (!mainController.nextFullScreenPage(LastShownTableType))
                 resetColor(selectedResultTableButton);
         }
 
@@ -434,6 +456,17 @@ namespace RobonautCasparClient_v2
 
         private void CasparSetChannelButton_OnClick(object sender, RoutedEventArgs e)
         {
+            SetCasparChannel();
+        }
+
+        private void CasparChannel_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.Key == Key.Return)
+                SetCasparChannel();
+        }
+
+        private void SetCasparChannel()
+        {
             var text = casparChannel.Text;
 
             if (int.TryParse(text, out int channel))
@@ -473,7 +506,7 @@ namespace RobonautCasparClient_v2
                 selectedResultTableButton = button;
             }
         }
-        
+
         private void resetColor(Button button)
         {
             if (button != null)
