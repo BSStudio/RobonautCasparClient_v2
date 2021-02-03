@@ -51,8 +51,10 @@ namespace RobonautCasparClient_v2.modules.controller
         private int LastTechTimerTime { get; set; }
         private bool SpeedTimingRolling { get; set; }
         private int LastSpeedTimerTime { get; set; }
+        public FullScreenTableType CurrentFullScreenGraphicsType { get; set; }
 
         private int shownTableItemsAmount_;
+
         public int ShownTableItemsAmount
         {
             get
@@ -63,11 +65,6 @@ namespace RobonautCasparClient_v2.modules.controller
             {
                 shownTableItemsAmount_ = value;
                 graphicsInteractor.setShownFullscreenGraphicsItemAmount(value);
-                /*
-                if (FullscreenGraphicsShown)
-                {
-                    graphicsInteractor.updateFullScreenGraphicsTable(teamDataService.getLastGivenTeams(shownTableItemsAmount_));
-                }*/
             }
         }
 
@@ -375,6 +372,8 @@ namespace RobonautCasparClient_v2.modules.controller
         {
             if (ConnectedToGraphicsServer)
             {
+                CurrentFullScreenGraphicsType = type;
+                
                 graphicsInteractor.showFullscreenGraphics(type, teamDataService.getTeamsWithSpecialRank(type), ShownTableItemsAmount);
                 
                 FullscreenGraphicsShown = true;
@@ -389,6 +388,16 @@ namespace RobonautCasparClient_v2.modules.controller
             }
 
             return FullscreenGraphicsShown;
+        }
+
+        public void updateShownTable()
+        {
+            if (ConnectedToGraphicsServer && FullscreenGraphicsShown)
+            {
+                graphicsInteractor.updateFullScreenGraphics(
+                    teamDataService.getTeamsWithSpecialRank(CurrentFullScreenGraphicsType), 
+                    ShownTableItemsAmount);
+            }
         }
 
         public void hideFullScreenGraphics()

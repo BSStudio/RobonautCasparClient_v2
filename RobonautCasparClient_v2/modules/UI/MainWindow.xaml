@@ -43,7 +43,6 @@
             <TextBox Grid.Column="1" Grid.Row="1" Name="casparServerAddress" Height="23" TextWrapping="Wrap"
                      Width="175" HorizontalAlignment="Left" VerticalAlignment="Center" Text="192.168.10.20"
                      KeyDown="CasparServerAddress_OnKeyDown"/>
-            <!--192.168.10.20-->
             <Button Name="casparServerConnectButton" Content="Csatlakozás" Grid.Column="2"
                     HorizontalAlignment="Left" Margin="0,1,0,0" Grid.Row="1" Width="120"
                     HorizontalContentAlignment="Center" VerticalAlignment="Top"
@@ -124,18 +123,13 @@
                         Összes
                     </TextBox>
                     <Button Height="30" Margin="2,0,2,5" Padding="10, 0"
-                            Click="decreaseShownTeamsInTable">
-                        -
-                    </Button>
+                            Click="decreaseShownTeamsInTable" Content="-"/>
                     <Button Height="30" Margin="2,0,2,5" Padding="10, 0"
-                            Click="increaseShownTeamsInTable">
-                        +
-                    </Button>
+                            Click="increaseShownTeamsInTable" Content="+"/>
                     <Button Height="30" Margin="2,0,2,5" Padding="10, 0"
-                            Click="setShowAllTeamsInTable">
-                        Összes
-                    </Button>
+                            Click="setShowAllTeamsInTable" Content="Összes"/>
                 </StackPanel>
+                <CheckBox Name="UpdateOnShownItemChange" Content="Update változtatáskor" Margin="10, 0, 0, 0"/>
                 <Button Height="30" Margin="10,10,10,5" Content="Hozott pontok ranglistája"
                         Click="showQualificationPointsTableButton_Click" />
                 <Button Height="30" Content="Ügyességi verseny pontok" Margin="10,0,10,5"

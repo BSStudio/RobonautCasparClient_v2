@@ -36,7 +36,7 @@ namespace RobonautCasparClient_v2
 
             mainController.Window = this;
 
-            this.PreviewKeyUp += new KeyEventHandler(handleEsc);
+            PreviewKeyUp += handleEsc;
         }
 
         private void handleEsc(object sender, KeyEventArgs e)
@@ -427,7 +427,7 @@ namespace RobonautCasparClient_v2
             if (ShownTeamsAmount > numOfTeams)
                 ShownTeamsAmount = numOfTeams;
 
-            mainController.ShownTableItemsAmount = ShownTeamsAmount;
+            updateShownTeamsAmountInController(ShownTeamsAmount);
 
             NumberOfShownTeamsInTable.Text = ShownTeamsAmount.ToString();
         }
@@ -438,7 +438,7 @@ namespace RobonautCasparClient_v2
             if (ShownTeamsAmount < 0)
                 ShownTeamsAmount = 0;
 
-            mainController.ShownTableItemsAmount = ShownTeamsAmount;
+            updateShownTeamsAmountInController(ShownTeamsAmount);
 
             if (ShownTeamsAmount == 0)
                 NumberOfShownTeamsInTable.Text = "Összes";
@@ -449,9 +449,17 @@ namespace RobonautCasparClient_v2
         private void setShowAllTeamsInTable(object sender, RoutedEventArgs e)
         {
             ShownTeamsAmount = 0;
-            mainController.ShownTableItemsAmount = 0;
+            updateShownTeamsAmountInController(ShownTeamsAmount);
 
             NumberOfShownTeamsInTable.Text = "Összes";
+        }
+
+        private void updateShownTeamsAmountInController(int amount)
+        {
+            mainController.ShownTableItemsAmount = amount;
+            
+            if ((bool) UpdateOnShownItemChange.IsChecked)
+                mainController.updateShownTable();
         }
 
         private void CasparSetChannelButton_OnClick(object sender, RoutedEventArgs e)

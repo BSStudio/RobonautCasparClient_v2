@@ -127,6 +127,12 @@ namespace RobonautCasparClient_v2.Modules.interfaces
          * Ha a mennyiség -1, akkor mindet megjeleníti
          */
         public abstract void setShownFullscreenGraphicsItemAmount(int amount);
+        
+        /*
+         * frissíti a jelenleg megjelenített grafikában lévő elemek számát
+         */
+        public abstract void updateFullScreenGraphics(List<(int rank, TeamData teamData)> teamDatasWithRanks,
+         int shownTableItemsAmount);
 
         /*
          * elrejti a teljes képernyős grafikát

@@ -374,57 +374,104 @@ namespace RobonautCasparClient_v2.modules
             }
         }
 
+        public override void updateFullScreenGraphics(List<(int rank, TeamData teamData)> teamDatasWithRanks,
+            int shownTableItemsAmount)
+        {
+            if (IsConnected && FullScreenGraphicsShown)
+            {
+                var generatedFilteredTeamRanks = filterLastGivenTeams(teamDatasWithRanks, shownTableItemsAmount);
+
+                var numOfTeams = generatedFilteredTeamRanks.Count;
+
+                var numberOfPages = (int) Math.Ceiling((double) numOfTeams / SCOREBOARD_ITEMS_PER_PAGE);
+
+                //0-tól indul az oldalak szamolasa
+                if (CurrentFullScreenPage >= numberOfPages)
+                {
+                    stopLayer(SCOREBOARD_LAYER);
+                }
+                else
+                {
+                    CasparCGDataCollection cgData = new CasparCGDataCollection();
+
+                    switch (FullScreenGraphicsTypeShown)
+                    {
+                        case FullScreenTableType.QUALIFICATION_POINTS:
+                            updateQualificationCgData(cgData, generatedFilteredTeamRanks);
+                            break;
+                        case FullScreenTableType.AUDIENCE_POINTS:
+                            updateAudienceCgData(cgData, generatedFilteredTeamRanks);
+                            break;
+                        case FullScreenTableType.SKILL_POINTS:
+                            updateTechnicalPointsCgData(cgData, generatedFilteredTeamRanks);
+                            break;
+                        case FullScreenTableType.SPEED_TIMES:
+                            updateSpeedTimesCgData(cgData, generatedFilteredTeamRanks);
+                            break;
+                        case FullScreenTableType.SPEED_POINTS:
+                            updateSpeedPointsCgData(cgData, generatedFilteredTeamRanks);
+                            break;
+                        case FullScreenTableType.FINAL_JUNIOR:
+                            updateJuniorFinalResultCgData(cgData, generatedFilteredTeamRanks);
+                            break;
+                        case FullScreenTableType.FINAL:
+                            updateFinalResultCgData(cgData, generatedFilteredTeamRanks);
+                            break;
+                    }
+
+                    casparDevice.Channels[Channel].CG.Update(SCOREBOARD_LAYER, 0, cgData);
+                }
+            }
+        }
+
         public override bool stepFullScreenGraphics(List<(int rank, TeamData teamData)> teamDatasWithRanks,
             int lastThisMany)
         {
-            if (IsConnected)
+            if (IsConnected && FullScreenGraphicsShown)
             {
-                if (FullScreenGraphicsShown)
+                var generatedFilteredTeamRanks = filterLastGivenTeams(teamDatasWithRanks, lastThisMany);
+
+                var numOfTeams = generatedFilteredTeamRanks.Count;
+
+                var numberOfPages = (int) Math.Ceiling((double) numOfTeams / SCOREBOARD_ITEMS_PER_PAGE);
+
+                CurrentFullScreenPage++;
+
+                //0-tól indul az oldalak szamolasa
+                if (CurrentFullScreenPage >= numberOfPages)
                 {
-                    var generatedFilteredTeamRanks = filterLastGivenTeams(teamDatasWithRanks, lastThisMany);
+                    stopLayer(SCOREBOARD_LAYER);
+                }
+                else
+                {
+                    CasparCGDataCollection cgData = new CasparCGDataCollection();
 
-                    var numOfTeams = generatedFilteredTeamRanks.Count;
-
-                    var numberOfPages = (int) Math.Ceiling((double) numOfTeams / SCOREBOARD_ITEMS_PER_PAGE);
-
-                    CurrentFullScreenPage++;
-
-                    //0-tól indul az oldalak szamolasa
-                    if (CurrentFullScreenPage >= numberOfPages)
+                    switch (FullScreenGraphicsTypeShown)
                     {
-                        stopLayer(SCOREBOARD_LAYER);
+                        case FullScreenTableType.QUALIFICATION_POINTS:
+                            updateQualificationCgData(cgData, generatedFilteredTeamRanks);
+                            break;
+                        case FullScreenTableType.AUDIENCE_POINTS:
+                            updateAudienceCgData(cgData, generatedFilteredTeamRanks);
+                            break;
+                        case FullScreenTableType.SKILL_POINTS:
+                            updateTechnicalPointsCgData(cgData, generatedFilteredTeamRanks);
+                            break;
+                        case FullScreenTableType.SPEED_TIMES:
+                            updateSpeedTimesCgData(cgData, generatedFilteredTeamRanks);
+                            break;
+                        case FullScreenTableType.SPEED_POINTS:
+                            updateSpeedPointsCgData(cgData, generatedFilteredTeamRanks);
+                            break;
+                        case FullScreenTableType.FINAL_JUNIOR:
+                            updateJuniorFinalResultCgData(cgData, generatedFilteredTeamRanks);
+                            break;
+                        case FullScreenTableType.FINAL:
+                            updateFinalResultCgData(cgData, generatedFilteredTeamRanks);
+                            break;
                     }
-                    else
-                    {
-                        CasparCGDataCollection cgData = new CasparCGDataCollection();
 
-                        switch (FullScreenGraphicsTypeShown)
-                        {
-                            case FullScreenTableType.QUALIFICATION_POINTS:
-                                updateQualificationCgData(cgData, generatedFilteredTeamRanks);
-                                break;
-                            case FullScreenTableType.AUDIENCE_POINTS:
-                                updateAudienceCgData(cgData, generatedFilteredTeamRanks);
-                                break;
-                            case FullScreenTableType.SKILL_POINTS:
-                                updateTechnicalPointsCgData(cgData, generatedFilteredTeamRanks);
-                                break;
-                            case FullScreenTableType.SPEED_TIMES:
-                                updateSpeedTimesCgData(cgData, generatedFilteredTeamRanks);
-                                break;
-                            case FullScreenTableType.SPEED_POINTS:
-                                updateSpeedPointsCgData(cgData, generatedFilteredTeamRanks);
-                                break;
-                            case FullScreenTableType.FINAL_JUNIOR:
-                                updateJuniorFinalResultCgData(cgData, generatedFilteredTeamRanks);
-                                break;
-                            case FullScreenTableType.FINAL:
-                                updateFinalResultCgData(cgData, generatedFilteredTeamRanks);
-                                break;
-                        }
-
-                        casparDevice.Channels[Channel].CG.Update(SCOREBOARD_LAYER, 0, cgData);
-                    }
+                    casparDevice.Channels[Channel].CG.Update(SCOREBOARD_LAYER, 0, cgData);
                 }
             }
 
