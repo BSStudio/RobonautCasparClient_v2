@@ -134,7 +134,8 @@ namespace RobonautCasparClient_v2.modules
             {
                 CasparCGDataCollection cgData = new CasparCGDataCollection();
                 cgData.SetData("teamname", teamData.TeamName);
-                cgData.SetData("members", teamData.TeamMembersString);
+                if (teamData.TeamMembers != null)
+                    cgData.SetData("members", teamData.TeamMembersString);
 
                 casparDevice.Channels[Channel].CG.Add(TEAMINFO_LAYER, 0, "CSAPAT_NEVINZERT", true, cgData);
             }
@@ -298,7 +299,7 @@ namespace RobonautCasparClient_v2.modules
                 var totalScore = rankType == TeamType.JUNIOR
                     ? teamData.JuniorScore.TotalScore
                     : teamData.CombinedScore.TotalScore;
-                
+
                 CasparCGDataCollection CGdata = new CasparCGDataCollection();
                 CGdata.SetData("teamname", teamData.TeamName);
                 CGdata.SetData("broughtpoint", "Hozott pont: " + teamData.QualificationScore);
@@ -312,7 +313,8 @@ namespace RobonautCasparClient_v2.modules
             }
         }
 
-        public override void showFullscreenGraphics(FullScreenTableType type, List<(int rank, TeamData teamData)> teamDatasWithRanks,
+        public override void showFullscreenGraphics(FullScreenTableType type,
+            List<(int rank, TeamData teamData)> teamDatasWithRanks,
             int lastThisMany)
         {
             if (IsConnected)
@@ -372,14 +374,15 @@ namespace RobonautCasparClient_v2.modules
             }
         }
 
-        public override bool stepFullScreenGraphics(List<(int rank, TeamData teamData)> teamDatasWithRanks, int lastThisMany)
+        public override bool stepFullScreenGraphics(List<(int rank, TeamData teamData)> teamDatasWithRanks,
+            int lastThisMany)
         {
             if (IsConnected)
             {
                 if (FullScreenGraphicsShown)
                 {
                     var generatedFilteredTeamRanks = filterLastGivenTeams(teamDatasWithRanks, lastThisMany);
-                    
+
                     var numOfTeams = generatedFilteredTeamRanks.Count;
 
                     var numberOfPages = (int) Math.Ceiling((double) numOfTeams / SCOREBOARD_ITEMS_PER_PAGE);
@@ -394,7 +397,7 @@ namespace RobonautCasparClient_v2.modules
                     else
                     {
                         CasparCGDataCollection cgData = new CasparCGDataCollection();
-                        
+
                         switch (FullScreenGraphicsTypeShown)
                         {
                             case FullScreenTableType.QUALIFICATION_POINTS:
