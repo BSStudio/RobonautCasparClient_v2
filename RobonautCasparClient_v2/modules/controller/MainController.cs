@@ -114,7 +114,7 @@ namespace RobonautCasparClient_v2.modules.controller
 
             techTimerUpdateTimer = new DispatcherTimer();
             techTimerUpdateTimer.Tick += updateTechTimerTick;
-            speedTimerUpdateTimer.Interval = TimeSpan.FromMilliseconds(100);
+            techTimerUpdateTimer.Interval = TimeSpan.FromMilliseconds(100);
 
             dataInteractor.gateInfoRecievedEvent += GateInfoRecieved;
             dataInteractor.speedRaceScoreRecievedEvent += updateTeamSpeedDisplay;
@@ -276,7 +276,7 @@ namespace RobonautCasparClient_v2.modules.controller
 
             TechTimingRolling = true;
 
-            if (TimingShown)
+            if (TimingShown && ShownTimingType == TimerType.TECHNICAL)
             {
                 graphicsInteractor.showTimer(startTime, TimerDirection.DOWN);
             }
@@ -290,7 +290,7 @@ namespace RobonautCasparClient_v2.modules.controller
             TechTimingRolling = false;
             LastTechTimerTime = stopTime;
 
-            if (TimingShown)
+            if (TimingShown && ShownTimingType == TimerType.TECHNICAL)
             {
                 graphicsInteractor.showTimer(stopTime, TimerDirection.STOP);
             }

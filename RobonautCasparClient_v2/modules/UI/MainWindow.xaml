@@ -41,7 +41,7 @@
             <TextBlock Grid.Column="0" Grid.Row="1" Text="Caspar Szerver címe:" Margin="0,0,10,0"
                        HorizontalAlignment="Left" VerticalAlignment="Center" />
             <TextBox Grid.Column="1" Grid.Row="1" Name="casparServerAddress" Height="23" TextWrapping="Wrap"
-                     Width="175" HorizontalAlignment="Left" VerticalAlignment="Center" Text="localhost" />
+                     Width="175" HorizontalAlignment="Left" VerticalAlignment="Center" Text="192.168.10.20" />
             <!--192.168.10.20-->
             <Button Name="casparServerConnectButton" Content="Csatlakozás" Grid.Column="2"
                     HorizontalAlignment="Left" Margin="0,1,0,0" Grid.Row="1" Width="120"
