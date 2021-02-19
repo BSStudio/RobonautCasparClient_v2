@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using RobonautCasparClient_v2.DO.communication;
@@ -62,13 +63,19 @@ namespace RobonautCasparClient_v2.DO
         public List<TeamWithRanks> getTeamsWithRanks()
         {
             List<TeamWithRanks> ranksList = new List<TeamWithRanks>();
-            
-            Teams.Sort((a, b) => b.CombinedScore.TotalScore - a.CombinedScore.TotalScore);
-            
+
+            Teams.Sort((a, b) =>
+            {
+                int result = b.CombinedScore.TotalScore - a.CombinedScore.TotalScore;
+
+                return result != 0 ? result : a.FastestTime - b.FastestTime;
+            });
+
             var rank = 0;
             var rankJump = 1;
             var lastScore = -1;
-            
+            var lastBestTime = -1;
+
             var juniorRank = 0;
             var juniorLastScore = -1;
 
@@ -79,6 +86,10 @@ namespace RobonautCasparClient_v2.DO
                     rank++;
                     lastScore = team.CombinedScore.TotalScore;
                 }
+                else if (lastBestTime != team.FastestTime)
+                {
+                    rank++;
+                }
 
                 if (team.TeamType == TeamType.JUNIOR)
                 {
@@ -87,20 +98,28 @@ namespace RobonautCasparClient_v2.DO
                         juniorRank++;
                         juniorLastScore = team.JuniorScore.TotalScore;
                     }
+                    else if (lastBestTime != team.FastestTime)
+                    {
+                        juniorRank++;
+                    }
+
                 }
                 
+                lastBestTime = team.FastestTime;
+
                 ranksList.Add(new TeamWithRanks(team, rank, team.TeamType == TeamType.JUNIOR ? juniorRank : -1));
             }
 
             return ranksList;
         }
-        
+
         public List<(int rank, TeamData teamData)> getTeamsWithSpecialRank(FullScreenTableType type)
         {
             List<(int rank, TeamData teamData)> rankList = new List<(int rank, TeamData teamData)>();
 
             var rank = 0;
             var lastScore = -1;
+            int lastBestTime = -1;
 
             switch (type)
             {
@@ -114,7 +133,7 @@ namespace RobonautCasparClient_v2.DO
                             rank++;
                             lastScore = team.QualificationScore;
                         }
-                        
+
                         rankList.Add((rank, team));
                     }
 
@@ -181,7 +200,12 @@ namespace RobonautCasparClient_v2.DO
                     break;
                 case FullScreenTableType.FINAL_JUNIOR:
                     var teams = Teams.Where(team => team.TeamType == TeamType.JUNIOR).ToList();
-                    teams.Sort((a, b) => b.JuniorScore.TotalScore - a.JuniorScore.TotalScore);
+                    teams.Sort((a, b) =>
+                    {
+                        int result = b.JuniorScore.TotalScore - a.JuniorScore.TotalScore;
+
+                        return result != 0 ? result : a.FastestTime - b.FastestTime;
+                    });
 
                     foreach (var team in teams)
                     {
@@ -190,14 +214,25 @@ namespace RobonautCasparClient_v2.DO
                             rank++;
                             lastScore = team.JuniorScore.TotalScore;
                         }
+                        else if (lastBestTime != team.FastestTime)
+                        {
+                            rank++;
+                        }
+
+                        lastBestTime = team.FastestTime;
 
                         rankList.Add((rank, team));
                     }
 
                     break;
                 case FullScreenTableType.FINAL:
-                    Teams.Sort((a, b) => b.CombinedScore.TotalScore - a.CombinedScore.TotalScore);
+                    Teams.Sort((a, b) =>
+                    {
+                        int result = b.CombinedScore.TotalScore - a.CombinedScore.TotalScore;
 
+                        return result != 0 ? result : a.FastestTime - b.FastestTime;
+                    });
+                    
                     foreach (var team in Teams)
                     {
                         if (lastScore != team.CombinedScore.TotalScore)
@@ -205,6 +240,12 @@ namespace RobonautCasparClient_v2.DO
                             rank++;
                             lastScore = team.CombinedScore.TotalScore;
                         }
+                        else if (lastBestTime != team.FastestTime)
+                        {
+                            rank++;
+                        }
+
+                        lastBestTime = team.FastestTime;
 
                         rankList.Add((rank, team));
                     }
@@ -225,35 +266,46 @@ namespace RobonautCasparClient_v2.DO
                     .Where(teamD => teamD.TeamType == TeamType.JUNIOR)
                     .ToList();
 
-                currentTeams.Sort((a, b) => b.JuniorScore.TotalScore - a.JuniorScore.TotalScore);
+                currentTeams.Sort((a, b) =>
+                {
+                    int result = b.JuniorScore.TotalScore - a.JuniorScore.TotalScore;
+
+                    return result != 0 ? result : a.FastestTime - b.FastestTime;
+                });
             }
             else
             {
                 currentTeams = Teams;
 
-                currentTeams.Sort((a, b) => b.CombinedScore.TotalScore - a.CombinedScore.TotalScore);
+                currentTeams.Sort((a, b) =>
+                {
+                    int result = b.CombinedScore.TotalScore - a.CombinedScore.TotalScore;
+
+                    return result != 0 ? result : a.FastestTime - b.FastestTime;
+                });
             }
 
             var rank = 0;
-            var rankJump = 1;
             var lastScore = -1;
+            var lastBestTime = -1;
 
             foreach (var _team in currentTeams)
             {
                 var currentScore = teamType == TeamType.JUNIOR
                     ? _team.JuniorScore.TotalScore
                     : _team.CombinedScore.TotalScore;
-                
+
                 if (lastScore != currentScore)
                 {
-                    rank += rankJump;
-                    rankJump = 1;
+                    rank += 1;
                     lastScore = currentScore;
                 }
-                else
+                else if (lastBestTime != team.FastestTime)
                 {
-                    rankJump++;
+                    rank++;
                 }
+
+                lastBestTime = _team.FastestTime;
 
                 if (team.TeamId == _team.TeamId && team.Year == _team.Year)
                 {

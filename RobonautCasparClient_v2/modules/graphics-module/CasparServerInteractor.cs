@@ -357,7 +357,7 @@ namespace RobonautCasparClient_v2.modules
                         casparDevice.Channels[Channel].CG.Add(SCOREBOARD_LAYER, 0, "RANGSOR_PONT", true, cgData);
                         break;
                     case FullScreenTableType.FINAL_JUNIOR:
-                        cgData.SetData("title", "Összesített junior rangsor");
+                        cgData.SetData("title", "Junior rangsor");
                         updateJuniorFinalResultCgData(cgData, generatedFilteredTeamRanks);
 
                         casparDevice.Channels[Channel].CG.Add(SCOREBOARD_LAYER, 0, "RANGSOR_PONT", true, cgData);
