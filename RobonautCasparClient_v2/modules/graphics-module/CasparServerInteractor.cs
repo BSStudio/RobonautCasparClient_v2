@@ -33,6 +33,19 @@ namespace RobonautCasparClient_v2.modules
 
         public const int SCOREBOARD_ITEMS_PER_PAGE = 6;
 
+        private const string TEMPLATE_FOLDER = "robonaut/";
+        
+        private const string NAME_INSERT_TEMPLATE_NAME = TEMPLATE_FOLDER + "NEVINZERT";
+        private const string TEAM_NAME_INSERT_TEMPLATE_NAME = TEMPLATE_FOLDER + "CSAPAT_NEVINZERT";
+        private const string TEAM_SKILL_INSERT_TEMPLATE_NAME = TEMPLATE_FOLDER + "CSAPAT_UGYESSEGI";
+        private const string TEAM_SPEED_INSERT_TEMPLATE_NAME = TEMPLATE_FOLDER + "CSAPAT_GYORSASAGI";
+        private const string SAFETY_CAR_INSERT_TEMPLATE_NAME = TEMPLATE_FOLDER + "ROBONAUT_SAFETY_CAR_INFO";
+        private const string TIMER_INSERT_TEMPLATE_NAME = TEMPLATE_FOLDER + "ROBONAUT_TIMER";
+        private const string TEAM_ALL_RESULTS_INSERT_TEMPLATE_NAME = TEMPLATE_FOLDER + "CSAPAT_OSSZETETT";
+        private const string AUDIENCE_POINTS_TEMPLATE_NAME = TEMPLATE_FOLDER + "RANGSOR_KOZONSEG";
+        private const string END_RESULT_SPEED_TEMPLATE_NAME = TEMPLATE_FOLDER + "RANGSOR_GYORSASAGI";
+        private const string END_RESULT_POINTS_TEMPLATE_NAME = TEMPLATE_FOLDER + "RANGSOR_PONT";
+
         //public const int CHANNEL = 0; //1
         public const int NAME_LAYER = 10;
         public const int TEAMINFO_LAYER = 11;
@@ -76,7 +89,15 @@ namespace RobonautCasparClient_v2.modules
                 casparDevice.Settings.Hostname = connectionUrl;
                 casparDevice.Settings.Port = 5250;
                 casparDevice.Connect();
+                
+                casparDevice.UpdatedTemplates += CasparDeviceOnUpdatedTemplates;
             }
+        }
+
+        private void CasparDeviceOnUpdatedTemplates(object sender, EventArgs e)
+        {
+            var casparDeviceTemplates = casparDevice.Templates.All;
+            Console.WriteLine("asd");
         }
 
         public override void disconnect()
@@ -89,6 +110,7 @@ namespace RobonautCasparClient_v2.modules
             if (IsConnected)
             {
                 fireCasparConnected();
+                casparDevice.RefreshTemplates();
             }
             else
             {
@@ -119,7 +141,7 @@ namespace RobonautCasparClient_v2.modules
                 cgData.SetData("person_name", name);
                 cgData.SetData("title", title);
 
-                casparDevice.Channels[Channel].CG.Add(NAME_LAYER, 0, "NEVINZERT", true, cgData);
+                casparDevice.Channels[Channel].CG.Add(NAME_LAYER, 0, NAME_INSERT_TEMPLATE_NAME, true, cgData);
             }
         }
 
@@ -137,7 +159,7 @@ namespace RobonautCasparClient_v2.modules
                 if (teamData.TeamMembers != null)
                     cgData.SetData("members", teamData.TeamMembersString);
 
-                casparDevice.Channels[Channel].CG.Add(TEAMINFO_LAYER, 0, "CSAPAT_NEVINZERT", true, cgData);
+                casparDevice.Channels[Channel].CG.Add(TEAMINFO_LAYER, 0, TEAM_NAME_INSERT_TEMPLATE_NAME, true, cgData);
             }
         }
 
@@ -163,7 +185,7 @@ namespace RobonautCasparClient_v2.modules
                 cgData.SetData("teamname", teamData.TeamName);
                 cgData.SetData("point", teamData.SkillScore.ToString());
 
-                casparDevice.Channels[Channel].CG.Add(TEAMINFO_LAYER, 0, "CSAPAT_UGYESSEGI", true, cgData);
+                casparDevice.Channels[Channel].CG.Add(TEAMINFO_LAYER, 0, TEAM_SKILL_INSERT_TEMPLATE_NAME, true, cgData);
 
                 TechDisplayShown = true;
             }
@@ -194,7 +216,7 @@ namespace RobonautCasparClient_v2.modules
                     lap++;
                 }
 
-                casparDevice.Channels[Channel].CG.Add(TEAMINFO_LAYER, 0, "CSAPAT_GYORSASAGI", true, cgData);
+                casparDevice.Channels[Channel].CG.Add(TEAMINFO_LAYER, 0, TEAM_SPEED_INSERT_TEMPLATE_NAME, true, cgData);
 
                 SpeedDisplayShown = true;
             }
@@ -233,7 +255,7 @@ namespace RobonautCasparClient_v2.modules
                 cgData.SetData("follow", teamData.SafetyCarWasFollowed.ToString());
 
                 casparDevice.Channels[Channel].CG
-                    .Add(SAFETY_CAR_INFO_LAYER, 0, "ROBONAUT_SAFETY_CAR_INFO", true, cgData);
+                    .Add(SAFETY_CAR_INFO_LAYER, 0, SAFETY_CAR_INSERT_TEMPLATE_NAME, true, cgData);
 
                 SafetyCarDisplayShown = true;
             }
@@ -269,7 +291,7 @@ namespace RobonautCasparClient_v2.modules
                     cgData.SetData("dir", Converters.DirectionToString(dir));
                     cgData.SetData("time", startMs.ToString());
 
-                    casparDevice.Channels[Channel].CG.Add(TIMER_LAYER, 0, "ROBONAUT_TIMER", true, cgData);
+                    casparDevice.Channels[Channel].CG.Add(TIMER_LAYER, 0, TIMER_INSERT_TEMPLATE_NAME, true, cgData);
 
                     TimerShown = true;
                 }
@@ -309,7 +331,7 @@ namespace RobonautCasparClient_v2.modules
                 CGdata.SetData("sumpoint", "Összpontszám: " + totalScore);
                 CGdata.SetData("rank", rank.ToString());
 
-                casparDevice.Channels[Channel].CG.Add(TEAMINFO_LAYER, 0, "CSAPAT_OSSZETETT", true, CGdata);
+                casparDevice.Channels[Channel].CG.Add(TEAMINFO_LAYER, 0, TEAM_ALL_RESULTS_INSERT_TEMPLATE_NAME, true, CGdata);
             }
         }
 
@@ -332,41 +354,41 @@ namespace RobonautCasparClient_v2.modules
                         cgData.SetData("title", "Hozott pontok");
                         updateQualificationCgData(cgData, generatedFilteredTeamRanks);
 
-                        casparDevice.Channels[Channel].CG.Add(SCOREBOARD_LAYER, 0, "RANGSOR_PONT", true, cgData);
+                        casparDevice.Channels[Channel].CG.Add(SCOREBOARD_LAYER, 0, END_RESULT_POINTS_TEMPLATE_NAME, true, cgData);
                         break;
                     case FullScreenTableType.AUDIENCE_POINTS:
                         updateAudienceCgData(cgData, generatedFilteredTeamRanks);
 
-                        casparDevice.Channels[Channel].CG.Add(SCOREBOARD_LAYER, 0, "RANGSOR_KOZONSEG", true, cgData);
+                        casparDevice.Channels[Channel].CG.Add(SCOREBOARD_LAYER, 0, AUDIENCE_POINTS_TEMPLATE_NAME, true, cgData);
                         break;
                     case FullScreenTableType.SKILL_POINTS:
                         cgData.SetData("title", "Ügyességi verseny rangsor");
                         updateTechnicalPointsCgData(cgData, generatedFilteredTeamRanks);
 
-                        casparDevice.Channels[Channel].CG.Add(SCOREBOARD_LAYER, 0, "RANGSOR_PONT", true, cgData);
+                        casparDevice.Channels[Channel].CG.Add(SCOREBOARD_LAYER, 0, END_RESULT_POINTS_TEMPLATE_NAME, true, cgData);
                         break;
                     case FullScreenTableType.SPEED_TIMES:
                         updateSpeedTimesCgData(cgData, generatedFilteredTeamRanks);
 
-                        casparDevice.Channels[Channel].CG.Add(SCOREBOARD_LAYER, 0, "RANGSOR_GYORSASAGI", true, cgData);
+                        casparDevice.Channels[Channel].CG.Add(SCOREBOARD_LAYER, 0, END_RESULT_SPEED_TEMPLATE_NAME, true, cgData);
                         break;
                     case FullScreenTableType.SPEED_POINTS:
                         cgData.SetData("title", "Gyorsasági verseny rangsor");
                         updateSpeedPointsCgData(cgData, generatedFilteredTeamRanks);
 
-                        casparDevice.Channels[Channel].CG.Add(SCOREBOARD_LAYER, 0, "RANGSOR_PONT", true, cgData);
+                        casparDevice.Channels[Channel].CG.Add(SCOREBOARD_LAYER, 0, END_RESULT_POINTS_TEMPLATE_NAME, true, cgData);
                         break;
                     case FullScreenTableType.FINAL_JUNIOR:
                         cgData.SetData("title", "Junior rangsor");
                         updateJuniorFinalResultCgData(cgData, generatedFilteredTeamRanks);
 
-                        casparDevice.Channels[Channel].CG.Add(SCOREBOARD_LAYER, 0, "RANGSOR_PONT", true, cgData);
+                        casparDevice.Channels[Channel].CG.Add(SCOREBOARD_LAYER, 0, END_RESULT_POINTS_TEMPLATE_NAME, true, cgData);
                         break;
                     case FullScreenTableType.FINAL:
                         cgData.SetData("title", "Összesített rangsor");
                         updateFinalResultCgData(cgData, generatedFilteredTeamRanks);
 
-                        casparDevice.Channels[Channel].CG.Add(SCOREBOARD_LAYER, 0, "RANGSOR_PONT", true, cgData);
+                        casparDevice.Channels[Channel].CG.Add(SCOREBOARD_LAYER, 0, END_RESULT_POINTS_TEMPLATE_NAME, true, cgData);
                         break;
                 }
 
