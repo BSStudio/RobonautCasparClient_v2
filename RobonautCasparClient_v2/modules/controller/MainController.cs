@@ -88,6 +88,7 @@ namespace RobonautCasparClient_v2.modules.controller
                 dataInteractor.disconnectedEvent += _window.dataServerDisconnected;
                 
                 dataInteractor.teamDataRecievedEvent += updateTeamsOnUI;
+                dataInteractor.teamDataRecievedEvent += updateTeamSkillDisplay;
             }
         }
 
@@ -214,6 +215,11 @@ namespace RobonautCasparClient_v2.modules.controller
         {
             TeamData team = teamDataService.updateWithSpeedRaceScore(speedRaceScore);
             graphicsInteractor.updateTeamSpeedContestDisplay(team);
+        }
+
+        private void updateTeamSkillDisplay(TeamData newteamdata)
+        {
+            graphicsInteractor.updateTeamTechnicalContestDisplay(newteamdata);
         }
 
         public void showSafetyCarInfoDisplay(int teamId)
